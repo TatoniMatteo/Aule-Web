@@ -1,0 +1,40 @@
+body {
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+.blue {
+    color: #1a2e65;
+}
+
+.blue-variant {
+    color: #233f8b;
+}
+
+.yellow {
+    color: #fad762;
+}
+
+.yellow-variant {
+    color: #eccc5d;
+}
+
+.bg-blue {
+    color: #fff;
+    background-color: #1a2e65;
+}
+
+.bg-blue-variant {
+    color: #fff;
+    background-color: #233f8b;
+}
+
+.bg-yellow {
+    color: #000;
+    background-color: #fad762;
+}
+
+.bg-yellow-variant {
+    color: #000;
+    background-color: #eccc5d;
+}

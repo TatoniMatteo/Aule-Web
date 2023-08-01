@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <title>Login</title>
+        <#include "base/default_setting.html">
+        <link rel="stylesheet" href="resources/styles/login.css">
+    </head>
+
+    <body>
+
+        <#include "base/header.html">
+
+        <main>
+            <div class="login-form">
+                <h2 class="blue-variant">Login per amministratori</h2>
+                <form action="loginAction" method="post">
+                    <label for="username" class="blue">Username:</label>
+                    <input type="text" id="username" name="username" required>
+
+                    <label for="password" class="blue">Password:</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <button type="submit" class="bg-blue">Accedi</button>
+                </form>
+            </div>
+        </main>
+
+        <#include "base/footer.html">
+
+    </body>
+</html>

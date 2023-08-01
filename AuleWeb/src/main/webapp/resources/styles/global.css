@@ -1,0 +1,47 @@
+footer {
+    padding: 10px 0;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.footer-text {
+    margin: 10px 0;
+}
+
+
+header {
+    padding: 10px;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 10%;
+
+    #logo{
+        width: 150px;
+        height: 80px;
+        margin-right: 10px;
+    }
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-left: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+}
