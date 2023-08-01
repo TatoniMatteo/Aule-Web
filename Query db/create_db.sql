@@ -83,6 +83,7 @@ CREATE TABLE Evento
     id_responsabile INT,
     id_aula         INT,
     versione        INT,
+    tipo_evento     VARCHAR(30),
     FOREIGN KEY (id_corso) REFERENCES CORSO (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_responsabile) REFERENCES RESPONSABILE (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (id_aula) REFERENCES AULA (id) ON DELETE RESTRICT ON UPDATE CASCADE

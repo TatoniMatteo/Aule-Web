@@ -1,0 +1,24 @@
+/* Definizione dei colori */
+body {
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+/* Colori specifici del progetto */
+.red-brick {
+    color: #a00000;
+}
+
+.yellow {
+    color: #ffc107;
+}
+
+.bg-red {
+    background-color: #a00000;
+}
+
+.bg-yellow {
+    background-color: #ffc107;
+}
+
+/* Aggiungi qui altre regole di colori specifiche se necessario */
