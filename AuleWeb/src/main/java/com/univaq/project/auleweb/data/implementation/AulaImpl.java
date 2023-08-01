@@ -20,6 +20,27 @@ public class AulaImpl extends DataItemImpl<Integer> implements Aula {
     private String note;
     private Responsabile responsabile;
 
+    public AulaImpl(String nome, String luogo, String edficio, Integer piano, Integer capienza, Integer prese_elettriche, Integer prese_rete, String note, Responsabile responsabile) {
+        super();
+        this.nome = nome;
+        this.luogo = luogo;
+        this.edficio = edficio;
+        this.piano = piano;
+        this.capienza = capienza;
+        this.prese_elettriche = prese_elettriche;
+        this.prese_rete = prese_rete;
+        this.note = note;
+        this.responsabile = responsabile;
+    }
+
+    public Responsabile getResponsabile() {
+        return responsabile;
+    }
+
+    public void setResponsabile(Responsabile responsabile) {
+        this.responsabile = responsabile;
+    }
+
     public String getNome() {
         return nome;
     }

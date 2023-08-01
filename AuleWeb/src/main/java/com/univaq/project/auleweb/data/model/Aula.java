@@ -12,6 +12,10 @@ import com.univaq.project.framework.data.DataItem;
  */
 public interface Aula extends DataItem<Integer> {
 
+    Responsabile getResponsabile();
+
+    void setResponsabile(Responsabile responsabile);
+
     String getNome();
 
     void setNome(String nome);
