@@ -1,3 +1,9 @@
+/*Stili di base per il main */
+main {
+    text-align: center;
+    margin: 10px 0;
+}
+
 /* Stili di base per il footer */
 footer {
     padding: 10px 0;
