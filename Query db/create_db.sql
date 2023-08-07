@@ -41,12 +41,21 @@ CREATE TABLE Aula
     FOREIGN KEY (id_responsabile) REFERENCES RESPONSABILE (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+CREATE TABLE Categoria
+(
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    nome     VARCHAR(255) NOT NULL,
+    versione INT DEFAULT 0
+);
+
 CREATE TABLE Gruppo
 (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    nome        VARCHAR(255) NOT NULL,
-    descrizione TEXT,
-    versione    INT DEFAULT 0
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    nome         VARCHAR(255) NOT NULL,
+    descrizione  TEXT,
+    id_categoria INT          NOT NULL,
+    versione     INT DEFAULT 0,
+    FOREIGN KEY (id_categoria) REFERENCES CATEGORIA (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE Aula_Gruppo

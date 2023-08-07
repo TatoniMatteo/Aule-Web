@@ -7,6 +7,8 @@ import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -20,6 +22,8 @@ public class Login extends AuleWebController {
         try {
             String action = request.getParameter("loginAction");
             if (action == null || action.isEmpty()) {
+                String https_redirect_url = SecurityHelpers.checkHttps(request);
+                request.setAttribute("https-redirect", https_redirect_url);
                 action_default(request, response);
             } else if (action.equals("loginAction")) {
                 action_login(request, response);
@@ -33,9 +37,11 @@ public class Login extends AuleWebController {
     }
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException {
+        Map data = new HashMap<>();
+        data.put("outline_tpl", null);
+        data.put("username", SecurityHelpers.checkSession(request));
         TemplateResult templateResult = new TemplateResult(getServletContext());
-        request.setAttribute("outline_tpl", null);
-        templateResult.activate("login.ftl.html", request, response);
+        templateResult.activate("login.ftl.html", data, response);
     }
 
     private void action_login(HttpServletRequest request, HttpServletResponse response) throws IOException {

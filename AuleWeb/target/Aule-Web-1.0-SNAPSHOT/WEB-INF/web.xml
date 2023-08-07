@@ -7,22 +7,32 @@
         <servlet-name>Login</servlet-name>
         <servlet-class>com.univaq.project.auleweb.controller.controller.Login</servlet-class>
     </servlet>
-    
+
+    <servlet>
+        <servlet-name>Homepage</servlet-name>
+        <servlet-class>com.univaq.project.auleweb.controller.controller.Homepage</servlet-class>
+    </servlet>
+   
     <!-- servlet-mapping -->
-    
+   
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/login</url-pattern>
+    </servlet-mapping> 
+    
+    <servlet-mapping>
+        <servlet-name>Homepage</servlet-name>
+        <url-pattern>/homepage</url-pattern>
     </servlet-mapping>
     
     <!-- welcome -->
     
     <welcome-file-list>
-        <welcome-file>login</welcome-file>
+        <welcome-file>homepage</welcome-file>
     </welcome-file-list>
     
     <!-- session -->
-    
+   
     <session-config>
         <session-timeout>
             30
@@ -44,16 +54,16 @@
         <param-name>data.source</param-name>
         <param-value>jdbc/auleweb</param-value>
     </context-param>
-    
     <context-param>
         <param-name>view.template_directory</param-name>
         <param-value>resources/templates</param-value>
     </context-param>
-    
+   
     <!--
     <context-param>
         <param-name>view.error_template</param-name>
         <param-value>base/errore.ftl.html</param-value>
     </context-param>
     -->
+    
 </web-app>

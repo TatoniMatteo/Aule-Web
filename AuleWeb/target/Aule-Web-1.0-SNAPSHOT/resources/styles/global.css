@@ -1,3 +1,4 @@
+/* Stili di base per il footer */
 footer {
     padding: 10px 0;
     text-align: center;
@@ -7,16 +8,17 @@ footer {
     bottom: 0;
     left: 0;
     right: 0;
+    background-color: #f0f0f0;
 }
 
 .footer-text {
     margin: 10px 0;
 }
 
-
 /* Stili di base per l'header */
 header {
     padding: 10px;
+    background-color: #f0f0f0;
 }
 
 .header-container {
@@ -29,11 +31,28 @@ header {
 .header-container .logos {
     height: 80px;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex:1;
+}
+
+.header-container h1,
+.header-container nav{
+    flex:1;
+    text-align: center;
+}
+
+.header-container .logos a {
+    padding: 5px 20px;
+    height: 100%;
 }
 
 .header-container .logos img {
-    padding: 5px 20px;
+    height: 100%;
+    width: auto; /* Impostato width: auto per mantenere il rapporto di aspetto */
+}
+
+.header-container .logged-options h4 {
+    text-align: center;
 }
 
 .header-container nav ul {
@@ -55,8 +74,9 @@ header {
     margin-right: 5px;
 }
 
+/* Media Query */
 @media screen and (min-width: 900px) and (max-width: 1200px) {
-    .header-container{
+    .header-container {
         margin: 0;
     }
 
@@ -76,7 +96,7 @@ header {
     }
 
     .header-container nav ul li {
-        display: inline;
+        display: block;
         margin: 20px 5px;
     }
 
@@ -85,8 +105,8 @@ header {
         justify-content: center;
     }
 
-    .header-container .logos img {
-        flex: 1;
+    .header-container .logos a {
         padding: 0 10px;
+        height: 60px;
     }
 }
