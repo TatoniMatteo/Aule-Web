@@ -1,3 +1,4 @@
+/* General Styles */
 .search {
     margin: 20px;
 }
@@ -12,19 +13,24 @@
     font-size: 1em;
 }
 
-.search .text-input {
+.search .text-input,
+.search .button {
     padding: 10px;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-radius: 10px;
+}
+
+.search .text-input {
     flex: 15;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .search .button {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
     cursor: pointer;
     padding: 8px;
     flex: 1;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 /* Category List Styles */
@@ -43,10 +49,11 @@
     margin-bottom: 10px;
     text-align: center;
     cursor: pointer;
-    height: 20px;
+    height: auto;
+    max-height: 20px;
     overflow: hidden;
-    transition: height 1s ease;
     position: relative;
+    transition: max-height 0.3s ease;
 }
 
 .category-item h3 {
@@ -56,41 +63,34 @@
 }
 
 .category-item:hover{
-    height: auto;
+    max-height: 250px;
 }
 
-.category-item:not(:hover) {
-    transition: height 1s ease;
-    height: 20px;
-}
-
-.category-item:hover .sub-category-list{
+.category-item:hover .sub-category-list {
     opacity: 1;
-    max-height: 200px;
     overflow: auto;
 }
 
-.sub-category-list{
-    margin-top: 20px;
-    padding: 0;
+.sub-category-list {
+    padding:0;
+    margin: 20px 0;
     opacity: 0;
-    max-height: 0;
-    transition: max-height 1s ease;
+    max-height: 200px;
+    transition: opacity 0.5s ease-in-out
 }
 
-.sub-category-list li{
-    text-decoration: none;
-    list-style: none;
+.sub-category-list li {
     text-align: center;
     padding: 5px 0;
+    list-style: none;
 }
 
-.sub-category-list li a{
+.sub-category-list li a {
     text-decoration: none;
     color: inherit;
 }
 
-.sub-category-list li:hover{
+.sub-category-list li:hover {
     color: #fad762;
     font-weight: bold;
 }
