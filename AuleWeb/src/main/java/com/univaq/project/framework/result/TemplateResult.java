@@ -56,7 +56,6 @@ public class TemplateResult {
     private void init() {
         cfg = new Configuration(Configuration.VERSION_2_3_26);
         //impostiamo l'encoding di default per l'input e l'output
-        //set the default input and outpout encoding
         String encoding = "utf-8";
         if (context.getInitParameter("view.encoding") != null) {
             encoding = context.getInitParameter("view.encoding");
@@ -65,7 +64,6 @@ public class TemplateResult {
         cfg.setDefaultEncoding(encoding);
 
         //impostiamo la directory (relativa al contesto) da cui caricare i templates
-        //set the (context relative) directory for template loading
         if (context.getInitParameter("view.template_directory") != null) {
             cfg.setServletContextForTemplateLoading(context, context.getInitParameter("view.template_directory"));
         } else {
@@ -73,7 +71,6 @@ public class TemplateResult {
         }
 
         //impostiamo un handler per gli errori nei template - utile per il debug
-        //set an error handler for debug purposes       
         if (context.getInitParameter("view.debug") != null && context.getInitParameter("view.debug").equals("true")) {
             cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
         } else {
@@ -81,20 +78,17 @@ public class TemplateResult {
         }
 
         //formato di default per data/ora
-        //date/time default formatting
         if (context.getInitParameter("view.date_format") != null) {
             cfg.setDateTimeFormat(context.getInitParameter("view.date_format"));
         }
 
         //impostiamo il gestore degli oggetti - trasformerà in hash i Java beans
-        //set the object handler that allows us to "view" Java beans as hashes
         DefaultObjectWrapperBuilder owb = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_26);
         owb.setForceLegacyNonListCollections(false);
         owb.setDefaultDateType(TemplateDateModel.DATETIME);
         cfg.setObjectWrapper(owb.build());
 
         //classi opzionali che permettono di riempire ogni data model con dati generati dinamicamente
-        //optional classes to automatically fill every data model with dynamically generated data
         fillers = new ArrayList<>();
         Enumeration parms = context.getInitParameterNames();
         while (parms.hasMoreElements()) {
@@ -118,17 +112,14 @@ public class TemplateResult {
     //(qui inizializzato anche con informazioni di base utili alla gestione dell'outline)
     protected Map getDefaultDataModel(HttpServletRequest request) {
         //inizializziamo il contenitore per i dati di deafult        
-        //initialize the container for default data
         Map default_data_model = new HashMap();
 
         //iniettiamo alcuni dati di default nel data model
-        //inject some default data in the data model
         default_data_model.put("compiled_on", Calendar.getInstance().getTime()); //data di compilazione del template
         default_data_model.put("outline_tpl", context.getInitParameter("view.outline_template")); //eventuale template di outline
         default_data_model.put("select_button", 0);
 
         //aggiungiamo altri dati di inizializzazione presi dal web.xml
-        //add other data taken from web.xml
         Map init_tpl_data = new HashMap();
         default_data_model.put("defaults", init_tpl_data);
         Enumeration parms = context.getInitParameterNames();
@@ -140,7 +131,6 @@ public class TemplateResult {
         }
 
         //se sono state specificate delle classi filler, facciamo loro riempire il default data model
-        //if filler classes have been specified, let them fill the default data model
         for (DataModelFiller f : fillers) {
             f.fillDataModel(default_data_model, request, context);
         }
@@ -149,7 +139,6 @@ public class TemplateResult {
     }
 
     //questo metodo restituisce un data model estratto dagli attributi della request
-    //this method returns the data model extracted from the request attributes
     protected Map getRequestDataModel(HttpServletRequest request) {
         Map datamodel = new HashMap();
         Enumeration attrs = request.getAttributeNames();
