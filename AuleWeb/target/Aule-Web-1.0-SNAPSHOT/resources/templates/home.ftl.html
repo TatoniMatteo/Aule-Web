@@ -1,100 +1,29 @@
-<!DOCTYPE html>
-<html lang="it">
-    <head>
-        <title>AuleWeb - Hompage</title>
-        <#include "base/default_setting.html">
-        <link rel="stylesheet" href="resources/styles/home.css">
-    </head>
+<form action="searchAction" method="post" class="search">
+    <h1>Scegli un gruppo</h1>
+    <div class="searchBar">
+        <input type="text" id="key" placeholder="Cerca categoria..." class="text-input br-yellow">
+        <button type="submit" class="button bg-yellow br-yellow"><i class="fas fa-search"></i></button>
+    </div>
+</form>
 
-    <body>
-        <#include "base/header.ftl.html">
-        <main>
-            <form action="searchAction" method="post" class="search">
-                <h1>Scegli un gruppo</h1>
-                <div class="searchBar">
-                    <input type="text" id="key" placeholder="Cerca categoria..." class="text-input br-yellow">
-                    <button type="submit" class="button bg-yellow br-yellow"><i class="fas fa-search"></i></button>
-                </div>
-            </form>
+<ul class="category-list">
+    <#list categorie as categoria>
+    <li class="category-item bg-blue">
+        <h3>${categoria.nome?cap_first}</h3>
+        <ul class="sub-category-list">
+            <li><a href="#">Sottocategoria 1</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+            <li><a href="#">Sottocategoria 2</a></li>
+        </ul>
+    </li>
+    </#list>
+</ul>
 
-            <ul class="category-list">
-                <li class="category-item bg-blue">
-                    <a href="#">Categoria A</a>
-                    <ul class="sub-category-list">
-                        <li><a href="#">Sottocategoria 1</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                    </ul>
-                </li>
-                <li class="category-item bg-blue">
-                    <a href="#">Categoria A</a>
-                    <ul class="sub-category-list">
-                        <li><a href="#">Sottocategoria 1</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                    </ul>
-                </li>
-                <li class="category-item bg-blue">
-                    <a href="#">Categoria A</a>
-                    <ul class="sub-category-list">
-                        <li><a href="#">Sottocategoria 1</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                    </ul>
-                </li>
-                <li class="category-item bg-blue">
-                    <a href="#">Categoria B</a>
-                    <ul class="sub-category-list">
-                        <li><a href="#">Sottocategoria 1</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                    </ul>
-                </li>
-                <li class="category-item bg-blue">
-                    <a href="#">Categoria C</a>
-                    <ul class="sub-category-list">
-                        <li><a href="#">Sottocategoria 1</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                    </ul>
-                </li>
-                <li class="category-item bg-blue">
-                    <a href="#">Categoria D</a>
-                    <ul class="sub-category-list">
-                        <li><a href="#">Sottocategoria 1</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                    </ul>
-                </li>
-
-                <li class="category-item bg-blue">
-                    <a href="#">Categoria E</a>
-                    <ul class="sub-category-list">
-                        <li><a href="#">Sottocategoria 1</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                    </ul>
-                </li>
-                <li class="category-item bg-blue">
-                    <a href="#">Categoria F</a>
-                    <ul class="sub-category-list">
-                        <li><a href="#">Sottocategoria 1</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                    </ul>
-                </li>
-                <li class="category-item bg-blue">
-                    <a href="#">Categoria G</a>
-                    <ul class="sub-category-list">
-                        <li><a href="#">Sottocategoria 1</a></li>
-                        <li><a href="#">Sottocategoria 2</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </main>
-
-        <#include "base/footer.html">
-
-    <body>
-</html>

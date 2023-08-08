@@ -7,6 +7,10 @@ public class CategoriaImpl extends DataItemImpl<Integer> implements Categoria {
 
     private String nome;
 
+    public CategoriaImpl() {
+        this.nome = "";
+    }
+
     public CategoriaImpl(String nome) {
         this.nome = nome;
     }

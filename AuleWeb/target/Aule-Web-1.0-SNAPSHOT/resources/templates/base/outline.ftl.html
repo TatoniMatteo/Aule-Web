@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <title>AuleWeb - Hompage</title>
+        <#include "default_setting.html">
+        <#if styles??>
+        <#list styles as style>
+        <link rel="stylesheet" href="resources/styles/${style}.css">
+        </#list>
+        </#if>
+
+    </head>
+
+    <body>
+        <#include "header.ftl.html">
+        <main>
+            <#include "../" + content_tpl>
+        </main>
+        <#include "footer.html">
+
+    <body>
+</html>

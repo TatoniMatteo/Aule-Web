@@ -1,31 +1,14 @@
-<!DOCTYPE html>
-<html lang="it">
-    <head>
-        <title>AuleWeb - Login</title>
-        <#include "base/default_setting.html">
-        <link rel="stylesheet" href="resources/styles/login.css">
-    </head>
+<div class="login-form">
+    <h2 class="blue-variant">Login per amministratori</h2>
+    <form action="loginAction" method="post">
+        <label for="username" class="blue">Username</label>
+        <input type="text" id="username" name="username" 
+               placeholder="Username" required>
 
-    <body>
+        <label for="password" class="blue">Password</label>
+        <input type="password" id="password" name="password" 
+               placeholder="Password" required>
 
-        <#include "base/header.ftl.html">
-
-        <main>
-            <div class="login-form">
-                <h2 class="blue-variant">Login per amministratori</h2>
-                <form action="loginAction" method="post">
-                    <label for="username" class="blue">Username:</label>
-                    <input type="text" id="username" name="username" required>
-
-                    <label for="password" class="blue">Password:</label>
-                    <input type="password" id="password" name="password" required>
-
-                    <button type="submit" class="bg-yellow">ACCEDI</button>
-                </form>
-            </div>
-        </main>
-
-        <#include "base/footer.html">
-
-    </body>
-</html>
+        <button type="submit" class="bg-yellow">ACCEDI</button>
+    </form>
+</div>

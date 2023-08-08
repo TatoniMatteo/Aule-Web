@@ -1,3 +1,4 @@
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\proxy\CategoriaProxy.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\GruppoImpl.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\result\TemplateManagerException.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\DataLayer.java
@@ -10,6 +11,7 @@ C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\DataException.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\result\DataModelFiller.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\CorsoImpl.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\mysql\CategorieDAO_MySQL.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\model\Responsabile.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\model\Attrezzatura.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\model\Categoria.java
@@ -18,6 +20,7 @@ C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\EventoImpl.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\model\Corso.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\controller\controller\Login.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\CategorieDAO.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\model\Aula.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\OptimisticLockException.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\contoller\AbstractBaseController.java

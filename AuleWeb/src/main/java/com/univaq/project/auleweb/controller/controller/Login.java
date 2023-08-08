@@ -38,7 +38,8 @@ public class Login extends AuleWebController {
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException {
         Map data = new HashMap<>();
-        data.put("outline_tpl", null);
+        String[] styles = {"login"};
+        data.put("styles", styles);
         data.put("username", SecurityHelpers.checkSession(request));
         TemplateResult templateResult = new TemplateResult(getServletContext());
         templateResult.activate("login.ftl.html", data, response);

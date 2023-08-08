@@ -45,17 +45,23 @@
     cursor: pointer;
     height: 20px;
     overflow: hidden;
-    transition: height 0.5s ease;
+    transition: height 1s ease;
     position: relative;
 }
 
-.category-item a {
+.category-item h3 {
+    margin-top: 0;
     color: inherit;
     text-decoration: none;
 }
 
 .category-item:hover{
     height: auto;
+}
+
+.category-item:not(:hover) {
+    transition: height 1s ease;
+    height: 20px;
 }
 
 .category-item:hover .sub-category-list{
@@ -69,7 +75,7 @@
     padding: 0;
     opacity: 0;
     max-height: 0;
-    transition: max-height 0.3s ease;
+    transition: max-height 1s ease;
 }
 
 .sub-category-list li{
@@ -77,6 +83,16 @@
     list-style: none;
     text-align: center;
     padding: 5px 0;
+}
+
+.sub-category-list li a{
+    text-decoration: none;
+    color: inherit;
+}
+
+.sub-category-list li:hover{
+    color: #fad762;
+    font-weight: bold;
 }
 
 /* Layout Responsive */

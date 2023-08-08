@@ -12,6 +12,7 @@ com\univaq\project\auleweb\data\model\Categoria.class
 com\univaq\project\auleweb\data\implementation\GruppoImpl.class
 com\univaq\project\auleweb\data\model\Responsabile.class
 com\univaq\project\framework\result\StreamResult.class
+com\univaq\project\auleweb\data\dao\mysql\CategorieDAO_MySQL.class
 com\univaq\project\auleweb\data\implementation\DataLayerImpl.class
 com\univaq\project\auleweb\data\implementation\EventoImpl.class
 com\univaq\project\framework\data\OptimisticLockException.class
@@ -24,10 +25,12 @@ com\univaq\project\auleweb\data\model\Aula.class
 com\univaq\project\auleweb\data\implementation\CategoriaImpl.class
 com\univaq\project\auleweb\data\model\Corso.class
 com\univaq\project\auleweb\data\implementation\enumType\Tipo.class
+com\univaq\project\auleweb\data\proxy\CategoriaProxy.class
 com\univaq\project\framework\data\DAO.class
 com\univaq\project\framework\data\DataItemProxy.class
 com\univaq\project\framework\result\TemplateResult.class
 com\univaq\project\auleweb\data\implementation\AmministratoreImpl.class
+com\univaq\project\auleweb\data\dao\CategorieDAO.class
 com\univaq\project\framework\security\SecurityHelpers.class
 com\univaq\project\auleweb\data\model\Evento.class
 com\univaq\project\framework\result\DataModelFiller.class
