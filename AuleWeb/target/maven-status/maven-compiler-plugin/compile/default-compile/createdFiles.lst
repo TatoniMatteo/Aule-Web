@@ -8,6 +8,7 @@ com\univaq\project\framework\contoller\AbstractBaseController.class
 com\univaq\project\framework\data\DataItemImpl.class
 com\univaq\project\auleweb\data\model\Gruppo.class
 com\univaq\project\auleweb\data\implementation\AulaImpl.class
+com\univaq\project\auleweb\data\model\Categoria.class
 com\univaq\project\auleweb\data\implementation\GruppoImpl.class
 com\univaq\project\auleweb\data\model\Responsabile.class
 com\univaq\project\framework\result\StreamResult.class
@@ -20,6 +21,7 @@ com\univaq\project\auleweb\data\implementation\AttrezzaturaImpl.class
 com\univaq\project\auleweb\data\model\Amministratore.class
 com\univaq\project\auleweb\controller\controller\Homepage.class
 com\univaq\project\auleweb\data\model\Aula.class
+com\univaq\project\auleweb\data\implementation\CategoriaImpl.class
 com\univaq\project\auleweb\data\model\Corso.class
 com\univaq\project\auleweb\data\implementation\enumType\Tipo.class
 com\univaq\project\framework\data\DAO.class

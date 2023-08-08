@@ -9,23 +9,83 @@
     <body>
         <#include "base/header.ftl.html">
         <main>
-            <h1 id="categories-title">Scegli una categoria</h1>
-            <label for="search-input" class="search-label">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="search-input" placeholder="Cerca categoria..." class="search-input">
-            </label>
+            <form action="searchAction" method="post" class="search">
+                <h1>Scegli una categoria</h1>
+                <div class="searchBar">
+                    <input type="text" id="key" placeholder="Cerca categoria..." class="text-input br-yellow">
+                    <button type="submit" class="button bg-yellow br-yellow"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
 
             <ul class="category-list">
-                <li class="category-item">Categoria A</li>
-                <li class="category-item">Categoria B</li>
-                <li class="category-item">Categoria C</li>
-                <li class="category-item">Categoria D</li>
-                <li class="category-item">Categoria E</li>
-                <li class="category-item">Categoria F</li>
-            </ul>
-        </main>
+            <li class="category-item bg-blue">
+                <a href="#">Categoria A</a>
+                <ul class="sub-category-list">
+                    <li><a href="#">Sottocategoria 1</a></li>
+                    <li><a href="#">Sottocategoria 2</a></li>
+                </ul>
+            </li>
+            <li class="category-item bg-blue">
+                <a href="#">Categoria A</a>
+                <ul class="sub-category-list">
+                    <li><a href="#">Sottocategoria 1</a></li>
+                    <li><a href="#">Sottocategoria 2</a></li>
+                </ul>
+            </li>
+            <li class="category-item bg-blue">
+                <a href="#">Categoria A</a>
+                <ul class="sub-category-list">
+                    <li><a href="#">Sottocategoria 1</a></li>
+                    <li><a href="#">Sottocategoria 2</a></li>
+                </ul>
+            </li>
+            <li class="category-item bg-blue">
+                <a href="#">Categoria B</a>
+                <ul class="sub-category-list">
+                    <li><a href="#">Sottocategoria 1</a></li>
+                    <li><a href="#">Sottocategoria 2</a></li>
+                </ul>
+            </li>
+            <li class="category-item bg-blue">
+                <a href="#">Categoria C</a>
+                <ul class="sub-category-list">
+                    <li><a href="#">Sottocategoria 1</a></li>
+                    <li><a href="#">Sottocategoria 2</a></li>
+                </ul>
+            </li>
+            <li class="category-item bg-blue">
+                <a href="#">Categoria D</a>
+                <ul class="sub-category-list">
+                    <li><a href="#">Sottocategoria 1</a></li>
+                    <li><a href="#">Sottocategoria 2</a></li>
+                </ul>
+            </li>
+            
+            <li class="category-item bg-blue">
+                <a href="#">Categoria E</a>
+                <ul class="sub-category-list">
+                    <li><a href="#">Sottocategoria 1</a></li>
+                    <li><a href="#">Sottocategoria 2</a></li>
+                </ul>
+            </li>
+            <li class="category-item bg-blue">
+                <a href="#">Categoria F</a>
+                <ul class="sub-category-list">
+                    <li><a href="#">Sottocategoria 1</a></li>
+                    <li><a href="#">Sottocategoria 2</a></li>
+                </ul>
+            </li>
+            <li class="category-item bg-blue">
+                <a href="#">Categoria G</a>
+                <ul class="sub-category-list">
+                    <li><a href="#">Sottocategoria 1</a></li>
+                    <li><a href="#">Sottocategoria 2</a></li>
+                </ul>
+            </li>
+        </ul>
+    </main>
 
-        <#include "base/footer.html">
+    <#include "base/footer.html">
 
-    <body>
+<body>
 </html>

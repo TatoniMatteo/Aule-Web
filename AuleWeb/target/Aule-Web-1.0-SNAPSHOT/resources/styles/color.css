@@ -38,3 +38,11 @@ body {
     color: #000;
     background-color: #eccc5d;
 }
+
+.br-blu{
+    border: 2px solid #233f8b;
+}
+
+.br-yellow{
+    border: 2px solid #fad762;
+}
