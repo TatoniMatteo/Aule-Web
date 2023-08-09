@@ -16,6 +16,7 @@ footer {
     left: 0;
     right: 0;
     background-color: #f0f0f0;
+    height: 30px;
 }
 
 .footer-text {
@@ -82,6 +83,25 @@ header {
 .header-container nav ul li a i {
     margin-right: 5px;
 }
+
+.options{
+    display: flex;
+    justify-content: center;
+    height: 50px;
+}
+
+.options a {
+    text-decoration: none;
+    padding: 15px 40px;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.options a:hover {
+    background-color: #eccc5d;
+}
+
 
 @media screen and (min-width: 900px) and (max-width: 1200px) {
     .header-container {

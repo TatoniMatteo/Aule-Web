@@ -70,11 +70,11 @@
         <param-value>base/outline.ftl.html</param-value>
     </context-param>
    
-    <!--
+
     <context-param>
         <param-name>view.error_template</param-name>
-        <param-value>base/errore.ftl.html</param-value>
+        <param-value>errore.ftl.html</param-value>
     </context-param>
-    -->
+
     
 </web-app>

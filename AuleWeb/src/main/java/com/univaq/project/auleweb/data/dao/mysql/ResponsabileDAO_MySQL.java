@@ -4,7 +4,6 @@
  */
 package com.univaq.project.auleweb.data.dao.mysql;
 
-import com.univaq.project.auleweb.data.dao.ResponsabileDAO;
 import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataException;
@@ -13,12 +12,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import com.univaq.project.auleweb.data.dao.ResponsabiliDAO;
 
 /**
  *
  * @author david
  */
-public class ResponsabileDAO_MySQL extends DAO implements ResponsabileDAO {
+public class ResponsabileDAO_MySQL extends DAO implements ResponsabiliDAO {
 
     private PreparedStatement getResponsabileByID;
 

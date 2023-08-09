@@ -4,22 +4,15 @@
  */
 package com.univaq.project.auleweb.data.dao;
 
-import com.univaq.project.auleweb.data.model.Aula;
+import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataException;
-import java.util.List;
 
 /**
  *
  * @author david
  */
-public interface AulaDAO {
+public interface ResponsabiliDAO {
     
-    public Aula getAulaById(int id) throws DataException;
-    
-     public List<Aula> getAllAule() throws DataException;
-     
-     public List<Aula> getAuleByGruppoID(int id_gruppo) throws DataException;
-    
-    
+    public Responsabile getResponsabileById(int id)  throws DataException;
     
 }

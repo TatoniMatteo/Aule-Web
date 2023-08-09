@@ -15,6 +15,28 @@ public class Homepage extends AuleWebController {
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+
+        String page = request.getParameter("page");
+        if (page != null) {
+            switch (page) {
+                case "gruppi":
+                    action_gruppi(request, response);
+                    break;
+                case "aule":
+                    action_aule(request, response);
+                    break;
+                case "corsi":
+                    action_corsi(request, response);
+                    break;
+                default:
+                    action_gruppi(request, response);
+            }
+        } else {
+            action_gruppi(request, response);
+        }
+    }
+
+    private void action_gruppi(HttpServletRequest request, HttpServletResponse response) {
         try {
             String[] styles = {"home"};
             Map data = new HashMap<>();
@@ -23,7 +45,35 @@ public class Homepage extends AuleWebController {
             data.put("categorie", ((DataLayerImpl) request.getAttribute("datalayer")).getCategorieDAO().getAllCategorie());
             data.put("gruppi", ((DataLayerImpl) request.getAttribute("datalayer")).getGruppiDAO().getAllGruppi());
             TemplateResult templateResult = new TemplateResult(getServletContext());
-            templateResult.activate("home.ftl.html", data, response);
+            templateResult.activate("gruppi.ftl.html", data, response);
+        } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private void action_corsi(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String[] styles = {"home"};
+            Map data = new HashMap<>();
+            data.put("styles", styles);
+            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("aule", ((DataLayerImpl) request.getAttribute("datalayer")).getAuleDAO().getAllAule());
+            TemplateResult templateResult = new TemplateResult(getServletContext());
+            templateResult.activate("corsi.ftl.html", data, response);
+        } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private void action_aule(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String[] styles = {"home"};
+            Map data = new HashMap<>();
+            data.put("styles", styles);
+            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("aule", ((DataLayerImpl) request.getAttribute("datalayer")).getAuleDAO().getAllAule());
+            TemplateResult templateResult = new TemplateResult(getServletContext());
+            templateResult.activate("aule.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }

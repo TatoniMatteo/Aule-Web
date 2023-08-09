@@ -6,7 +6,6 @@ package com.univaq.project.auleweb.data.dao.mysql;
 
 import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataLayer;
-import com.univaq.project.auleweb.data.dao.AulaDAO;
 import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.framework.data.DataException;
 import java.sql.PreparedStatement;
@@ -16,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.univaq.project.auleweb.data.dao.AuleDAO;
 
-public class AuleDAO_MySQL extends DAO implements AulaDAO {
+public class AuleDAO_MySQL extends DAO implements AuleDAO {
 
     public AuleDAO_MySQL(DataLayer d) {
         super(d);

@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="it">
     <head>
-        <title>AuleWeb - Hompage</title>
         <#include "default_setting.html">
         <#if styles??>
         <#list styles as style>
         <link rel="stylesheet" href="resources/styles/${style}.css">
         </#list>
         </#if>
-
     </head>
 
     <body>
         <#include "header.ftl.html">
+        <#assign options = options?default(true)>
+        <#if options>
+        <nav class="bg-yellow options">
+            <a href="homepage?page=gruppi">Gruppi</a>
+            <a href="homepage?page=aule">Aule</a>
+            <a href="homepage?page=corsi">Corsi</a>
+        </nav>
+        </#if>
         <main>
             <#include "../" + content_tpl>
         </main>

@@ -4,7 +4,6 @@
  */
 package com.univaq.project.auleweb.data.proxy;
 
-import com.univaq.project.auleweb.data.dao.ResponsabileDAO;
 import com.univaq.project.auleweb.data.implementation.AulaImpl;
 import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataException;
@@ -12,6 +11,7 @@ import com.univaq.project.framework.data.DataItemProxy;
 import com.univaq.project.framework.data.DataLayer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.univaq.project.auleweb.data.dao.ResponsabiliDAO;
 
 /**
  *
@@ -34,7 +34,7 @@ public class AulaProxy extends AulaImpl implements DataItemProxy {
     public Responsabile getResponsabile(){
         if (super.getResponsabile() == null && this.id_responsabile> 0) {
             try {
-                super.setResponsabile(((ResponsabileDAO) dataLayer.getDAO(Responsabile.class)).getResponsabileById(id_responsabile));
+                super.setResponsabile(((ResponsabiliDAO) dataLayer.getDAO(Responsabile.class)).getResponsabileById(id_responsabile));
             } catch (DataException ex) {
                 Logger.getLogger(AulaProxy.class.getName()).log(Level.SEVERE, null, ex);
             }

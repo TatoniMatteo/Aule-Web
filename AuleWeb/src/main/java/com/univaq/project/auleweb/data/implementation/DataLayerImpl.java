@@ -1,20 +1,22 @@
 package com.univaq.project.auleweb.data.implementation;
 
+import com.univaq.project.auleweb.data.dao.AuleDAO;
 import com.univaq.project.auleweb.data.dao.CategorieDAO;
 import com.univaq.project.auleweb.data.dao.GruppiDAO;
+import com.univaq.project.auleweb.data.dao.ResponsabiliDAO;
+import com.univaq.project.auleweb.data.dao.mysql.AuleDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.CategorieDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.GruppiDAO_MySQL;
+import com.univaq.project.auleweb.data.dao.mysql.ResponsabileDAO_MySQL;
+import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.auleweb.data.model.Categoria;
 import com.univaq.project.auleweb.data.model.Gruppo;
+import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.data.DataLayer;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 
-/**
- *
- * @author taton
- */
 public class DataLayerImpl extends DataLayer {
 
     public DataLayerImpl(DataSource datasource) throws SQLException {
@@ -25,6 +27,8 @@ public class DataLayerImpl extends DataLayer {
     public void init() throws DataException {
         registerDAO(Categoria.class, new CategorieDAO_MySQL(this));
         registerDAO(Gruppo.class, new GruppiDAO_MySQL(this));
+        registerDAO(Aula.class, new AuleDAO_MySQL(this));
+        registerDAO(Responsabile.class, new ResponsabileDAO_MySQL(this));
     }
 
     public CategorieDAO getCategorieDAO() {
@@ -33,5 +37,13 @@ public class DataLayerImpl extends DataLayer {
 
     public GruppiDAO getGruppiDAO() {
         return (GruppiDAO) getDAO(Gruppo.class);
+    }
+
+    public AuleDAO getAuleDAO() {
+        return (AuleDAO) getDAO(Aula.class);
+    }
+
+    public ResponsabiliDAO getResponsabileDAO() {
+        return (ResponsabiliDAO) getDAO(Responsabile.class);
     }
 }

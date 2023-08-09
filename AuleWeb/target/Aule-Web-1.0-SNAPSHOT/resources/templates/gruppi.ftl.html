@@ -1,11 +1,14 @@
+<!-- 
 <form action="searchAction" method="post" class="search">
-    <h1>Scegli un gruppo</h1>
+   
     <div class="searchBar">
         <input type="text" id="key" placeholder="Cerca categoria..." class="text-input br-yellow">
         <button type="submit" class="button bg-yellow br-yellow"><i class="fas fa-search"></i></button>
     </div>
 </form>
+-->
 
+<h1 class="space">Scegli un gruppo</h1>
 <ul class="category-list">
     <#list categorie as categoria>
     <li class="category-item bg-blue">
@@ -13,7 +16,7 @@
         <ul class="sub-category-list">
             <#list gruppi as gruppo>
             <#if gruppo.categoria.key == categoria.key>
-            <li><a href="#gruppo/${gruppo.key}">${gruppo.nome?cap_first}</a></li>
+            <li><a href="#gruppo?id=${gruppo.key}">${gruppo.nome?cap_first}</a></li>
             </#if>
             </#list>
         </ul>
