@@ -86,7 +86,7 @@ public class CategorieDAO_MySQL extends DAO implements CategorieDAO {
             categoria.setNome(rs.getString("nome"));
             categoria.setVersion(rs.getLong("versione"));
         } catch (SQLException ex) {
-            throw new DataException("Errore creazione oggetto Gruppo", ex);
+            throw new DataException("Errore l'importazione dell'oggetto Categoria", ex);
         }
         return categoria;
     }

@@ -1,25 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.univaq.project.auleweb.data.implementation;
 
+import com.univaq.project.auleweb.data.model.Categoria;
 import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.framework.data.DataItemImpl;
 
-/**
- *
- * @author david
- */
 public class GruppoImpl extends DataItemImpl<Integer> implements Gruppo {
 
     private String nome;
     private String descrizione;
+    private Categoria categoria;
 
     public GruppoImpl(String nome, String descrizione) {
         super();
         this.nome = nome;
         this.descrizione = descrizione;
+    }
+
+    public GruppoImpl() {
+        super();
+        this.nome = "";
+        this.descrizione = "";
     }
 
     public String getNome() {
@@ -36,6 +36,14 @@ public class GruppoImpl extends DataItemImpl<Integer> implements Gruppo {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
 }

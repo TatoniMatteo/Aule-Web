@@ -1,4 +1,4 @@
-package com.univaq.project.auleweb.controller.controller;
+package com.univaq.project.auleweb.controller;
 
 import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
 import com.univaq.project.framework.data.DataException;
@@ -21,6 +21,7 @@ public class Homepage extends AuleWebController {
             data.put("styles", styles);
             data.put("username", SecurityHelpers.checkSession(request));
             data.put("categorie", ((DataLayerImpl) request.getAttribute("datalayer")).getCategorieDAO().getAllCategorie());
+            data.put("gruppi", ((DataLayerImpl) request.getAttribute("datalayer")).getGruppiDAO().getAllGruppi());
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("home.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {

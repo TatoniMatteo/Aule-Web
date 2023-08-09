@@ -11,17 +11,11 @@
     <li class="category-item bg-blue">
         <h3>${categoria.nome?cap_first}</h3>
         <ul class="sub-category-list">
-            <li><a href="#">Sottocategoria 1</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
-            <li><a href="#">Sottocategoria 2</a></li>
+            <#list gruppi as gruppo>
+            <#if gruppo.categoria.key == categoria.key>
+            <li><a href="#gruppo/${gruppo.key}">${gruppo.nome?cap_first}</a></li>
+            </#if>
+            </#list>
         </ul>
     </li>
     </#list>

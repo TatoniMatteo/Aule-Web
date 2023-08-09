@@ -1,4 +1,4 @@
-package com.univaq.project.auleweb.controller.controller;
+package com.univaq.project.auleweb.controller;
 
 import com.univaq.project.auleweb.data.model.Amministratore;
 import com.univaq.project.framework.result.TemplateManagerException;
