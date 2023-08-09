@@ -1,1 +1,40 @@
-<h1> AULE </h1>
+<h1 class="space">Scegli un'aula</h1>
+<form action="homepage?page=aule_filtered" method="post" class="search">
+
+    <#assign filter = filter?default("")>
+    <div class="searchBar">
+        <input type="text" id="filter" name="filter" placeholder="Cerca categoria..." class="text-input br-yellow" required value="${filter}">
+        <button type="submit" class="button bg-yellow br-yellow"><i class="fas fa-search"></i></button>
+    </div>
+</form>
+<div class="table-container">
+    <table>
+        <thead class="bg-yellow">
+            <tr>
+                <th>Nome</th>
+                <th>Luogo</th>
+                <th>Edificio</th>
+                <th>Piano</th>
+                <th>Capienza</th>
+                <th>Azione</th>
+            </tr>
+        </thead>
+        <#if aule?has_content>
+        <tbody>
+            <#list aule as aula>
+            <tr>
+                <td>${aula.nome}</td>
+                <td>${aula.luogo}</td>
+                <td>${aula.edificio}</td>
+                <td>${aula.piano}</td>
+                <td>${aula.capienza}</td>
+                <td><button class="action-button bg-blue">Dettagli</button></td>
+            </tr>
+        </tbody>
+        </#list>
+        </#if>
+    </table>
+    <#if !aule?has_content>
+    <h4>Non ci sono risultati per questa ricerca!</h4>
+    </#if>
+</div>

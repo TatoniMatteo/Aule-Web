@@ -1,21 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.univaq.project.auleweb.data.dao.mysql;
 
-import com.univaq.project.framework.data.DAO;
-import com.univaq.project.framework.data.DataLayer;
+import com.univaq.project.auleweb.data.dao.AuleDAO;
 import com.univaq.project.auleweb.data.model.Aula;
+import com.univaq.project.auleweb.data.proxy.AulaProxy;
+import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataException;
+import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import com.univaq.project.auleweb.data.dao.AuleDAO;
 
 public class AuleDAO_MySQL extends DAO implements AuleDAO {
 
@@ -23,16 +18,16 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
         super(d);
     }
 
-    private PreparedStatement getAllAule, getAulaByID, getAuleByGruppo;
+    private PreparedStatement getAllAule, getAulaByID, getAuleByGruppo, getAuleByName;
 
     public void init() throws DataException {
 
         try {
             super.init();
-            getAllAule = connection.prepareStatement("SELECT * FROM Aula");
-            getAulaByID = connection.prepareStatement("SELECT * FROM Aula WHERE ID = ?");
-            getAuleByGruppo = connection.prepareStatement("SELECT A.* FROM Aula A, Aula_gruppo AG, Gruppo G WHERE "
-                    + "G.ID = ? AND AG.ID_gruppo = G.ID AND A.ID = AG.ID_aula");
+            getAllAule = connection.prepareStatement("SELECT * FROM Aula ORDER BY nome");
+            getAulaByID = connection.prepareStatement("SELECT * FROM Aula WHERE ID = ? ORDER BY nome");
+            getAuleByGruppo = connection.prepareStatement("SELECT A.* FROM Aula A, Aula_gruppo AG, Gruppo G WHERE G.ID = ? AND AG.ID_gruppo = G.ID AND A.ID = AG.ID_aula ORDER BY A.nome");
+            getAuleByName = connection.prepareStatement("SELECT * FROM Aula WHERE nome LIKE ?");
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
@@ -43,6 +38,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAllAule.close();
             getAulaByID.close();
             getAuleByGruppo.close();
+            getAuleByName.close();
             super.destroy();
         } catch (SQLException ex) {
             throw new DataException("Errore durante la chiusura del DatLayer", ex);
@@ -55,10 +51,10 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
         List<Aula> aule = new ArrayList<>();
         try ( ResultSet rs = getAllAule.executeQuery()) {
             while (rs.next()) {
-                //aule.add(createAula(rs));
+                aule.add(importAula(rs));
             }
         } catch (SQLException ex) {
-            throw new DataException("Impossibile caricare Aula dal nome e dalla posizione digitati", ex);
+            throw new DataException("Impossibile caricare le Aula", ex);
         }
         return aule;
     }
@@ -66,12 +62,10 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
     public Aula getAulaById(int id) throws DataException {
         Aula aula = null;
         try {
-
             getAulaByID.setInt(1, id);
-
             try ( ResultSet rs = getAulaByID.executeQuery()) {
                 if (rs.next()) {
-                    //aula = createAula(rs);
+                    aula = importAula(rs);
                 }
             }
         } catch (SQLException ex) {
@@ -79,23 +73,63 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
         }
         return aula;
     }
-    
+
     @Override
     public List<Aula> getAuleByGruppoID(int id_gruppo) throws DataException {
         List<Aula> aule = new ArrayList<>();
         try {
             getAuleByGruppo.setInt(1, id_gruppo);
-        } catch (SQLException ex) {
-            Logger.getLogger(AuleDAO_MySQL.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try ( ResultSet rs = getAuleByGruppo.executeQuery()) {
-            while (rs.next()) {
-                //Aula aula = createAula(rs);
-                //aule.add(aula);
+            try ( ResultSet rs = getAuleByGruppo.executeQuery()) {
+                while (rs.next()) {
+                    Aula aula = importAula(rs);
+                    aule.add(aula);
+                }
             }
-
         } catch (SQLException ex) {
-            throw new DataException("error DB", ex);
+            throw new DataException("Impossibile caricare le aule di questo gruppo (ID gruppo: " + id_gruppo + ")", ex);
+        }
+
+        return aule;
+    }
+
+    @Override
+    public Aula importAula() {
+        return new AulaProxy(getDataLayer());
+    }
+
+    private AulaProxy importAula(ResultSet rs) throws DataException {
+        AulaProxy aula = (AulaProxy) importAula();
+        try {
+            aula.setKey(rs.getInt("ID"));
+            aula.setNome(rs.getString("nome"));
+            aula.setLuogo(rs.getString("luogo"));
+            aula.setEdificio(rs.getString("edificio"));
+            aula.setPiano(rs.getInt("piano"));
+            aula.setCapienza(rs.getInt("capienza"));
+            aula.setPrese_rete(rs.getInt("prese_rete"));
+            aula.setPrese_elettriche(rs.getInt("prese_elettriche"));
+            aula.setNote(rs.getString("note"));
+            aula.setId_responsabile(rs.getInt("id_responsabile"));
+            aula.setVersion(rs.getLong("versione"));
+        } catch (SQLException ex) {
+            throw new DataException("Errore l'importazione dell'oggetto Categoria", ex);
+        }
+        return aula;
+    }
+
+    @Override
+    public List<Aula> getAuleByName(String filter) throws DataException {
+        List<Aula> aule = new ArrayList<>();
+        try {
+            getAuleByName.setString(1, "%" + filter + "%");
+            try ( ResultSet rs = getAuleByName.executeQuery()) {
+                while (rs.next()) {
+                    Aula aula = importAula(rs);
+                    aule.add(aula);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare le aule con questo filtro : '" + filter + "'", ex);
         }
 
         return aule;

@@ -6,10 +6,13 @@ import java.util.List;
 
 public interface AuleDAO {
 
-    public Aula getAulaById(int id) throws DataException;
+    Aula getAulaById(int id) throws DataException;
 
-    public List<Aula> getAllAule() throws DataException;
+    List<Aula> getAllAule() throws DataException;
 
-    public List<Aula> getAuleByGruppoID(int id_gruppo) throws DataException;
+    List<Aula> getAuleByGruppoID(int id_gruppo) throws DataException;
 
+    Aula importAula();
+
+    List<Aula> getAuleByName(String filter) throws DataException;
 }

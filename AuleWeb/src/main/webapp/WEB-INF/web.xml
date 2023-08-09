@@ -73,7 +73,7 @@
 
     <context-param>
         <param-name>view.error_template</param-name>
-        <param-value>errore.ftl.html</param-value>
+        <param-value>error.ftl.html</param-value>
     </context-param>
 
     

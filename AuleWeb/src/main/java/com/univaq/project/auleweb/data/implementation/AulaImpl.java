@@ -8,33 +8,33 @@ public class AulaImpl extends DataItemImpl<Integer> implements Aula {
 
     private String nome;
     private String luogo;
-    private String edficio;
+    private String edificio;
     private Integer piano;
     private Integer capienza;
     private Integer prese_elettriche;
     private Integer prese_rete;
     private String note;
     private Responsabile responsabile;
-    
-    public AulaImpl(){
+
+    public AulaImpl() {
         super();
         this.nome = "";
         this.luogo = "";
-        this.edficio = "";
+        this.edificio = "";
         this.piano = 0;
         this.capienza = 0;
         this.prese_elettriche = 0;
         this.prese_rete = 0;
         this.note = "";
         this.responsabile = null;
-        
+
     }
 
-    public AulaImpl(String nome, String luogo, String edficio, Integer piano, Integer capienza, Integer prese_elettriche, Integer prese_rete, String note, Responsabile responsabile) {
+    public AulaImpl(String nome, String luogo, String edificio, Integer piano, Integer capienza, Integer prese_elettriche, Integer prese_rete, String note, Responsabile responsabile) {
         super();
         this.nome = nome;
         this.luogo = luogo;
-        this.edficio = edficio;
+        this.edificio = edificio;
         this.piano = piano;
         this.capienza = capienza;
         this.prese_elettriche = prese_elettriche;
@@ -67,12 +67,12 @@ public class AulaImpl extends DataItemImpl<Integer> implements Aula {
         this.luogo = luogo;
     }
 
-    public String getEdficio() {
-        return edficio;
+    public String getEdificio() {
+        return edificio;
     }
 
-    public void setEdficio(String edficio) {
-        this.edficio = edficio;
+    public void setEdificio(String edificio) {
+        this.edificio = edificio;
     }
 
     public Integer getPiano() {

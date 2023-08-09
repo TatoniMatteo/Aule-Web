@@ -1,0 +1,33 @@
+.search {
+    margin: 20px;
+}
+
+.search h1 {
+    margin-bottom: 10px;
+}
+
+.search .searchBar {
+    display: flex;
+    margin-bottom: 20px;
+    font-size: 1em;
+}
+
+.search .text-input,
+.search .button {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.search .text-input {
+    flex: 15;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.search .button {
+    cursor: pointer;
+    padding: 8px;
+    flex: 1;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}

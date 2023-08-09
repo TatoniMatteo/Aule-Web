@@ -2,10 +2,6 @@ package com.univaq.project.auleweb.data.model;
 
 import com.univaq.project.framework.data.DataItem;
 
-/**
- *
- * @author taton
- */
 public interface Aula extends DataItem<Integer> {
 
     Responsabile getResponsabile();
@@ -20,9 +16,9 @@ public interface Aula extends DataItem<Integer> {
 
     void setLuogo(String luogo);
 
-    String getEdficio();
+    String getEdificio();
 
-    void setEdficio(String edficio);
+    void setEdificio(String edficio);
 
     Integer getPiano();
 

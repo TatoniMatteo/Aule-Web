@@ -3,12 +3,12 @@ com\univaq\project\auleweb\data\implementation\ResponsabileImpl.class
 com\univaq\project\auleweb\data\model\Attrezzatura.class
 com\univaq\project\framework\result\TemplateManagerException.class
 com\univaq\project\framework\data\DataItem.class
-com\univaq\project\auleweb\data\dao\ResponsabileDAO.class
 com\univaq\project\auleweb\data\implementation\CorsoImpl.class
 com\univaq\project\framework\data\DataLayer.class
 com\univaq\project\framework\contoller\AbstractBaseController.class
 com\univaq\project\auleweb\controller\AuleWebController.class
 com\univaq\project\framework\data\DataItemImpl.class
+com\univaq\project\auleweb\data\dao\AuleDAO.class
 com\univaq\project\auleweb\data\model\Gruppo.class
 com\univaq\project\auleweb\data\implementation\AulaImpl.class
 com\univaq\project\auleweb\data\model\Categoria.class
@@ -26,6 +26,7 @@ com\univaq\project\auleweb\data\implementation\enumType\Laurea.class
 com\univaq\project\auleweb\data\proxy\ResponsabileProxy.class
 com\univaq\project\auleweb\data\implementation\AttrezzaturaImpl.class
 com\univaq\project\auleweb\data\model\Amministratore.class
+com\univaq\project\auleweb\data\dao\ResponsabiliDAO.class
 com\univaq\project\auleweb\data\model\Aula.class
 com\univaq\project\auleweb\data\implementation\CategoriaImpl.class
 com\univaq\project\auleweb\data\model\Corso.class
@@ -42,7 +43,6 @@ com\univaq\project\auleweb\data\proxy\AulaProxy.class
 com\univaq\project\framework\security\SecurityHelpers.class
 com\univaq\project\auleweb\data\model\Evento.class
 com\univaq\project\framework\result\DataModelFiller.class
-com\univaq\project\auleweb\data\dao\AulaDAO.class
 com\univaq\project\framework\result\FailureResult.class
 com\univaq\project\auleweb\data\dao\GruppiDAO.class
 com\univaq\project\framework\data\DataException.class
