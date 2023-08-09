@@ -11,14 +11,18 @@ public class ResponsabileImpl extends DataItemImpl<Integer> implements Responsab
 
     private String nome;
     private String cognome;
-    private String codice_fiscale;
     private String email;
 
-    public ResponsabileImpl(String nome, String cognome, String codice_fiscale, String email) {
+    public ResponsabileImpl(){
+        this.nome = "";
+        this.cognome = "";
+        this.email = "";
+    }
+    
+    public ResponsabileImpl(String nome, String cognome, String email) {
         super();
         this.nome = nome;
         this.cognome = cognome;
-        this.codice_fiscale = codice_fiscale;
         this.email = email;
     }
 
@@ -36,14 +40,6 @@ public class ResponsabileImpl extends DataItemImpl<Integer> implements Responsab
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
-    }
-
-    public String getCodice_fiscale() {
-        return codice_fiscale;
-    }
-
-    public void setCodice_fiscale(String codice_fiscale) {
-        this.codice_fiscale = codice_fiscale;
     }
 
     public String getEmail() {
