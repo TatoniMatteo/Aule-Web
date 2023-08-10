@@ -1,15 +1,16 @@
 package com.univaq.project.auleweb.data.proxy;
 
-import com.univaq.project.auleweb.data.implementation.ResponsabileImpl;
+import com.univaq.project.auleweb.data.implementation.CorsoImpl;
+import com.univaq.project.auleweb.data.implementation.enumType.Laurea;
 import com.univaq.project.framework.data.DataItemProxy;
 import com.univaq.project.framework.data.DataLayer;
 
-public class ResponsabileProxy extends ResponsabileImpl implements DataItemProxy {
+public class CorsoProxy extends CorsoImpl implements DataItemProxy {
 
     private boolean modified;
     protected DataLayer dataLayer;
 
-    public ResponsabileProxy(DataLayer d) {
+    public CorsoProxy(DataLayer d) {
         super();
         this.modified = false;
         this.dataLayer = d;
@@ -28,14 +29,14 @@ public class ResponsabileProxy extends ResponsabileImpl implements DataItemProxy
     }
 
     @Override
-    public void setCognome(String cognome) {
-        super.setCognome(cognome);
+    public void setDescrizione(String descrizione) {
+        super.setDescrizione(descrizione);
         this.modified = true;
     }
 
     @Override
-    public void setEmail(String email) {
-        super.setEmail(email);
+    public void setCorsoLaurea(Laurea corso_laurea) {
+        super.setCorsoLaurea(corso_laurea);
         this.modified = true;
     }
 

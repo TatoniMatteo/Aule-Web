@@ -13,7 +13,7 @@ public interface Corso extends DataItem<Integer> {
 
     void setDescrizione(String descrizione);
 
-    Laurea getCorso_laurea();
+    Laurea getCorsoLaurea();
 
-    void setCorso_laurea(Laurea corso_laurea);
+    void setCorsoLaurea(Laurea corso_laurea);
 }

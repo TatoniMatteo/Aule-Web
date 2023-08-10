@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.univaq.project.auleweb.data.dao.mysql;
 
 import com.univaq.project.auleweb.data.model.Responsabile;
@@ -13,16 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import com.univaq.project.auleweb.data.dao.ResponsabiliDAO;
+import com.univaq.project.auleweb.data.proxy.ResponsabileProxy;
 
-/**
- *
- * @author david
- */
-public class ResponsabileDAO_MySQL extends DAO implements ResponsabiliDAO {
+public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
     private PreparedStatement getResponsabileByID;
 
-    public ResponsabileDAO_MySQL(DataLayer d) {
+    public ResponsabiliDAO_MySQL(DataLayer d) {
         super(d);
     }
 
@@ -46,14 +39,14 @@ public class ResponsabileDAO_MySQL extends DAO implements ResponsabiliDAO {
         }
         super.destroy();
     }
-     
+
     public Responsabile getResponsabileById(int id_responsabile) throws DataException {
         Responsabile responsabile = null;
         try {
             getResponsabileByID.setInt(1, id_responsabile);
             try ( ResultSet rs = getResponsabileByID.executeQuery()) {
                 if (rs.next()) {
-                    //responsabile = createResponsabile(rs);
+                    responsabile = importResponsabile(rs);
                 }
             }
         } catch (SQLException ex) {
@@ -61,6 +54,25 @@ public class ResponsabileDAO_MySQL extends DAO implements ResponsabiliDAO {
         }
         return responsabile;
     }
-  
+
+    @Override
+    public Responsabile importResponsabile() {
+        return new ResponsabileProxy(this.getDataLayer());
+    }
+
+    private ResponsabileProxy importResponsabile(ResultSet rs) throws DataException {
+        ResponsabileProxy r = (ResponsabileProxy) this.importResponsabile();
+        try {
+            r.setKey(rs.getInt("ID"));
+            r.setNome(rs.getString("nome"));
+            r.setCognome(rs.getString("cognome"));
+            r.setEmail(rs.getString("email"));
+            r.setVersion(rs.getInt("versione"));
+        } catch (SQLException ex) {
+            throw new DataException("Errore nel DataLayer", ex);
+        }
+
+        return r;
+    }
 
 }

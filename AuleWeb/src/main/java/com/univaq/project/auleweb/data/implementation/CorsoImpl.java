@@ -8,12 +8,20 @@ public class CorsoImpl extends DataItemImpl<Integer> implements Corso {
 
     private String nome;
     private String descrizione;
-    private Laurea corso_laurea;
+    private Laurea corsoLaurea;
+
+    public CorsoImpl() {
+        this.nome="";
+        this.descrizione="";
+        this.corsoLaurea=null;
+    }
+    
+    
 
     public CorsoImpl(String nome, String descrizione, Laurea corso_laurea) {
         this.nome = nome;
         this.descrizione = descrizione;
-        this.corso_laurea = corso_laurea;
+        this.corsoLaurea = corso_laurea;
     }
 
     public String getNome() {
@@ -32,12 +40,12 @@ public class CorsoImpl extends DataItemImpl<Integer> implements Corso {
         this.descrizione = descrizione;
     }
 
-    public Laurea getCorso_laurea() {
-        return corso_laurea;
+    public Laurea getCorsoLaurea() {
+        return corsoLaurea;
     }
 
-    public void setCorso_laurea(Laurea corso_laurea) {
-        this.corso_laurea = corso_laurea;
+    public void setCorsoLaurea(Laurea corsoLaurea) {
+        this.corsoLaurea = corsoLaurea;
     }
 
 }
