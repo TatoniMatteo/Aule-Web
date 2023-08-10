@@ -20,6 +20,20 @@ public class EventoImpl extends DataItemImpl<Integer> implements Evento {
     private Responsabile responsabile;
     private Aula aula;
     private Tipo tipo_evento;
+    
+    public EventoImpl(){
+        this.id_ricorrenza = 0;
+        this.nome = "";
+        this.descrizione = "";
+        this.data = null;
+        this.ora_inizio = null;
+        this.ora_fine = null;
+        this.corso = null;
+        this.responsabile = null;
+        this.aula = null;
+        this.tipo_evento = null;
+        
+    }
 
     public EventoImpl(Integer id_ricorrenza, String nome, String descrizione, Date data, Integer ora_inizio, Integer ora_fine, Corso corso, Responsabile responsabile, Aula aula, Tipo tipo) {
         super();
