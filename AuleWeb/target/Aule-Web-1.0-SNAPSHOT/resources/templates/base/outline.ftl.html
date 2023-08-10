@@ -10,18 +10,22 @@
     </head>
 
     <body>
-        <#include "header.ftl.html">
-        <#assign options = options?default(false)>
-        <#if options>
-        <nav class="bg-yellow options">
-            <a href="homepage?page=gruppi">Gruppi</a>
-            <a href="homepage?page=aule">Aule</a>
-            <a href="homepage?page=corsi">Corsi</a>
-        </nav>
-        </#if>
-        <main>
-            <#include "../" + content_tpl>
-        </main>
+        <div class="container">
+            <#include "header.ftl.html">
+            <#assign options = options?default(false)>
+            <#if options>
+            <nav class="bg-yellow options">
+                <a href="homepage?page=home"><i class="fas fa-home"></i> Home</a>
+                <a href="homepage?page=gruppi"><i class="fas fa-object-group"></i> Gruppi</a>
+                <a href="homepage?page=aule"><i class="fas fa-chalkboard"></i> Aule</a>
+                <a href="homepage?page=corsi"><i class="fas fa-book"></i> Corsi</a>
+            </nav>
+            </#if>
+            <main>
+                <#include "../" + content_tpl>
+            </main>
+            <div class="spacer"></div>
+        </div>
         <#include "footer.html">
 
     <body>

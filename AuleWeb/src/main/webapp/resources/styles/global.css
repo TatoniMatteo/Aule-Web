@@ -1,4 +1,15 @@
 /*Stili di base per il main */
+.container{
+    min-width: 0;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.spacer{
+    height: 30px !important;
+}
+
 body main {
     text-align: center;
     margin: 0 10%;
@@ -102,6 +113,10 @@ header {
     background-color: #eccc5d;
 }
 
+.options a i {
+    margin-right: 5px;
+}
+
 
 @media screen and (min-width: 900px) and (max-width: 1200px) {
     .header-container {
@@ -143,5 +158,14 @@ header {
 
     body main{
         margin: 0 2%;
+    }
+
+    .options a i {
+        display: none;
+    }
+
+    .options a {
+        padding: 15px 20px;
+        margin: 0;
     }
 }

@@ -1,38 +1,4 @@
-.table-container {
-    width: 100%;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #dddddd;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-.action-button {
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.action-button:hover {
-    background-color: #2980b9;
-}
-
 .space{
     margin:10px 0;
 }
+
