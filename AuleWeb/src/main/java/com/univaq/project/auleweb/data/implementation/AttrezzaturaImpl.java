@@ -15,13 +15,20 @@ import com.univaq.project.framework.data.DataItemImpl;
 public class AttrezzaturaImpl extends DataItemImpl<Integer> implements Attrezzatura {
 
     private String nome;
-    private Integer numero_serie;
+    private String numeroSerie;
     private Aula aula;
 
-    public AttrezzaturaImpl(String nome, Integer numero_serie, Aula aula) {
+    public AttrezzaturaImpl() {
+        this.nome="";
+        this.numeroSerie="";
+        this.aula=null;
+    }
+    
+
+    public AttrezzaturaImpl(String nome, String numero_serie, Aula aula) {
         super();
         this.nome = nome;
-        this.numero_serie = numero_serie;
+        this.numeroSerie = numero_serie;
         this.aula = aula;
     }
 
@@ -33,12 +40,12 @@ public class AttrezzaturaImpl extends DataItemImpl<Integer> implements Attrezzat
         this.nome = nome;
     }
 
-    public Integer getNumero_serie() {
-        return numero_serie;
+    public String getNumeroSerie() {
+        return numeroSerie;
     }
 
-    public void setNumero_serie(Integer numero_serie) {
-        this.numero_serie = numero_serie;
+    public void setNumeroSerie(String numeroSerie) {
+        this.numeroSerie = numeroSerie;
     }
 
     public Aula getAula() {

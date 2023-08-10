@@ -16,9 +16,9 @@ public interface Attrezzatura extends DataItem<Integer> {
 
     void setNome(String nome);
 
-    Integer getNumero_serie();
+    String getNumeroSerie();
 
-    void setNumero_serie(Integer numero_serie);
+    void setNumeroSerie(String numero_serie);
 
     Aula getAula();
 
