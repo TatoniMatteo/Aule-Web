@@ -1,1 +1,27 @@
-<h1> CORSI </h1>
+<h1 class="space">Scegli un corso</h1>
+<#include "base/search.ftl.html">
+<div class="simple-table-container">
+    <table>
+        <thead class="bg-gray">
+            <tr>
+                <th>Nome</th>
+                <th>Corso di Laurea</th>
+                <th>Azione</th>
+            </tr>
+        </thead>
+        <#if corsi?has_content>
+        <tbody>
+            <#list corsi as corso>
+            <tr>
+                <td>${corso.nome}</td>
+                <td>${corso.corsoLaurea}</td>
+                <td><a href="dettaglicorso?id=${corso.key}" class="action-button bg-blue">Dettagli</a></td>
+            </tr>
+        </tbody>
+        </#list>
+        </#if>
+    </table>
+    <#if !corsi?has_content>
+    <h4>Non ci sono risultati per questa ricerca!</h4>
+    </#if>
+</div>

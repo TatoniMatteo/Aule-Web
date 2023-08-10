@@ -58,7 +58,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             attrezzatura.setKey(rs.getInt("ID"));
             attrezzatura.setId_aula(rs.getInt("id_aula"));
             attrezzatura.setNome(rs.getString("nome"));
-            attrezzatura.setNumeroSerie(rs.getString("numero_di_serie"));
+            attrezzatura.setNumeroSerie(rs.getString("numero_serie"));
             attrezzatura.setVersion(rs.getInt("versione"));
         } catch (SQLException ex) {
             throw new DataException("Impossibile creare l'oggetto Attrezzatura", ex);

@@ -14,7 +14,6 @@ import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,36 +22,36 @@ import java.util.List;
  * @author david
  */
 public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
-    
+
     private PreparedStatement getAllCorsi, getCorsoById, getCorsiByName;
-    
+
     public CorsiDAO_MySQL(DataLayer d) {
         super(d);
     }
-    
+
     public void init() throws DataException {
         super.init();
-        
+
         try {
             this.getCorsoById = this.connection.prepareStatement("SELECT * FROM Corso WHERE ID = ?");
             this.getAllCorsi = this.connection.prepareStatement("SELECT * FROM corso");
             this.getCorsiByName = this.connection.prepareStatement("SELECT * FROM Corso WHERE nome LIKE ?");
-            
+
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
         }
-        
+
     }
-    
+
     @Override
     public void destroy() throws DataException {
-        //anche chiudere i PreparedStamenent � una buona pratica...
-        //also closing PreparedStamenents is a good practice...
+        //anche chiudere i PreparedStamenent è una buona pratica...
         try {
-            
+
             getCorsoById.close();
             getAllCorsi.close();
-            
+            getCorsiByName.close();
+
         } catch (SQLException ex) {
             //
         }
@@ -63,29 +62,29 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
     public Corso importCorso() {
         return new CorsoProxy(this.getDataLayer());
     }
-    
+
     private CorsoProxy importCorso(ResultSet rs) throws DataException {
         CorsoProxy c = (CorsoProxy) this.importCorso();
         try {
             c.setKey(rs.getInt("ID"));
             c.setNome(rs.getString("nome"));
             c.setDescrizione(rs.getString("descrizione"));
-            
+
             for (Laurea l : Laurea.values()) {
                 if (l.toString().equals(rs.getString("corso_laurea"))) {
                     c.setCorsoLaurea(l);
                     break;
                 }
             }
-            
+
             c.setVersion(rs.getInt("versione"));
         } catch (SQLException ex) {
             throw new DataException("Errore nel DataLayer", ex);
         }
-        
+
         return c;
     }
-    
+
     @Override
     public Corso getCorsoById(int id) throws DataException {
         Corso corso = null;
@@ -100,26 +99,26 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataException("Impossibile caricate il corso con l'ID: "+ id, ex);
+            throw new DataException("Impossibile caricate il corso con l'ID: " + id, ex);
         }
         return corso;
     }
-    
+
     @Override
     public List<Corso> getAllCorsi() throws DataException {
         List<Corso> corsi = new ArrayList<>();
-        try{
+        try {
             try ( ResultSet rs = getAllCorsi.executeQuery()) {
-                while(rs.next()) {
+                while (rs.next()) {
                     corsi.add(importCorso(rs));
                 }
             }
-        }catch (SQLException ex) {
+        } catch (SQLException ex) {
             throw new DataException("Impossibile caricare i corsi", ex);
         }
         return corsi;
     }
-    
+
     @Override
     public List<Corso> getCorsiByName(String filter) throws DataException {
         List<Corso> corsi = new ArrayList<>();
@@ -137,5 +136,5 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
 
         return corsi;
     }
-    
+
 }
