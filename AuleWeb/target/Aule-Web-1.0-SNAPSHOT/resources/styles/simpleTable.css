@@ -36,6 +36,10 @@
     background-color: #2980b9;
 }
 
+.simple-table-container .small-table{
+    display: none;
+}
+
 @media screen and (min-width: 900px) and (max-width: 1200px) {
 
     .simple-table-container .table-container{
@@ -50,5 +54,9 @@
 
     .simple-table-container .large-table{
         display: none;
+    }
+
+    .simple-table-container .small-table{
+        display: block;
     }
 }

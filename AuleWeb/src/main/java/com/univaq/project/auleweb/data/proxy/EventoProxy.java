@@ -1,4 +1,3 @@
-
 package com.univaq.project.auleweb.data.proxy;
 
 import com.univaq.project.auleweb.data.dao.AuleDAO;
@@ -12,20 +11,23 @@ import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.data.DataItemProxy;
 import com.univaq.project.framework.data.DataLayer;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+public class EventoProxy extends EventoImpl implements DataItemProxy {
 
-public class EventoProxy extends EventoImpl implements DataItemProxy{
-    
-     protected boolean modified;
+    protected boolean modified;
     protected DataLayer dataLayer;
 
     protected int id_corso;
     protected int id_responsabile;
     protected int id_aula;
-    
+
     public EventoProxy(DataLayer d) {
         super();
         this.modified = false;
@@ -34,7 +36,7 @@ public class EventoProxy extends EventoImpl implements DataItemProxy{
         this.id_aula = 0;
         this.id_responsabile = 0;
     }
-    
+
     @Override
     public Corso getCorso() {
         if (super.getCorso() == null && this.id_corso > 0) {
@@ -70,44 +72,44 @@ public class EventoProxy extends EventoImpl implements DataItemProxy{
         }
         return super.getResponsabile();
     }
-    
+
     @Override
     public void setId_ricorrenza(Integer id_ricorrenza) {
         super.setId_ricorrenza(id_ricorrenza);
-        this.modified=true;
+        this.modified = true;
     }
-    
-     @Override
+
+    @Override
     public void setNome(String nome) {
         super.setNome(nome);
         this.modified = true;
     }
-    
+
     @Override
     public void setDescrizione(String descrizione) {
         super.setDescrizione(descrizione);
         this.modified = true;
     }
-    
+
     @Override
     public void setData(Date data) {
         super.setData(data);
         this.modified = true;
     }
-    
+
     @Override
-    public void setOra_inizio(Integer ora_inizio) {
-        super.setOra_inizio(ora_inizio);
+    public void setOraInizio(Time ora_inizio) {
+        super.setOraInizio(ora_inizio);
         this.modified = true;
     }
-    
+
     @Override
-    public void setOra_fine(Integer ora_fine) {
-        super.setOra_fine(ora_fine);
+    public void setOraFine(Time ora_fine) {
+        super.setOraFine(ora_fine);
         this.modified = true;
     }
-    
-     @Override
+
+    @Override
     public void setCorso(Corso corso) {
         super.setCorso(corso);
         if (corso != null) {
@@ -117,13 +119,14 @@ public class EventoProxy extends EventoImpl implements DataItemProxy{
         }
         this.modified = true;
     }
-     @Override
-        public void setTipo_evento(Tipo tipo_evento) {
-        super.setTipo_evento(tipo_evento);
+
+    @Override
+    public void setTipoEvento(Tipo tipo_evento) {
+        super.setTipoEvento(tipo_evento);
         this.modified = true;
     }
-    
-     @Override
+
+    @Override
     public void setResponsabile(Responsabile responsabile) {
         super.setResponsabile(responsabile);
         if (responsabile != null) {
@@ -133,7 +136,7 @@ public class EventoProxy extends EventoImpl implements DataItemProxy{
         }
         this.modified = true;
     }
-    
+
     @Override
     public void setAula(Aula aula) {
         super.setAula(aula);
@@ -144,7 +147,7 @@ public class EventoProxy extends EventoImpl implements DataItemProxy{
         }
         this.modified = true;
     }
-    
+
     @Override
     public void setKey(Integer key) {
         super.setKey(key);
@@ -160,13 +163,13 @@ public class EventoProxy extends EventoImpl implements DataItemProxy{
     public void setModified(boolean dirty) {
         this.modified = dirty;
     }
-    
-    public void setResponsabileKey(int id) {
+
+    public void setResponsabileId(int id) {
         this.id_responsabile = id;
         super.setResponsabile(null);
     }
 
-    public void setAulaKey(int id) {
+    public void setAulaId(int id) {
         this.id_aula = id;
         super.setAula(null);
     }
@@ -190,12 +193,12 @@ public class EventoProxy extends EventoImpl implements DataItemProxy{
 
     @Override
     public String toString() {
-        return this.getKey() + "," + this.getNome() + "," + this.getDescrizione() + "," + this.getData() + "," + this.getOra_fine() + "," + this.getOra_inizio() + "," + this.getAulaId()+ "," + this.getResponsabileId() + "," + this.getCorsoId();
+        return this.getKey() + "," + this.getNome() + "," + this.getDescrizione() + "," + this.getData() + "," + this.getOraFine() + "," + this.getOraInizio() + "," + this.getAulaId() + "," + this.getResponsabileId() + "," + this.getCorsoId();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        EventoProxy evento = (EventoProxy)obj;
+        EventoProxy evento = (EventoProxy) obj;
         if (super.equals(evento)) {
             if (this.id_corso != evento.id_corso) {
                 return false;
@@ -204,12 +207,8 @@ public class EventoProxy extends EventoImpl implements DataItemProxy{
                 return false;
             }
             return this.id_aula == evento.id_aula;
-        }
-        else{
+        } else {
             return false;
         }
     }
-    
-    
-    
 }

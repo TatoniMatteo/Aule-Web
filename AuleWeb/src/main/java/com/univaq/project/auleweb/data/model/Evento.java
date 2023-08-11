@@ -2,6 +2,7 @@ package com.univaq.project.auleweb.data.model;
 
 import com.univaq.project.auleweb.data.implementation.enumType.Tipo;
 import com.univaq.project.framework.data.DataItem;
+import java.sql.Time;
 import java.util.Date;
 
 public interface Evento extends DataItem<Integer> {
@@ -22,13 +23,13 @@ public interface Evento extends DataItem<Integer> {
 
     void setData(Date data);
 
-    Integer getOra_inizio();
+    Time getOraInizio();
 
-    void setOra_inizio(Integer ora_inizio);
+    void setOraInizio(Time ora_inizio);
 
-    Integer getOra_fine();
+    Time getOraFine();
 
-    void setOra_fine(Integer ora_fine);
+    void setOraFine(Time ora_fine);
 
     Corso getCorso();
 
@@ -42,7 +43,7 @@ public interface Evento extends DataItem<Integer> {
 
     void setAula(Aula aula);
 
-    Tipo getTipo_evento();
+    Tipo getTipoEvento();
 
-    void setTipo_evento(Tipo tipo_evento);
+    void setTipoEvento(Tipo tipo_evento);
 }

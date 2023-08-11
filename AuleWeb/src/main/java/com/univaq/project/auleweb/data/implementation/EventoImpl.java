@@ -6,6 +6,7 @@ import com.univaq.project.auleweb.data.model.Corso;
 import com.univaq.project.auleweb.data.model.Evento;
 import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataItemImpl;
+import java.sql.Time;
 import java.util.Date;
 
 public class EventoImpl extends DataItemImpl<Integer> implements Evento {
@@ -14,39 +15,39 @@ public class EventoImpl extends DataItemImpl<Integer> implements Evento {
     private String nome;
     private String descrizione;
     private Date data;
-    private Integer ora_inizio;
-    private Integer ora_fine;
+    private Time oraInizio;
+    private Time oraFine;
     private Corso corso;
     private Responsabile responsabile;
     private Aula aula;
-    private Tipo tipo_evento;
+    private Tipo tipoEvento;
     
     public EventoImpl(){
         this.id_ricorrenza = 0;
         this.nome = "";
         this.descrizione = "";
         this.data = null;
-        this.ora_inizio = null;
-        this.ora_fine = null;
+        this.oraInizio = null;
+        this.oraFine = null;
         this.corso = null;
         this.responsabile = null;
         this.aula = null;
-        this.tipo_evento = null;
+        this.tipoEvento = null;
         
     }
 
-    public EventoImpl(Integer id_ricorrenza, String nome, String descrizione, Date data, Integer ora_inizio, Integer ora_fine, Corso corso, Responsabile responsabile, Aula aula, Tipo tipo) {
+    public EventoImpl(Integer id_ricorrenza, String nome, String descrizione, Date data, Time ora_inizio, Time ora_fine, Corso corso, Responsabile responsabile, Aula aula, Tipo tipo) {
         super();
         this.id_ricorrenza = id_ricorrenza;
         this.nome = nome;
         this.descrizione = descrizione;
         this.data = data;
-        this.ora_inizio = ora_inizio;
-        this.ora_fine = ora_fine;
+        this.oraInizio = ora_inizio;
+        this.oraFine = ora_fine;
         this.corso = corso;
         this.responsabile = responsabile;
         this.aula = aula;
-        this.tipo_evento = tipo;
+        this.tipoEvento = tipo;
     }
 
     public Integer getId_ricorrenza() {
@@ -81,20 +82,20 @@ public class EventoImpl extends DataItemImpl<Integer> implements Evento {
         this.data = data;
     }
 
-    public Integer getOra_inizio() {
-        return ora_inizio;
+    public Time getOraInizio() {
+        return oraInizio;
     }
 
-    public void setOra_inizio(Integer ora_inizio) {
-        this.ora_inizio = ora_inizio;
+    public void setOraInizio(Time oraInizio) {
+        this.oraInizio = oraInizio;
     }
 
-    public Integer getOra_fine() {
-        return ora_fine;
+    public Time getOraFine() {
+        return oraFine;
     }
 
-    public void setOra_fine(Integer ora_fine) {
-        this.ora_fine = ora_fine;
+    public void setOraFine(Time oraFine) {
+        this.oraFine = oraFine;
     }
 
     public Corso getCorso() {
@@ -121,12 +122,12 @@ public class EventoImpl extends DataItemImpl<Integer> implements Evento {
         this.aula = aula;
     }
 
-    public Tipo getTipo_evento() {
-        return tipo_evento;
+    public Tipo getTipoEvento() {
+        return tipoEvento;
     }
 
-    public void setTipo_evento(Tipo tipo_evento) {
-        this.tipo_evento = tipo_evento;
+    public void setTipoEvento(Tipo tipoEvento) {
+        this.tipoEvento = tipoEvento;
     }
 
 }

@@ -1,11 +1,9 @@
-.space{
-    margin-top: 50px;
-}
-
 .date-form {
     display: flex;
     justify-content: space-evenly;
     padding: 20px;
+    width: 50%;
+    margin: 0 auto;
 }
 
 #weekPicker {
@@ -27,4 +25,34 @@
 
 .date-form button:hover {
     background-color: #233f8b;
+}
+
+/* Stili per la griglia */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.grid-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+/* Stili per gli eventi */
+.event {
+    margin-bottom: 5px;
+}
+
+.separator{
+    margin: 50px auto;
+    height: 4px;
+    border-radius: 4px;
+    width: 80%;
+}
+
+@media screen and (max-width: 900px){
+    .date-form {
+        width: 100%;
+    }
 }

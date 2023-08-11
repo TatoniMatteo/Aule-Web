@@ -60,11 +60,53 @@
     </div>
 </div>
 
+<!-- SEPARATORE -->
+
+<div class="separator bg-yellow"></div>
+
 <!-- EVENTI   -->
 
-<h2 class="space">Eventi in programma per i giorni dal ${settimana[1]} al ${settimana[2]}</h2>
+<h2>Eventi in programma per i giorni dal ${settimana[1]} al ${settimana[2]}</h2>
 <form class="date-form" method="post">
     <input type="week" id="weekPicker" value="${settimana[0]}" name="week">
     <button type="submit" class="bg-blue">Cambia settimana</button>
 </form>
+<div class="simple-table-container">
+    <table>
+        <thead class="bg-gray">
+            <tr>
+                <th class="text-left">Nome Evento</th>
+                <th class="large-table text-left">Tipo Evento</th>
+                <th>Giorno</th>
+                <th class="large-table">Inizio</th>
+                <th class="large-table">Fine</th>
+                <th class="small-table">Orario</th>
+                <th></th>
+            </tr>
+        </thead>
+        <#if eventi?has_content>
+        <tbody>
+            <#list eventi as evento>
+
+            <#assign start = evento.oraInizio?string("HH:mm")>
+            <#assign end = evento.oraFine?string("HH:mm")>
+
+            <tr>
+                <td class="text-left">${evento.nome}</td>
+                <td class="large-table text-left">${evento.tipoEvento?capitalize}</td>
+                <td>${evento.data}</td>
+                <td class="large-table">${start}</td>
+                <td class="large-table">${end}</td>
+                <td class="small-table">${start} - ${end}</td>
+                <td><a href="dettagliEvento?id=${evento.key}" class="action-button bg-blue">Dettagli</a></td>
+            </tr>
+            </#list>
+        </tbody>
+        </#if>
+    </table>
+    <#if !eventi?has_content>
+    <h4>Non ci sono eventi per questa settimana!</h4>
+    </#if>
+</div>
+
 

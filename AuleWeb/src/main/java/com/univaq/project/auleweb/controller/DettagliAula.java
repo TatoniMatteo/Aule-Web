@@ -18,15 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class DettagliAula extends AuleWebController {
 
-    private DataLayerImpl dataLayer;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
-            dataLayer = (DataLayerImpl) request.getAttribute("datalayer");
             int id = Integer.parseInt(request.getParameter("id"));
+            DataLayerImpl dataLayer = (DataLayerImpl) request.getAttribute("datalayer");
             String[] settimana = getWeek(request.getParameter("week"));
             Aula aula = dataLayer.getAuleDAO().getAulaById(id);
-            String[] styles = {"dettagliAula", "info"};
+            String[] styles = {"dettagliAula", "info", "simpleTable"};
 
             Map data = new HashMap<>();
             data.put("styles", styles);
@@ -35,7 +33,7 @@ public class DettagliAula extends AuleWebController {
             data.put("aula", aula);
             data.put("attrezzature", dataLayer.getAttrezzatureDAO().getAttrezzaturaByAula(id));
             data.put("settimana", settimana);
-            data.put("eventi", dataLayer.getEventiDAO().getEventiByAulaAndWeek(id, settimana[1], settimana[2]));
+            data.put("eventi", dataLayer.getEventiDAO().getEventiByAulaAndWeek(id, settimana[1]));
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("dettagliAula.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
