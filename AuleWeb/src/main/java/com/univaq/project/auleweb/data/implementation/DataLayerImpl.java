@@ -1,5 +1,6 @@
 package com.univaq.project.auleweb.data.implementation;
 
+import com.univaq.project.auleweb.data.dao.AmministratoriDAO;
 import com.univaq.project.auleweb.data.dao.AttrezzatureDAO;
 import com.univaq.project.auleweb.data.dao.AuleDAO;
 import com.univaq.project.auleweb.data.dao.CategorieDAO;
@@ -7,6 +8,7 @@ import com.univaq.project.auleweb.data.dao.CorsiDAO;
 import com.univaq.project.auleweb.data.dao.EventiDAO;
 import com.univaq.project.auleweb.data.dao.GruppiDAO;
 import com.univaq.project.auleweb.data.dao.ResponsabiliDAO;
+import com.univaq.project.auleweb.data.dao.mysql.AmministratoriDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.AttrezzatureDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.AuleDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.CategorieDAO_MySQL;
@@ -14,6 +16,7 @@ import com.univaq.project.auleweb.data.dao.mysql.CorsiDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.EventiDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.GruppiDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.ResponsabiliDAO_MySQL;
+import com.univaq.project.auleweb.data.model.Amministratore;
 import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.auleweb.data.model.Categoria;
@@ -41,6 +44,7 @@ public class DataLayerImpl extends DataLayer {
         registerDAO(Corso.class, new CorsiDAO_MySQL(this));
         registerDAO(Attrezzatura.class, new AttrezzatureDAO_MySQL(this));
         registerDAO(Evento.class, new EventiDAO_MySQL(this));
+        registerDAO(Amministratore.class, new AmministratoriDAO_MySQL(this));
     }
 
     public CategorieDAO getCategorieDAO() {
@@ -69,5 +73,9 @@ public class DataLayerImpl extends DataLayer {
 
     public EventiDAO getEventiDAO() {
         return (EventiDAO) getDAO(Evento.class);
+    }
+    
+    public AmministratoriDAO getAmministratoriDAO(){
+        return (AmministratoriDAO) getDAO(Amministratore.class);
     }
 }

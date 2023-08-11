@@ -112,7 +112,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             aula.setId_responsabile(rs.getInt("id_responsabile"));
             aula.setVersion(rs.getLong("versione"));
         } catch (SQLException ex) {
-            throw new DataException("Errore l'importazione dell'oggetto Categoria", ex);
+            throw new DataException("Errore l'importazione dell'oggetto Aula", ex);
         }
         return aula;
     }
