@@ -1,3 +1,4 @@
+com\univaq\project\auleweb\controller\DettagliEvento.class
 com\univaq\project\auleweb\data\implementation\ResponsabileImpl.class
 com\univaq\project\framework\result\TemplateManagerException.class
 com\univaq\project\framework\data\DataItem.class
@@ -18,6 +19,7 @@ com\univaq\project\auleweb\data\dao\CorsiDAO.class
 com\univaq\project\auleweb\data\dao\mysql\ResponsabiliDAO_MySQL.class
 com\univaq\project\auleweb\data\dao\mysql\CorsiDAO_MySQL.class
 com\univaq\project\auleweb\data\proxy\ResponsabileProxy.class
+com\univaq\project\auleweb\controller\Amministrazione.class
 com\univaq\project\auleweb\data\model\Aula.class
 com\univaq\project\auleweb\data\implementation\CategoriaImpl.class
 com\univaq\project\auleweb\data\implementation\enumType\Tipo.class
@@ -25,6 +27,7 @@ com\univaq\project\auleweb\data\proxy\CategoriaProxy.class
 com\univaq\project\framework\data\DataItemProxy.class
 com\univaq\project\auleweb\data\dao\mysql\EventiDAO_MySQL.class
 com\univaq\project\framework\result\TemplateResult.class
+com\univaq\project\auleweb\data\proxy\AmministratoreProxy.class
 com\univaq\project\auleweb\data\implementation\AmministratoreImpl.class
 com\univaq\project\auleweb\data\proxy\CorsoProxy.class
 com\univaq\project\auleweb\data\dao\CategorieDAO.class
@@ -40,6 +43,7 @@ com\univaq\project\auleweb\data\proxy\AttrezzaturaProxy.class
 com\univaq\project\framework\data\DataLayer.class
 com\univaq\project\auleweb\controller\AuleWebController.class
 com\univaq\project\auleweb\data\dao\AuleDAO.class
+com\univaq\project\auleweb\data\dao\mysql\AmministratoriDAO_MySQL.class
 com\univaq\project\auleweb\data\implementation\GruppoImpl.class
 com\univaq\project\auleweb\data\proxy\GruppoProxy.class
 com\univaq\project\framework\result\StreamResult.class
@@ -52,6 +56,7 @@ com\univaq\project\auleweb\data\model\Amministratore.class
 com\univaq\project\auleweb\data\dao\ResponsabiliDAO.class
 com\univaq\project\auleweb\data\model\Corso.class
 com\univaq\project\framework\data\DAO.class
+com\univaq\project\auleweb\data\dao\AmministratoriDAO.class
 com\univaq\project\auleweb\controller\Login.class
 com\univaq\project\auleweb\data\dao\mysql\GruppiDAO_MySQL.class
 com\univaq\project\auleweb\data\proxy\AulaProxy.class

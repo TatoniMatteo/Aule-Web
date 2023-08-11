@@ -17,7 +17,7 @@ import java.util.List;
 
 public class EventiDAO_MySQL extends DAO implements EventiDAO {
 
-    private PreparedStatement getAllEeventiNext3Hours, getEventiByAulaAndWeek, getEventiByCorsoAndWeek;
+    private PreparedStatement getAllEeventiNext3Hours, getEventiByAulaAndWeek, getEventiByCorsoAndWeek, getEventoById;
 
     public EventiDAO_MySQL(DataLayer d) {
         super(d);
@@ -49,6 +49,12 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
                     + "ORDER BY data AND ora_inizio"
             );
 
+            getEventoById = this.dataLayer.getConnection().prepareStatement(
+                    "SELECT * "
+                    + "FROM evento "
+                    + "WHERE id = ? "
+            );
+
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
         }
@@ -58,6 +64,9 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
     public void destroy() throws DataException {
         try {
             getAllEeventiNext3Hours.close();
+            getEventiByAulaAndWeek.close();
+            getEventiByCorsoAndWeek.close();
+            getEventoById.close();
 
         } catch (SQLException ex) {
 
@@ -175,6 +184,22 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
         return eventi;
     }
 
+    @Override
+    public Evento getEventoById(int eventoId) throws DataException {
+        try {
+            getEventoById.setInt(1, eventoId);
+            try ( ResultSet rs = getEventoById.executeQuery()) {
+                if (rs.next()) {
+                    return importEvento(rs);
+                } else {
+                    throw new SQLException("Elemento non trovato");
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile trovare l'evento con id " + eventoId, ex);
+        }
+    }
+
     private static LocalDate getStartOfWeek(String weekString) {
         String[] parts = weekString.split("-W");
         int year = Integer.parseInt(parts[0]);
@@ -184,5 +209,4 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
         firstDayOfWeek = firstDayOfWeek.plusWeeks(week - 1);
         return firstDayOfWeek;
     }
-
 }

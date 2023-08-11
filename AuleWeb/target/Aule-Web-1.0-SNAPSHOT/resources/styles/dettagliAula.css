@@ -1,3 +1,12 @@
+.back{
+    margin-left: 2%;
+}
+
+.back a{
+    text-decoration: none;
+    color: inherit;
+}
+
 .date-form {
     display: flex;
     justify-content: space-evenly;
@@ -7,7 +16,6 @@
 }
 
 #weekPicker {
-    margin: 10px 0;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -20,7 +28,7 @@
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
-    max-height: 50px;
+    width: 200px;
 }
 
 .date-form button:hover {

@@ -12,8 +12,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
 
@@ -80,29 +78,22 @@ public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
         }
         return amministratore;
     }
-    
+
     @Override
     public Amministratore getAmministratoreByUsernamePassword(String username, String password) throws DataException {
         Amministratore amministratore = null;
         try {
-            password= SecurityHelpers.getPasswordHashPBKDF2(password);
-            
-            getAmministratoreById.setString(1,username);
-            getAmministratoreById.setString(2, password);
-
-            try ( ResultSet rs = getAmministratoreById.executeQuery()) {
+            password = SecurityHelpers.getPasswordHashPBKDF2(password);
+            getAmministratoreByUsernamePassword.setString(1, username);
+            getAmministratoreByUsernamePassword.setString(2, password);
+            try ( ResultSet rs = getAmministratoreByUsernamePassword.executeQuery()) {
                 if (rs.next()) {
                     amministratore = importAmministratore(rs);
                 }
             }
-        } catch (SQLException ex) {
-            throw new DataException("Impossibile caricare l'amministratore con Id: "  , ex);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            Logger.getLogger(AmministratoriDAO_MySQL.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException | SQLException ex) {
+            throw new DataException("Impossibile verificare le credenziali (username: " + username + ", password: " + password + ")", ex);
+        }
         return amministratore;
     }
-    
-    
-
 }

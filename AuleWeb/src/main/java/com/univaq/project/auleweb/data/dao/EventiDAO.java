@@ -10,8 +10,10 @@ public interface EventiDAO {
 
     List<Evento> getAllEeventiNext3Hours() throws DataException;
 
-    List<Evento> getEventiByAulaAndWeek(int id, String input) throws DataException;
+    List<Evento> getEventiByAulaAndWeek(int aulaId, String input) throws DataException;
 
-    List<Evento> getEventiByCorsoAndWeek(int id, String input) throws DataException;
+    List<Evento> getEventiByCorsoAndWeek(int corsoId, String input) throws DataException;
+
+    Evento getEventoById(int eventoId) throws DataException;
 
 }

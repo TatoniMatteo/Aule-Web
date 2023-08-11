@@ -1,11 +1,13 @@
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\mysql\AttrezzatureDAO_MySQL.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\controller\AuleWebController.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\proxy\CategoriaProxy.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\AmministratoriDAO.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\DataLayer.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\DataItemProxy.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\result\FailureResult.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\AulaImpl.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\proxy\EventoProxy.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\controller\DettagliEvento.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\DataException.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\result\DataModelFiller.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\CorsoImpl.java
@@ -27,11 +29,13 @@ C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framewo
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\mysql\EventiDAO_MySQL.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\proxy\GruppoProxy.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\result\TemplateResult.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\mysql\AmministratoriDAO_MySQL.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\enumType\Laurea.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\controller\Homepage.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\ResponsabiliDAO.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\proxy\ResponsabileProxy.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\DataLayerImpl.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\proxy\AmministratoreProxy.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\model\Amministratore.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\ResponsabileImpl.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\GruppoImpl.java
@@ -51,6 +55,7 @@ C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\GruppiDAO.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\DAO.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\proxy\AulaProxy.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\controller\Amministrazione.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\model\Evento.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\result\StreamResult.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\DataItemImpl.java

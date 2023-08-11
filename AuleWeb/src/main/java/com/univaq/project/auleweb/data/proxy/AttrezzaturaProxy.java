@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.univaq.project.auleweb.data.proxy;
 
 import com.univaq.project.auleweb.data.dao.AuleDAO;
@@ -13,10 +9,6 @@ import com.univaq.project.framework.data.DataLayer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author david
- */
 public class AttrezzaturaProxy extends AttrezzaturaImpl implements DataItemProxy {
 
     private boolean modified;

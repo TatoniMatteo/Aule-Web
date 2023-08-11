@@ -1,3 +1,10 @@
+<h4 class="text-left back">
+    <a href="homepage?page=corsi">
+        <i class="fas fa-arrow-left"></i>
+        Torna indietro
+    </a>
+</h4>
+
 <!<!-- INFO -->
 
 <div class="info-container">
@@ -60,7 +67,7 @@
                 <td class="large-table">${start}</td>
                 <td class="large-table">${end}</td>
                 <td class="small-table">${start} - ${end}</td>
-                <td><a href="dettagliEvento?id=${evento.key}" class="action-button bg-blue">Dettagli</a></td>
+                <td><a href="dettaglievento?id=${evento.key}&back=dettaglicorso?id=${corso.key}" class="action-button bg-blue">Dettagli</a></td>
             </tr>
             </#list>
         </tbody>

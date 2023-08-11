@@ -4,9 +4,9 @@
     <table>
         <thead class="bg-gray">
             <tr>
-                <th>Nome</th>
-                <th class="large-table">Luogo</th>
-                <th>Edificio</th>
+                <th class="text-left">Nome</th>
+                <th class="large-table text-left">Responsabile</th>
+                <th class="text-left">Edificio</th>
                 <th class="large-table">Piano</th>
                 <th>Capienza</th>
                 <th></th>
@@ -16,9 +16,9 @@
         <tbody>
             <#list aule as aula>
             <tr>
-                <td>${aula.nome}</td>
-                <td class="large-table">${aula.luogo}</td>
-                <td>${aula.edificio}</td>
+                <td class="text-left">${aula.nome}</td>
+                <td class="large-table text-left">${aula.responsabile.nome} ${aula.responsabile.cognome}</td>
+                <td class="text-left">${aula.edificio}</td>
                 <td class="large-table">${aula.piano}</td>
                 <td>${aula.capienza}</td>
                 <td><a href="dettagliaula?id=${aula.key}" class="action-button bg-blue">Dettagli</a></td>

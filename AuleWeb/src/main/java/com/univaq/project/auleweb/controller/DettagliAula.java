@@ -29,7 +29,6 @@ public class DettagliAula extends AuleWebController {
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("username", SecurityHelpers.checkSession(request));
-            data.put("options", true);
             data.put("aula", aula);
             data.put("attrezzature", dataLayer.getAttrezzatureDAO().getAttrezzaturaByAula(id));
             data.put("settimana", settimana);

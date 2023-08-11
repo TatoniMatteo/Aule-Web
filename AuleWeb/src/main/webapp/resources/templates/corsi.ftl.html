@@ -4,8 +4,8 @@
     <table>
         <thead class="bg-gray">
             <tr>
-                <th>Nome</th>
-                <th>Corso di Laurea</th>
+                <th class="text-left">Nome</th>
+                <th class="text-left">Corso di Laurea</th>
                 <th>Azione</th>
             </tr>
         </thead>
@@ -13,8 +13,8 @@
         <tbody>
             <#list corsi as corso>
             <tr>
-                <td>${corso.nome}</td>
-                <td>${corso.corsoLaurea}</td>
+                <td class="text-left">${corso.nome}</td>
+                <td class="text-left">${corso.corsoLaurea}</td>
                 <td><a href="dettaglicorso?id=${corso.key}" class="action-button bg-blue">Dettagli</a></td>
             </tr>
         </tbody>

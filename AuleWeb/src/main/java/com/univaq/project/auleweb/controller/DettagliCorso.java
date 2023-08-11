@@ -24,13 +24,12 @@ public class DettagliCorso extends AuleWebController {
             DataLayerImpl dataLayer = (DataLayerImpl) request.getAttribute("datalayer");
             String[] settimana = getWeek(request.getParameter("week"));
             Corso corso = dataLayer.getCorsiDAO().getCorsoById(id);
-            String[] styles = {"dettagliCorso", "info","simpleTable"};
+            String[] styles = {"dettagliCorso", "info", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("username", SecurityHelpers.checkSession(request));
-            data.put("options", true);
             data.put("corso", corso);
-             data.put("settimana", settimana);
+            data.put("settimana", settimana);
             data.put("eventi", dataLayer.getEventiDAO().getEventiByCorsoAndWeek(id, settimana[1]));
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("dettagliCorso.ftl.html", data, response);
@@ -39,7 +38,7 @@ public class DettagliCorso extends AuleWebController {
         }
     }
 
-        private String[] getWeek(String inputWeek) {
+    private String[] getWeek(String inputWeek) {
         String[] settimana = new String[3];
         settimana[0] = inputWeek != null ? inputWeek : LocalDate.now().getYear() + "-W" + LocalDate.now().get(WeekFields.ISO.weekOfWeekBasedYear());
 

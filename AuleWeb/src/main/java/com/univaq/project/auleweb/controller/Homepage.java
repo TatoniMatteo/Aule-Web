@@ -7,7 +7,6 @@ import com.univaq.project.framework.result.TemplateResult;
 import com.univaq.project.framework.security.SecurityHelpers;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,7 +15,7 @@ public class Homepage extends AuleWebController {
     private DataLayerImpl dataLayer;
 
     @Override
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
 
         String page = request.getParameter("page");
         dataLayer = (DataLayerImpl) request.getAttribute("datalayer");
@@ -134,12 +133,12 @@ public class Homepage extends AuleWebController {
 
     private void action_home(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {"home"};
+            String[] styles = {"home", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("username", SecurityHelpers.checkSession(request));
-            data.put("aule", dataLayer.getAuleDAO().getAllAule());
             data.put("options", true);
+            data.put("eventi", dataLayer.getEventiDAO().getAllEeventiNext3Hours());
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("home.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
