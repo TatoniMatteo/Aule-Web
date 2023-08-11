@@ -31,3 +31,17 @@ h6 {
 h1{
     font-size: 3em;
 }
+
+.text-center{
+    text-align: center;
+}
+
+
+.text-right{
+    text-align: end;
+}
+
+
+.text-left{
+    text-align: start;
+}

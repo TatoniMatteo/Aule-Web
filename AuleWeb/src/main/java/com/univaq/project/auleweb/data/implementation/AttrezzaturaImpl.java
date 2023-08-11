@@ -1,17 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.univaq.project.auleweb.data.implementation;
 
 import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.framework.data.DataItemImpl;
 
-/**
- *
- * @author david
- */
+
 public class AttrezzaturaImpl extends DataItemImpl<Integer> implements Attrezzatura {
 
     private String nome;

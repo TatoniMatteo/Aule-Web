@@ -1,3 +1,5 @@
+<!-- INFO -->
+
 <div class="info-container">
     <div class="info">
         <div class="info-header">
@@ -57,3 +59,12 @@
         <img src="resources/images/corso.svg" alt="Immagine Aula">
     </div>
 </div>
+
+<!-- EVENTI   -->
+
+<h2 class="space">Eventi in programma per i giorni dal ${settimana[1]} al ${settimana[2]}</h2>
+<form class="date-form" method="post">
+    <input type="week" id="weekPicker" value="${settimana[0]}" name="week">
+    <button type="submit" class="bg-blue">Cambia settimana</button>
+</form>
+

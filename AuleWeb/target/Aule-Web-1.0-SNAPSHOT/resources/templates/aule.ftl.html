@@ -7,27 +7,21 @@
                 <th>Nome</th>
                 <th class="large-table">Luogo</th>
                 <th>Edificio</th>
-                <th>Piano</th>
+                <th class="large-table">Piano</th>
                 <th>Capienza</th>
-                <th class="large-table">Azione</th>
+                <th></th>
             </tr>
         </thead>
         <#if aule?has_content>
         <tbody>
             <#list aule as aula>
-            <tr class="large-table">
+            <tr>
                 <td>${aula.nome}</td>
-                <td>${aula.luogo}</td>
+                <td class="large-table">${aula.luogo}</td>
                 <td>${aula.edificio}</td>
-                <td>${aula.piano}</td>
+                <td class="large-table">${aula.piano}</td>
                 <td>${aula.capienza}</td>
                 <td><a href="dettagliaula?id=${aula.key}" class="action-button bg-blue">Dettagli</a></td>
-            </tr>
-            <tr class="small-table">
-                <td> <a href="dettagliaula?id=${aula.key}">${aula.nome}</a></td>
-                <td> <a href="dettagliaula?id=${aula.key}">${aula.edificio}</a></td>
-                <td> <a href="dettagliaula?id=${aula.key}">${aula.piano}</a></td>
-                <td> <a href="dettagliaula?id=${aula.key}">${aula.capienza}</a></td>
             </tr>
             </#list>
         </tbody>

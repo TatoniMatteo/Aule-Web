@@ -4,18 +4,21 @@ import com.univaq.project.auleweb.data.dao.AttrezzatureDAO;
 import com.univaq.project.auleweb.data.dao.AuleDAO;
 import com.univaq.project.auleweb.data.dao.CategorieDAO;
 import com.univaq.project.auleweb.data.dao.CorsiDAO;
+import com.univaq.project.auleweb.data.dao.EventiDAO;
 import com.univaq.project.auleweb.data.dao.GruppiDAO;
 import com.univaq.project.auleweb.data.dao.ResponsabiliDAO;
 import com.univaq.project.auleweb.data.dao.mysql.AttrezzatureDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.AuleDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.CategorieDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.CorsiDAO_MySQL;
+import com.univaq.project.auleweb.data.dao.mysql.EventiDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.GruppiDAO_MySQL;
 import com.univaq.project.auleweb.data.dao.mysql.ResponsabiliDAO_MySQL;
 import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.auleweb.data.model.Categoria;
 import com.univaq.project.auleweb.data.model.Corso;
+import com.univaq.project.auleweb.data.model.Evento;
 import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataException;
@@ -37,6 +40,7 @@ public class DataLayerImpl extends DataLayer {
         registerDAO(Responsabile.class, new ResponsabiliDAO_MySQL(this));
         registerDAO(Corso.class, new CorsiDAO_MySQL(this));
         registerDAO(Attrezzatura.class, new AttrezzatureDAO_MySQL(this));
+        registerDAO(Evento.class, new EventiDAO_MySQL(this));
     }
 
     public CategorieDAO getCategorieDAO() {
@@ -54,11 +58,16 @@ public class DataLayerImpl extends DataLayer {
     public ResponsabiliDAO getResponsabiliDAO() {
         return (ResponsabiliDAO) getDAO(Responsabile.class);
     }
-    
-    public CorsiDAO getCorsiDAO(){
+
+    public CorsiDAO getCorsiDAO() {
         return (CorsiDAO) getDAO(Corso.class);
     }
-    public AttrezzatureDAO getAttrezzatureDAO(){
+
+    public AttrezzatureDAO getAttrezzatureDAO() {
         return (AttrezzatureDAO) getDAO(Attrezzatura.class);
+    }
+
+    public EventiDAO getEventiDAO() {
+        return (EventiDAO) getDAO(Evento.class);
     }
 }

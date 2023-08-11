@@ -5,6 +5,7 @@ C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framewo
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\DataItemProxy.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\result\FailureResult.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\AulaImpl.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\proxy\EventoProxy.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\DataException.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\result\DataModelFiller.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\CorsoImpl.java
@@ -20,8 +21,10 @@ C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\AuleDAO.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\mysql\ResponsabiliDAO_MySQL.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\data\OptimisticLockException.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\EventiDAO.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\mysql\AuleDAO_MySQL.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\contoller\AbstractBaseController.java
+C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\dao\mysql\EventiDAO_MySQL.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\proxy\GruppoProxy.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\framework\result\TemplateResult.java
 C:\Workspaces\Netbeans\Aule-Web\AuleWeb\src\main\java\com\univaq\project\auleweb\data\implementation\enumType\Laurea.java
