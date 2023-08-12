@@ -164,11 +164,7 @@ public class Homepage extends AuleWebController {
 
     private File createFile(String tipo, Integer corso, String dataInizio, String dataFine, String outputName) throws DataException {
         List<Evento> eventi;
-        String path;
         try {
-            outputName = outputName != null && !outputName.isBlank() ? (outputName.endsWith(".csv") ? outputName : outputName + ".csv") : "eventi.csv";
-            path = getServletContext().getRealPath(outputName);
-
             if (corso != null) {
                 eventi = dataLayer.getEventiDAO().getEventiByCorsoAndDateRange(corso, dataInizio, dataFine);
             } else {
@@ -180,10 +176,12 @@ public class Homepage extends AuleWebController {
 
         switch (tipo) {
             case "csv" -> {
-                return CSVExporter.exportEventiToCsv(eventi, path);
+                outputName = outputName != null && !outputName.isBlank() ? (outputName.endsWith(".csv") ? outputName : outputName + ".csv") : "eventi.csv";
+                return CSVExporter.exportEventiToCsv(eventi, getServletContext().getRealPath(outputName));
             }
             case "ical" -> {
-                return ICalendarExporter.exportEventiToICalendar(eventi, path);
+                outputName = outputName != null && !outputName.isBlank() ? (outputName.endsWith(".ics") ? outputName : outputName + ".ics") : "eventi.ics";
+                return ICalendarExporter.exportEventiToICalendar(eventi, getServletContext().getRealPath(outputName));
             }
             default ->
                 throw new DataException("tipo di file non valido!\nTipo specificato '" + tipo + "'");

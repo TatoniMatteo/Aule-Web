@@ -24,3 +24,4 @@ hs_err_pid*
 replay_pid*
 AuleWeb/target/test-classes/.netbeans_automatic_build
 AuleWeb/target/classes/.netbeans_automatic_build
+AuleWeb/target/*
