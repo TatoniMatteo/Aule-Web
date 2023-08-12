@@ -17,13 +17,19 @@ import java.util.List;
 
 public class EventiDAO_MySQL extends DAO implements EventiDAO {
 
-    private PreparedStatement getAllEeventiNext3Hours, getEventiByAulaAndWeek, getEventiByCorsoAndWeek, getEventoById;
+    private PreparedStatement getAllEeventiNext3Hours,
+            getEventiByAulaAndWeek,
+            getEventiByCorsoAndWeek,
+            getEventoById,
+            getEventiByCorsoAndDateRange,
+            getEventiByDateRange;
 
     public EventiDAO_MySQL(DataLayer d) {
         super(d);
 
     }
 
+    @Override
     public void init() throws DataException {
 
         try {
@@ -54,6 +60,17 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
                     + "FROM evento "
                     + "WHERE id = ? "
             );
+            getEventiByCorsoAndDateRange = this.dataLayer.getConnection().prepareStatement("SELECT * "
+                    + "FROM evento "
+                    + "WHERE data BETWEEN ? AND ? AND id_corso = ? "
+                    + "ORDER BY data AND ora_inizio"
+            );
+
+            getEventiByDateRange = this.dataLayer.getConnection().prepareStatement("SELECT * "
+                    + "FROM evento "
+                    + "WHERE data BETWEEN ? AND ? "
+                    + "ORDER BY data AND ora_inizio"
+            );
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -61,15 +78,18 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
 
     }
 
+    @Override
     public void destroy() throws DataException {
         try {
             getAllEeventiNext3Hours.close();
             getEventiByAulaAndWeek.close();
             getEventiByCorsoAndWeek.close();
             getEventoById.close();
+            getEventiByCorsoAndDateRange.close();
+            getEventiByDateRange.close();
 
         } catch (SQLException ex) {
-
+            throw new DataException("Errore nella chiusura degli statement", ex);
         }
         super.destroy();
     }
@@ -121,6 +141,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
         return eventi;
     }
 
+    @Override
     public List<Evento> getEventiByAulaAndWeek(int aulaId, String input) throws DataException {
         List<Evento> eventi = new ArrayList<>();
         try {
@@ -208,5 +229,46 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
         LocalDate firstDayOfWeek = LocalDate.of(year, 1, 1).with(java.time.temporal.TemporalAdjusters.firstInMonth(java.time.DayOfWeek.MONDAY));
         firstDayOfWeek = firstDayOfWeek.plusWeeks(week - 1);
         return firstDayOfWeek;
+    }
+
+    @Override
+    public List<Evento> getEventiByCorsoAndDateRange(int corsoId, String dataInizio, String dataFine) throws DataException {
+        List<Evento> eventi = new ArrayList<>();
+        try {
+            getEventiByCorsoAndDateRange.setString(1, dataInizio);
+            getEventiByCorsoAndDateRange.setString(2, dataFine);
+            getEventiByCorsoAndDateRange.setInt(3, corsoId);
+            try ( ResultSet rs = getEventiByCorsoAndDateRange.executeQuery()) {
+                if (rs.next()) {
+                    eventi.add(importEvento(rs));
+                } else {
+                    throw new SQLException("Elemento non trovato");
+                }
+            }
+            return eventi;
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile scaricare gli eventi del corso con id "
+                    + corsoId + " per il periodo che va dal " + dataInizio + " al " + dataFine, ex);
+        }
+    }
+
+    @Override
+    public List<Evento> getEventiByDateRange(String dataInizio, String dataFine) throws DataException {
+        List<Evento> eventi = new ArrayList<>();
+        try {
+            getEventiByDateRange.setString(1, dataInizio);
+            getEventiByDateRange.setString(2, dataFine);
+            try ( ResultSet rs = getEventiByDateRange.executeQuery()) {
+                if (rs.next()) {
+                    eventi.add(importEvento(rs));
+                } else {
+                    throw new SQLException("Elementi non trovato");
+                }
+            }
+            return eventi;
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile scaricare gli eventi del periodo che va dal "
+                    + dataInizio + " al " + dataFine, ex);
+        }
     }
 }

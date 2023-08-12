@@ -37,7 +37,6 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
     public void destroy() throws DataException {
 
         try {
-
             getAttrezzaturaByAulaId.close();
             getAttrezzaturaDisponibile.close();
 

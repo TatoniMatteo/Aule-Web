@@ -33,7 +33,6 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
         try {
             getResponsabileByID.close();
-
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
         }

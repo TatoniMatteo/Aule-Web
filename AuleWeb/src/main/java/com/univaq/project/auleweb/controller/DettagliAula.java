@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class DettagliAula extends AuleWebController {
 
+    @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));

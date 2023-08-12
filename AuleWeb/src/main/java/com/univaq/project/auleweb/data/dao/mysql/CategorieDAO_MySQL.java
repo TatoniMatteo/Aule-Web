@@ -37,7 +37,7 @@ public class CategorieDAO_MySQL extends DAO implements CategorieDAO {
             getCategoriaByID.close();
             super.destroy();
         } catch (SQLException ex) {
-            throw new DataException("Errore durante la chiusura del DatLayer", ex);
+            throw new DataException("Errore nella chiusura degli statement", ex);
         }
 
     }

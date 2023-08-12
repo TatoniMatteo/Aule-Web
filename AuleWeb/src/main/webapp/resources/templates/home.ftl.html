@@ -38,3 +38,47 @@
     <h4>Non ci sono eventi in programma per le prossime 3 ore!</h4>
     </#if>
 </div>
+
+<h1>Esporta Dati</h1> 
+<div class="export-form">
+    <form method="post">
+        <div>
+            <label class="text-left" for="format">Formato*</label>
+            <select name="format" id="format">
+                <option value="csv">CSV</option>
+                <option value="ical">ICalendar</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="text-left" for="course">Corso</label>
+            <select name="corso" id="course">
+                <option value="">Tutti</option>
+                <#list corsi as corso>
+                <option value="${corso.key}">${corso.nome}</option>
+                </#list>
+            </select>
+        </div>
+
+        <div>
+            <label class="text-left" for="start-date">Data di inizio*</label>
+            <input type="date" name="startDate" id="start-ate" required>
+        </div>
+
+        <div>
+            <label class="text-left" for="end-date">Data di fine*</label>
+            <input type="date" name="endDate" id="end-date" required>
+        </div>
+
+        <div>
+            <label class="text-left" for="output-name">Nome file di output</label>
+            <input type="text" name="outputName" id="output-name">
+        </div>
+
+
+        <button type="submit" class="bg-blue export-button"> Esporta <i class="fas fa-file-export"></i></button>
+    </form>
+</div>
+
+
+

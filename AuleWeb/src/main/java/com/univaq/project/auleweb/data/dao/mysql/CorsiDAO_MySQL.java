@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.univaq.project.auleweb.data.dao.mysql;
 
 import com.univaq.project.auleweb.data.dao.CorsiDAO;
@@ -17,10 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author david
- */
 public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
 
     private PreparedStatement getAllCorsi, getCorsoById, getCorsiByName;
@@ -34,8 +26,8 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
 
         try {
             this.getCorsoById = this.connection.prepareStatement("SELECT * FROM Corso WHERE ID = ?");
-            this.getAllCorsi = this.connection.prepareStatement("SELECT * FROM corso");
-            this.getCorsiByName = this.connection.prepareStatement("SELECT * FROM Corso WHERE nome LIKE ?");
+            this.getAllCorsi = this.connection.prepareStatement("SELECT * FROM corso ORDER BY nome");
+            this.getCorsiByName = this.connection.prepareStatement("SELECT * FROM Corso WHERE nome LIKE ? ORDER BY nome");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -45,15 +37,12 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
 
     @Override
     public void destroy() throws DataException {
-        //anche chiudere i PreparedStamenent è una buona pratica...
         try {
-
             getCorsoById.close();
             getAllCorsi.close();
             getCorsiByName.close();
-
         } catch (SQLException ex) {
-            //
+            throw new DataException("Errore nella chiusura degli statement", ex);
         }
         super.destroy();
     }

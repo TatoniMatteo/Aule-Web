@@ -8,7 +8,6 @@ import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.data.DataLayer;
 import com.univaq.project.framework.security.SecurityHelpers;
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,6 +36,7 @@ public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
 
         try {
             getAmministratoreById.close();
+            getAmministratoreByUsernamePassword.close();
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement");
         }
@@ -83,7 +83,7 @@ public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
     public Amministratore getAmministratoreByUsernamePassword(String username, String password) throws DataException {
         Amministratore amministratore = null;
         try {
-            password = SecurityHelpers.getPasswordHashPBKDF2(password);
+            password = SecurityHelpers.getPasswordHashSHA(password);
             getAmministratoreByUsernamePassword.setString(1, username);
             getAmministratoreByUsernamePassword.setString(2, password);
             try ( ResultSet rs = getAmministratoreByUsernamePassword.executeQuery()) {
@@ -91,7 +91,7 @@ public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
                     amministratore = importAmministratore(rs);
                 }
             }
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException | SQLException ex) {
+        } catch (NoSuchAlgorithmException | SQLException ex) {
             throw new DataException("Impossibile verificare le credenziali (username: " + username + ", password: " + password + ")", ex);
         }
         return amministratore;

@@ -39,7 +39,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             getGruppoByID.close();
             super.destroy();
         } catch (SQLException ex) {
-            throw new DataException("Errore durante la chiusura del DatLayer", ex);
+            throw new DataException("Errore nella chiusura degli statement", ex);
         }
 
     }
