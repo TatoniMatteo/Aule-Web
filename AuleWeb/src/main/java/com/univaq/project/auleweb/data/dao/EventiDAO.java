@@ -16,8 +16,10 @@ public interface EventiDAO {
 
     Evento getEventoById(int eventoId) throws DataException;
 
-    public List<Evento> getEventiByCorsoAndDateRange(int corsoId, String dataInizio, String dataFine) throws DataException;
+    List<Evento> getEventiByCorsoAndDateRange(int corsoId, String dataInizio, String dataFine) throws DataException;
 
-    public List<Evento> getEventiByDateRange(String dataInizio, String dataFine) throws DataException;
+    List<Evento> getEventiByDateRange(String dataInizio, String dataFine) throws DataException;
+
+    List<Evento> getEventiByGruppoIdAndDate(int gruppoId, String data) throws DataException;
 
 }

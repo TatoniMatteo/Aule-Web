@@ -26,6 +26,14 @@
         <servlet-name>Amministrazione</servlet-name>
         <servlet-class>com.univaq.project.auleweb.controller.Amministrazione</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DettagliGruppo</servlet-name>
+        <servlet-class>com.univaq.project.auleweb.controller.DettagliGruppo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>com.univaq.project.auleweb.controller.Logout</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -54,6 +62,14 @@
     <servlet-mapping>
         <servlet-name>Amministrazione</servlet-name>
         <url-pattern>/amministrazione</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DettagliGruppo</servlet-name>
+        <url-pattern>/dettagligruppo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

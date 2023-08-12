@@ -38,7 +38,7 @@ footer {
 /* Stili di base per l'header */
 header {
     padding: 10px;
-    background-color: #f0f0f0;
+    height: 100px !important;
 }
 
 .header-container {
@@ -56,7 +56,7 @@ header {
     flex:1;
 }
 
-.header-container h1,
+.header-container h2,
 .header-container nav{
     flex:1;
     text-align: center;
@@ -168,5 +168,10 @@ header {
     .options a {
         padding: 15px 20px;
         margin: 0;
+    }
+
+    header {
+        padding: 10px;
+        height: 250px !important;
     }
 }

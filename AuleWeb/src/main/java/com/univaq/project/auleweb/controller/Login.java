@@ -18,11 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Login extends AuleWebController {
 
-    private DataLayerImpl datalayer;
+    private DataLayerImpl dataLayer;
 
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
-        datalayer = (DataLayerImpl) request.getAttribute("datalayer");
+        dataLayer = (DataLayerImpl) request.getAttribute("datalayer");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         if (username == null || password == null) {
@@ -39,10 +39,10 @@ public class Login extends AuleWebController {
             Map data = new HashMap<>();
             String[] styles = {"login"};
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("login.ftl.html", data, response);
-        } catch (TemplateManagerException ex) {
+        } catch (DataException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }
     }
@@ -51,8 +51,8 @@ public class Login extends AuleWebController {
         if (!username.isBlank() && !password.isBlank()) {
             try {
                 Amministratore amministratore = null;
-                if (SecurityHelpers.checkPasswordHashPBKDF2(password, datalayer.getAmministratoriDAO().getPasswordByUsername(username))) {
-                    amministratore = datalayer.getAmministratoriDAO().getAmministratoreByUsername(username);
+                if (SecurityHelpers.checkPasswordHashPBKDF2(password, dataLayer.getAmministratoriDAO().getPasswordByUsername(username))) {
+                    amministratore = dataLayer.getAmministratoriDAO().getAmministratoreByUsername(username);
                 }
                 if (amministratore != null) {
                     SecurityHelpers.createSession(request, amministratore.getUsername(), amministratore.getKey());
@@ -71,12 +71,11 @@ public class Login extends AuleWebController {
             Map data = new HashMap<>();
             String[] styles = {"login"};
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("error", true);
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("login.ftl.html", data, response);
-        } catch (TemplateManagerException ex) {
+        } catch (DataException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }
     }

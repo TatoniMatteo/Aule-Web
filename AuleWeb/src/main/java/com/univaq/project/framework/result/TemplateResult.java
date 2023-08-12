@@ -31,7 +31,6 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -115,9 +114,7 @@ public class TemplateResult {
         Map default_data_model = new HashMap();
 
         //iniettiamo alcuni dati di default nel data model
-        default_data_model.put("compiled_on", Calendar.getInstance().getTime()); //data di compilazione del template
-        default_data_model.put("outline_tpl", context.getInitParameter("view.outline_template")); //eventuale template di outline
-        default_data_model.put("select_button", 0);
+        default_data_model.put("outline_tpl", context.getInitParameter("view.outline_template"));
 
         //aggiungiamo altri dati di inizializzazione presi dal web.xml
         Map init_tpl_data = new HashMap();
@@ -129,12 +126,10 @@ public class TemplateResult {
                 init_tpl_data.put(name.substring(17).replace(".", "_"), context.getInitParameter(name));
             }
         }
-
         //se sono state specificate delle classi filler, facciamo loro riempire il default data model
         for (DataModelFiller f : fillers) {
             f.fillDataModel(default_data_model, request, context);
         }
-
         return default_data_model;
     }
 
@@ -153,7 +148,7 @@ public class TemplateResult {
     //se è stato specificato un template di outline, quello richiesto viene inserito
     //all'interno dell'outline
     protected void process(String tplname, Map datamodel, HttpServletRequest request, Writer out) throws TemplateManagerException {
-        Template t;
+        Template template;
         //assicuriamoci di avere sempre un data model da passare al template, che contenga anche tutti i default
         Map<String, Object> localdatamodel = getDefaultDataModel(request);
         //nota: in questo modo il data model utente può eventualmente sovrascrivere i dati precaricati da getDefaultDataModel
@@ -164,48 +159,17 @@ public class TemplateResult {
         String outline_name = (String) localdatamodel.get("outline_tpl");
         try {
             if (outline_name == null || outline_name.isBlank()) {
-                //se non c'è un outline, carichiamo semplicemente il template specificato
-                t = cfg.getTemplate(tplname);
+                template = cfg.getTemplate(tplname);
             } else {
                 //un template di outline è stato specificato: il template da caricare � quindi sempre l'outline...
-                t = cfg.getTemplate(outline_name);
+                template = cfg.getTemplate(outline_name);
                 //...e il template specifico per questa pagina viene indicato all'outline tramite una variabile content_tpl
                 localdatamodel.put("content_tpl", tplname);
-
-                List<String> researches = new ArrayList<>();
-                //Controllo quali selezioni posso effettuare dalla pagina in cui vengo renderizzato
-
-                switch ((Integer) localdatamodel.get("select_button")) {
-                    case 1:
-                        researches.add(context.getInitParameter("view.select.datapicker"));
-                        researches.add(context.getInitParameter("view.select.corso"));
-                        researches.add(context.getInitParameter("view.select.aula"));
-                        break;
-                    case 2:
-                        researches.add(context.getInitParameter("view.select.datapicker"));
-                        researches.add(context.getInitParameter("view.select.corso"));
-                        researches.add(context.getInitParameter("view.select.orario_attuale"));
-                        break;
-                    case 3:
-                        researches.add(context.getInitParameter("view.select.datapicker"));
-                        researches.add(context.getInitParameter("view.select.orario_attuale"));
-                        researches.add(context.getInitParameter("view.select.aula"));
-                        break;
-                    case 4:
-                        researches.add(context.getInitParameter("view.select.orario_attuale"));
-                        researches.add(context.getInitParameter("view.select.corso"));
-                        researches.add(context.getInitParameter("view.select.aula"));
-                        break;
-
-                }
-
-                localdatamodel.put("ricerche", researches);
-
             }
 
             //si suppone che l'outline includa questo secondo template
             //associamo i dati al template e lo mandiamo in output
-            t.process(localdatamodel, out);
+            template.process(localdatamodel, out);
         } catch (IOException | TemplateException e) {
             throw new TemplateManagerException("Template error: " + e.getMessage(), e);
         }
@@ -256,25 +220,16 @@ public class TemplateResult {
         //impostiamo il tipo di output: in questo modo freemarker abiliterà il necessario escaping
         //set the output format, so that freemarker will enable the correspondoing escaping
         switch (contentType) {
-            case "text/html":
+            case "text/html" ->
                 cfg.setOutputFormat(HTMLOutputFormat.INSTANCE);
-                break;
-            case "text/xml":
-            case "application/xml":
+            case "text/xml", "application/xml" ->
                 cfg.setOutputFormat(XMLOutputFormat.INSTANCE);
-                break;
-            case "application/json":
+            case "application/json" ->
                 cfg.setOutputFormat(JSONOutputFormat.INSTANCE);
-                break;
-            default:
-                break;
         }
-
     }
 
-    //questa versione di activate può essere usata per generare output non diretto verso il browser, ad esempio
-    //su un file
-    //this activate method can be used to generate output and save it to a file
+    //questa versione di activate può essere usata per generare output non diretto verso il browser, ad esempio su un file
     public void activate(String tplname, Map datamodel, OutputStream out) throws TemplateManagerException {
         //impostiamo l'encoding, se specificato dall'utente, o usiamo il default
         String encoding = (String) datamodel.get("encoding");

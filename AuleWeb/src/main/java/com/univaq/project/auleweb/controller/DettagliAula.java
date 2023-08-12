@@ -24,16 +24,18 @@ public class DettagliAula extends AuleWebController {
             int id = Integer.parseInt(request.getParameter("id"));
             DataLayerImpl dataLayer = (DataLayerImpl) request.getAttribute("datalayer");
             String[] settimana = getWeek(request.getParameter("week"));
+            String back = request.getParameter("back");
             Aula aula = dataLayer.getAuleDAO().getAulaById(id);
             String[] styles = {"dettagliAula", "info", "simpleTable"};
 
             Map data = new HashMap<>();
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("aula", aula);
             data.put("attrezzature", dataLayer.getAttrezzatureDAO().getAttrezzaturaByAula(id));
             data.put("settimana", settimana);
             data.put("eventi", dataLayer.getEventiDAO().getEventiByAulaAndWeek(id, settimana[1]));
+            data.put("back", back);
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("dettagliAula.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {

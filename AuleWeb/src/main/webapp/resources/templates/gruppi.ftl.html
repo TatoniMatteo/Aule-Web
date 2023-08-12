@@ -6,7 +6,7 @@
         <ul class="sub-category-list">
             <#list gruppi as gruppo>
             <#if gruppo.categoria.key == categoria.key>
-            <li><a href="#gruppo?id=${gruppo.key}">${gruppo.nome?cap_first}</a></li>
+            <li><a href="dettagligruppo?id=${gruppo.key}">${gruppo.nome?cap_first}</a></li>
             </#if>
             </#list>
         </ul>

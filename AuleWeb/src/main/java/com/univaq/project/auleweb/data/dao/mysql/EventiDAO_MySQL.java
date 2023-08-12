@@ -22,7 +22,8 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventiByCorsoAndWeek,
             getEventoById,
             getEventiByCorsoAndDateRange,
-            getEventiByDateRange;
+            getEventiByDateRange,
+            getEventiByGruppoIdAndDate;
 
     public EventiDAO_MySQL(DataLayer d) {
         super(d);
@@ -60,15 +61,26 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
                     + "FROM evento "
                     + "WHERE id = ? "
             );
-            getEventiByCorsoAndDateRange = this.dataLayer.getConnection().prepareStatement("SELECT * "
+            getEventiByCorsoAndDateRange = this.dataLayer.getConnection().prepareStatement(
+                    "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND ? AND id_corso = ? "
                     + "ORDER BY data AND ora_inizio"
             );
 
-            getEventiByDateRange = this.dataLayer.getConnection().prepareStatement("SELECT * "
+            getEventiByDateRange = this.dataLayer.getConnection().prepareStatement(
+                    "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND ? "
+                    + "ORDER BY data AND ora_inizio"
+            );
+
+            getEventiByGruppoIdAndDate = this.dataLayer.getConnection().prepareStatement(
+                    "SELECT evento.* "
+                    + "FROM evento "
+                    + "JOIN aula ON evento.id_aula = aula.id "
+                    + "JOIN aula_gruppo ON aula_gruppo.id_aula = aula.id "
+                    + "WHERE aula_gruppo.id_gruppo = ? AND evento.data = ? "
                     + "ORDER BY data AND ora_inizio"
             );
 
@@ -87,6 +99,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventoById.close();
             getEventiByCorsoAndDateRange.close();
             getEventiByDateRange.close();
+            getEventiByGruppoIdAndDate.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -213,7 +226,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
                 if (rs.next()) {
                     return importEvento(rs);
                 } else {
-                    throw new SQLException("Elemento non trovato");
+                    return null;
                 }
             }
         } catch (SQLException ex) {
@@ -239,10 +252,8 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventiByCorsoAndDateRange.setString(2, dataFine);
             getEventiByCorsoAndDateRange.setInt(3, corsoId);
             try ( ResultSet rs = getEventiByCorsoAndDateRange.executeQuery()) {
-                if (rs.next()) {
+                while (rs.next()) {
                     eventi.add(importEvento(rs));
-                } else {
-                    throw new SQLException("Elemento non trovato");
                 }
             }
             return eventi;
@@ -259,16 +270,32 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventiByDateRange.setString(1, dataInizio);
             getEventiByDateRange.setString(2, dataFine);
             try ( ResultSet rs = getEventiByDateRange.executeQuery()) {
-                if (rs.next()) {
+                while (rs.next()) {
                     eventi.add(importEvento(rs));
-                } else {
-                    throw new SQLException("Elementi non trovato");
                 }
             }
             return eventi;
         } catch (SQLException ex) {
             throw new DataException("Impossibile scaricare gli eventi del periodo che va dal "
                     + dataInizio + " al " + dataFine, ex);
+        }
+    }
+
+    @Override
+    public List<Evento> getEventiByGruppoIdAndDate(int gruppoId, String data) throws DataException {
+        List<Evento> eventi = new ArrayList<>();
+        try {
+            getEventiByGruppoIdAndDate.setInt(1, gruppoId);
+            getEventiByGruppoIdAndDate.setString(2, data);
+            try ( ResultSet rs = getEventiByGruppoIdAndDate.executeQuery()) {
+                while (rs.next()) {
+                    eventi.add(importEvento(rs));
+                }
+            }
+            return eventi;
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile scaricare gli eventi per il gruppo con id "
+                    + gruppoId + " per il giorno " + data, ex);
         }
     }
 }

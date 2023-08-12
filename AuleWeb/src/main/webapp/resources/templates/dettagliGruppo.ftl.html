@@ -1,0 +1,95 @@
+<h4 class="text-left back">
+    <a href="homepage?page=gruppi">
+        <i class="fas fa-arrow-left"></i>
+        Torna indietro
+    </a>
+</h4>
+<h1>${gruppo.nome}</h1>
+
+
+<!-- EVENTI   -->
+
+<h2>Aule del gruppo</h2>
+<div class="simple-table-container">
+    <table>
+        <thead class="bg-gray">
+            <tr>
+                <th class="text-left">Nome</th>
+                <th class="large-table text-left">Responsabile</th>
+                <th class="text-left">Edificio</th>
+                <th class="large-table">Piano</th>
+                <th>Capienza</th>
+                <th></th>
+            </tr>
+        </thead>
+        <#if aule?has_content>
+        <tbody>
+            <#list aule as aula>
+            <tr>
+                <td class="text-left">${aula.nome}</td>
+                <td class="large-table text-left">${aula.responsabile.nome} ${aula.responsabile.cognome}</td>
+                <td class="text-left">${aula.edificio}</td>
+                <td class="large-table">${aula.piano}</td>
+                <td>${aula.capienza}</td>
+                <td><a href="dettagliaula?id=${aula.key}&back=dettagligruppo?id=${gruppo.key}" class="action-button bg-blue">Dettagli</a></td>
+            </tr>
+            </#list>
+        </tbody>
+        </#if>
+    </table>
+    <#if !aule?has_content>
+    <h4>Non ci sono risultati per questa ricerca!</h4>
+    </#if>
+</div>
+
+<!-- SEPARATORE -->
+
+<div class="separator bg-yellow"></div>
+
+<!-- EVENTI   -->
+
+<h2>Eventi in programma per il giorno ${day}</h2>
+<form class="date-form" method="post">
+    <input type="date" id="dayPicker" name="day" value="${day}">
+    <button type="submit" class="bg-blue">Cambia giorno</button>
+</form>
+
+<div class="simple-table-container">
+    <table>
+        <thead class="bg-gray">
+            <tr>
+                <th class="text-left">Nome Evento</th>
+                <th class="large-table text-left">Tipo Evento</th>
+                <th class="large-table">Giorno</th>
+                <th class="large-table">Inizio</th>
+                <th class="large-table">Fine</th>
+                <th class="small-table">Orario</th>
+                <th>Aula</th>
+                <th></th>
+            </tr>
+        </thead>
+        <#if eventi?has_content>
+        <tbody>
+            <#list eventi as evento>
+
+            <#assign start = evento.oraInizio?string("HH:mm")>
+            <#assign end = evento.oraFine?string("HH:mm")>
+
+            <tr>
+                <td class="text-left">${evento.nome}</td>
+                <td class="large-table text-left">${evento.tipoEvento?capitalize}</td>
+                <td class="large-table">${evento.data}</td>
+                <td class="large-table">${start}</td>
+                <td class="large-table">${end}</td>
+                <td class="small-table">${start} - ${end}</td>
+                <td>${evento.aula.nome}</td>
+                <td><a href="dettaglievento?id=${evento.key}&back=dettagligruppo?id=${gruppo.key}" class="action-button bg-blue">Dettagli</a></td>
+            </tr>
+            </#list>
+        </tbody>
+        </#if>
+    </table>
+    <#if !eventi?has_content>
+    <h4>Non ci sono eventi in programma per le prossime 3 ore!</h4>
+    </#if>
+</div>

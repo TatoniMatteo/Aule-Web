@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <#include "default_setting.html">
+        <#if styles??>
+        <#list styles as style>
+        <link rel="stylesheet" href="resources/styles/${style}.css">
+        <link rel="stylesheet" href="resources/styles/administration.css">
+        </#list>
+        </#if>
+    </head>
+
+    <body>
+        <div class="container">
+            <#include "header.ftl.html">
+            <div class="sidebar bg-yellow">
+                <ul>
+                    <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-building"></i> Aule</a></li>
+                    <li><a href="#"><i class="fas fa-tools"></i> Attrezzature</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Gruppi</a></li>
+                    <li><a href="#"><i class="fas fa-calendar-alt"></i> Eventi</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> Corsi</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> Responsabili</a></li>
+                </ul>
+            </div>
+            <main>
+                <div class="content">
+                    <#include "../" + content_tpl>
+                </div>
+            </main>
+            <div class="spacer"></div>
+        </div>
+        <#include "footer.html">
+
+    <body>
+</html>

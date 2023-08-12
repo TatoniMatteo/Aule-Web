@@ -8,7 +8,6 @@ import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.result.StreamResult;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
-import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -53,7 +52,7 @@ public class Homepage extends AuleWebController {
             String[] styles = {"gruppi"};
             Map data = new HashMap<>();
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("categorie", dataLayer.getCategorieDAO().getAllCategorie());
             data.put("gruppi", dataLayer.getGruppiDAO().getAllGruppi());
             data.put("options", true);
@@ -69,7 +68,7 @@ public class Homepage extends AuleWebController {
             String[] styles = {"corsi", "search", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("corsi", dataLayer.getCorsiDAO().getAllCorsi());
             data.put("options", true);
             data.put("searchLink", "homepage?page=corsi");
@@ -86,7 +85,7 @@ public class Homepage extends AuleWebController {
             String[] styles = {"corsi", "search", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("corsi", dataLayer.getCorsiDAO().getCorsiByName(filter));
             data.put("options", true);
             data.put("filter", filter);
@@ -103,7 +102,7 @@ public class Homepage extends AuleWebController {
             String[] styles = {"corsi", "search", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("aule", dataLayer.getAuleDAO().getAllAule());
             data.put("options", true);
             data.put("searchLink", "homepage?page=aule");
@@ -120,7 +119,7 @@ public class Homepage extends AuleWebController {
             String[] styles = {"corsi", "search", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("aule", dataLayer.getAuleDAO().getAuleByName(filter));
             data.put("options", true);
             data.put("filter", filter);
@@ -150,7 +149,7 @@ public class Homepage extends AuleWebController {
             String[] styles = {"home", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("options", true);
             data.put("eventi", dataLayer.getEventiDAO().getAllEeventiNext3Hours());
             data.put("corsi", dataLayer.getCorsiDAO().getAllCorsi());
@@ -164,16 +163,11 @@ public class Homepage extends AuleWebController {
 
     private File createFile(String tipo, Integer corso, String dataInizio, String dataFine, String outputName) throws DataException {
         List<Evento> eventi;
-        try {
-            if (corso != null) {
-                eventi = dataLayer.getEventiDAO().getEventiByCorsoAndDateRange(corso, dataInizio, dataFine);
-            } else {
-                eventi = dataLayer.getEventiDAO().getEventiByDateRange(dataInizio, dataFine);
-            }
-        } catch (DataException ex) {
-            throw new DataException("Non ci sono eventi nel range di date selezionate");
+        if (corso != null) {
+            eventi = dataLayer.getEventiDAO().getEventiByCorsoAndDateRange(corso, dataInizio, dataFine);
+        } else {
+            eventi = dataLayer.getEventiDAO().getEventiByDateRange(dataInizio, dataFine);
         }
-
         switch (tipo) {
             case "csv" -> {
                 outputName = outputName != null && !outputName.isBlank() ? (outputName.endsWith(".csv") ? outputName : outputName + ".csv") : "eventi.csv";

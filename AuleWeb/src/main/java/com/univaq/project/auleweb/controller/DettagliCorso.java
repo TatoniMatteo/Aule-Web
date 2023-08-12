@@ -28,7 +28,7 @@ public class DettagliCorso extends AuleWebController {
             String[] styles = {"dettagliCorso", "info", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
-            data.put("username", SecurityHelpers.checkSession(request));
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("corso", corso);
             data.put("settimana", settimana);
             data.put("eventi", dataLayer.getEventiDAO().getEventiByCorsoAndWeek(id, settimana[1]));
