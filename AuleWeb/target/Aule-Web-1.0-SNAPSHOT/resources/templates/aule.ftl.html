@@ -1,0 +1,33 @@
+<h1 class="space">Scegli un'aula</h1>
+<#include "base/search.ftl.html">
+<div class="simple-table-container">
+    <table>
+        <thead class="bg-gray">
+            <tr>
+                <th class="text-left">Nome</th>
+                <th class="large-table text-left">Responsabile</th>
+                <th class="text-left">Edificio</th>
+                <th class="large-table">Piano</th>
+                <th>Capienza</th>
+                <th></th>
+            </tr>
+        </thead>
+        <#if aule?has_content>
+        <tbody>
+            <#list aule as aula>
+            <tr>
+                <td class="text-left">${aula.nome}</td>
+                <td class="large-table text-left">${aula.responsabile.nome} ${aula.responsabile.cognome}</td>
+                <td class="text-left">${aula.edificio}</td>
+                <td class="large-table">${aula.piano}</td>
+                <td>${aula.capienza}</td>
+                <td><a href="dettagliaula?id=${aula.key}" class="action-button bg-blue">Dettagli</a></td>
+            </tr>
+            </#list>
+        </tbody>
+        </#if>
+    </table>
+    <#if !aule?has_content>
+    <h4>Non ci sono risultati per questa ricerca!</h4>
+    </#if>
+</div>

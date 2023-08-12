@@ -7,8 +7,12 @@ import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
 import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +25,7 @@ public class Login extends AuleWebController {
         datalayer = (DataLayerImpl) request.getAttribute("datalayer");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        if  (username == null || password == null) {
+        if (username == null || password == null) {
             String https_redirect_url = SecurityHelpers.checkHttps(request);
             request.setAttribute("https-redirect", https_redirect_url);
             action_default(request, response);
@@ -46,14 +50,17 @@ public class Login extends AuleWebController {
     private void action_login(HttpServletRequest request, HttpServletResponse response, String username, String password) {
         if (!username.isBlank() && !password.isBlank()) {
             try {
-                Amministratore amministratore = datalayer.getAmministratoriDAO().getAmministratoreByUsernamePassword(username, password);
+                Amministratore amministratore = null;
+                if (SecurityHelpers.checkPasswordHashPBKDF2(password, datalayer.getAmministratoriDAO().getPasswordByUsername(username))) {
+                    amministratore = datalayer.getAmministratoriDAO().getAmministratoreByUsername(username);
+                }
                 if (amministratore != null) {
                     SecurityHelpers.createSession(request, amministratore.getUsername(), amministratore.getKey());
                     response.sendRedirect("amministrazione");
                 } else {
                     action_error(request, response);
                 }
-            } catch (IOException | DataException ex) {
+            } catch (IOException | DataException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
                 handleError(ex, request, response);
             }
         }

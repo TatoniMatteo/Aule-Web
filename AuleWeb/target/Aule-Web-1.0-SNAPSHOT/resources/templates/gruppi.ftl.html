@@ -1,0 +1,16 @@
+<h1 class="space">Scegli un gruppo</h1>
+<ul class="category-list">
+    <#list categorie as categoria>
+    <li class="category-item bg-blue">
+        <h3>${categoria.nome?cap_first}</h3>
+        <ul class="sub-category-list">
+            <#list gruppi as gruppo>
+            <#if gruppo.categoria.key == categoria.key>
+            <li><a href="#gruppo?id=${gruppo.key}">${gruppo.nome?cap_first}</a></li>
+            </#if>
+            </#list>
+        </ul>
+    </li>
+    </#list>
+</ul>
+

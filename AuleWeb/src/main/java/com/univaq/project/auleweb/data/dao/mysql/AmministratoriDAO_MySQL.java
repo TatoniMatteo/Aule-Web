@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
 
-    private PreparedStatement getAmministratoreById, getAmministratoreByUsernamePassword;
+    private PreparedStatement getAmministratoreById, getAmministratoreByUsername, getPasswordByUsername;
 
     public AmministratoriDAO_MySQL(DataLayer d) {
         super(d);
@@ -25,7 +25,8 @@ public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
         try {
             super.init();
             getAmministratoreById = this.connection.prepareStatement("SELECT * FROM amministratore WHERE ID=?");
-            getAmministratoreByUsernamePassword = this.connection.prepareStatement("SELECT id,username,email,versione FROM amministratore WHERE username=? AND password=?");
+            getAmministratoreByUsername = this.connection.prepareStatement("SELECT id,username,email,versione FROM amministratore WHERE username=?");
+            getPasswordByUsername = this.connection.prepareStatement("SELECT password FROM amministratore WHERE username=?");
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
         }
@@ -36,7 +37,8 @@ public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
 
         try {
             getAmministratoreById.close();
-            getAmministratoreByUsernamePassword.close();
+            getAmministratoreByUsername.close();
+            getPasswordByUsername.close();
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement");
         }
@@ -80,20 +82,41 @@ public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
     }
 
     @Override
-    public Amministratore getAmministratoreByUsernamePassword(String username, String password) throws DataException {
+    public Amministratore getAmministratoreByUsername(String username) throws DataException {
         Amministratore amministratore = null;
         try {
-            password = SecurityHelpers.getPasswordHashSHA(password);
-            getAmministratoreByUsernamePassword.setString(1, username);
-            getAmministratoreByUsernamePassword.setString(2, password);
-            try ( ResultSet rs = getAmministratoreByUsernamePassword.executeQuery()) {
+
+            getAmministratoreByUsername.setString(1, username);
+            try ( ResultSet rs = getAmministratoreByUsername.executeQuery()) {
                 if (rs.next()) {
                     amministratore = importAmministratore(rs);
                 }
             }
-        } catch (NoSuchAlgorithmException | SQLException ex) {
-            throw new DataException("Impossibile verificare le credenziali (username: " + username + ", password: " + password + ")", ex);
+        } catch ( SQLException ex) {
+            throw new DataException("Impossibile recuperare l'amministratore con username: " + username, ex);
         }
         return amministratore;
     }
+    
+    
+    @Override
+    public String getPasswordByUsername(String username) throws DataException {
+       String password = null;
+        try {
+
+            getPasswordByUsername.setString(1, username);
+            try ( ResultSet rs = getPasswordByUsername.executeQuery()) {
+                if (rs.next()) {
+                    password = rs.getString("password");
+                
+                }
+            }
+        } catch ( SQLException ex) {
+            throw new DataException("Impossibile recuperare l'amministratore con username: " + username, ex);
+        }
+        return password;
+    }
+    
+
+  
 }

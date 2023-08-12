@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <#include "default_setting.html">
+        <#if styles??>
+        <#list styles as style>
+        <link rel="stylesheet" href="resources/styles/${style}.css">
+        </#list>
+        </#if>
+    </head>
+
+    <body>
+        <div class="container">
+            <#include "header.ftl.html">
+            <#assign options = options?default(false)>
+            <#if options>
+            <nav class="bg-yellow options">
+                <a href="homepage?page=home"><i class="fas fa-home"></i> Home</a>
+                <a href="homepage?page=gruppi"><i class="fas fa-object-group"></i> Gruppi</a>
+                <a href="homepage?page=aule"><i class="fas fa-chalkboard"></i> Aule</a>
+                <a href="homepage?page=corsi"><i class="fas fa-book"></i> Corsi</a>
+            </nav>
+            </#if>
+            <main>
+                <#include "../" + content_tpl>
+            </main>
+            <div class="spacer"></div>
+        </div>
+        <#include "footer.html">
+
+    <body>
+</html>

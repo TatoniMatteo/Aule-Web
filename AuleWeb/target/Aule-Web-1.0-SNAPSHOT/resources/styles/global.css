@@ -1,0 +1,172 @@
+/*Stili di base per il main */
+.container{
+    min-width: 0;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.spacer{
+    height: 30px !important;
+}
+
+body main {
+    text-align: center;
+    margin: 0 10%;
+    max-width: 1400px;
+}
+
+/* Stili di base per il footer */
+footer {
+    padding: 10px 0;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #f0f0f0;
+    height: 30px;
+}
+
+.footer-text {
+    max-width: 1400px;
+    margin: 10px 0;
+}
+
+/* Stili di base per l'header */
+header {
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 10%;
+}
+
+.header-container .logos {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    flex:1;
+}
+
+.header-container h1,
+.header-container nav{
+    flex:1;
+    text-align: center;
+}
+
+.header-container .logos a {
+    padding: 5px 20px;
+    height: 100%;
+}
+
+.header-container .logos img {
+    height: 100%;
+    width: auto; /* Impostato width: auto per mantenere il rapporto di aspetto */
+}
+
+.header-container .logged-options h4 {
+    text-align: center;
+}
+
+.header-container nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header-container nav ul li {
+    display: inline;
+    margin-left: 20px;
+}
+
+.header-container nav ul li a {
+    text-decoration: none;
+}
+
+.header-container nav ul li a i {
+    margin-right: 5px;
+}
+
+.options{
+    display: flex;
+    justify-content: center;
+    height: 50px;
+}
+
+.options a {
+    text-decoration: none;
+    color: inherit;
+    padding: 15px 40px;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.options a:hover {
+    background-color: #eccc5d;
+}
+
+.options a i {
+    margin-right: 5px;
+}
+
+
+@media screen and (min-width: 900px) and (max-width: 1200px) {
+    .header-container {
+        margin: 0;
+    }
+
+    .header-container .logos {
+        height: 60px;
+    }
+
+    body main{
+        margin: 0 5%;
+    }
+}
+
+@media screen and (max-width: 899px) {
+    .header-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header-container nav {
+        text-align: center;
+    }
+
+    .header-container nav ul li {
+        margin: 20px 5px;
+    }
+
+    .header-container .logos {
+        width: 150px;
+        justify-content: center;
+    }
+
+    .header-container .logos a {
+        padding: 0 10px;
+        height: 60px;
+    }
+
+    body main{
+        margin: 0 2%;
+    }
+
+    .options a i {
+        display: none;
+    }
+
+    .options a {
+        padding: 15px 20px;
+        margin: 0;
+    }
+}
