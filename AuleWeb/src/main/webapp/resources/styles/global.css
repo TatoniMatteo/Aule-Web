@@ -1,8 +1,4 @@
-/*Stili di base per il main */
-.container{
-    min-width: 0;
-    max-height: calc(100vh - 60px);
-    overflow-y: auto;
+html{
     overflow-x: hidden;
 }
 
@@ -10,10 +6,19 @@
     height: 30px !important;
 }
 
-body main {
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
     text-align: center;
     margin: 0 10%;
     max-width: 1400px;
+    flex: 1;
 }
 
 /* Stili di base per il footer */
@@ -22,12 +27,9 @@ footer {
     text-align: center;
     display: flex;
     justify-content: space-around;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
     background-color: #f0f0f0;
     height: 30px;
+    margin-top: auto;
 }
 
 .footer-text {

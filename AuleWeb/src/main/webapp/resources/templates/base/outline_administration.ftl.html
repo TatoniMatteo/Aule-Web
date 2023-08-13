@@ -5,33 +5,37 @@
         <#if styles??>
         <#list styles as style>
         <link rel="stylesheet" href="resources/styles/${style}.css">
-        <link rel="stylesheet" href="resources/styles/administration.css">
         </#list>
         </#if>
+        <link rel="stylesheet" href="resources/styles/administration.css">
     </head>
 
     <body>
-        <div class="container">
-            <#include "header.ftl.html">
+        <#include "header.ftl.html">
+        <main>
             <div class="sidebar bg-yellow">
                 <ul>
-                    <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="#"><i class="fas fa-building"></i> Aule</a></li>
-                    <li><a href="#"><i class="fas fa-tools"></i> Attrezzature</a></li>
-                    <li><a href="#"><i class="fas fa-users"></i> Gruppi</a></li>
-                    <li><a href="#"><i class="fas fa-calendar-alt"></i> Eventi</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> Corsi</a></li>
-                    <li><a href="#"><i class="fas fa-user"></i> Responsabili</a></li>
+                    <li><a href="amministrazione?page=dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="amministrazione?page=aule"><i class="fas fa-chalkboard"></i> Aule</a></li>
+                    <li><a href="amministrazione?page=attrezzature"><i class="fas fa-tools"></i> Attrezzature</a></li>
+                    <li><a href="amministrazione?page=gruppi"><i class="fas fa-users"></i> Gruppi</a></li>
+                    <li><a href="amministrazione?page=eventi"><i class="fas fa-calendar-alt"></i> Eventi</a></li>
+                    <li><a href="amministrazione?page=corsi"><i class="fas fa-book"></i> Corsi</a></li>
+                    <li><a href="amministrazione?page=responsabili"><i class="fas fa-user"></i> Responsabili</a></li>
                 </ul>
             </div>
-            <main>
-                <div class="content">
-                    <#include "../" + content_tpl>
-                </div>
-            </main>
-            <div class="spacer"></div>
-        </div>
+            <div class="content">
+                <#include "../" + content_tpl>
+            </div>
+        </main>
+        <div class="spacer"></div>
         <#include "footer.html">
 
+        <script src="resources/scripts/global.js"></script>
+        <#if scripts??>
+        <#list scripts as script>
+        <script src="resources/scripts//${style}.js"></script>
+        </#list>
+        </#if>
     <body>
 </html>

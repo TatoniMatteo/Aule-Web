@@ -1,29 +1,34 @@
-/* sidebar.css */
+main {
+    display: flex;
+}
 .sidebar {
-    top:130px;
-    left:8px;
-    position: absolute;
-    width: 250px;
-    padding: 20px;
+    margin-top: 20px;
+    width: 240px;
+    position: sticky;
+    top: 0;
+    height: max-content;
     border-radius: 5px;
 }
 
 .sidebar ul {
+    text-align: start;
     list-style: none;
-    padding: 0;
+    padding: 20px;
 }
 
 .sidebar li {
-    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .sidebar a {
     text-decoration: none;
     color: inherit;
+    font-weight: bold;
 }
 
 .sidebar .active{
-    font-weight: bold;
+    background: #eccc5d;
 }
 
 .sidebar a:hover {
@@ -36,12 +41,34 @@
 }
 
 .content {
+    flex: 1;
     padding: 20px;
-    margin-left: 270px;
+    padding-bottom: 0;
 }
 
 @media screen and (max-width: 899px) {
+
+    main{
+        flex-direction: column;
+    }
+
+    .sidebar ul{
+        display: flex;
+        flex-wrap: wrap;
+        margin: auto;
+    }
+
+    .sidebar li{
+        width: 150px;
+        margin-right: 20px;
+    }
+
     .sidebar {
-        top:280px;
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        width: -moz-fit-content;
+        width: fit-content;
+        margin: 10px 20px 0;
     }
 }

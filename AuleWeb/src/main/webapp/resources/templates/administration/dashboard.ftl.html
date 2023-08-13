@@ -1,0 +1,12 @@
+<h1>Dashboard</h1>
+<div class="grid-container">
+    <#list statistiche as stat>
+    <div class="box bg-yellow">
+        <i class="fas fa-${
+               stat.icona
+           }"></i>
+        <h3>${stat.titolo}</h3>
+        <p>${stat.valore}</p>
+    </div>
+    </#list>
+</div>
