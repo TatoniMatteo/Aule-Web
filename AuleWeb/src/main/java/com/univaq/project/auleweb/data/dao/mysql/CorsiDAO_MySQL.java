@@ -15,12 +15,13 @@ import java.util.List;
 
 public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
 
-    private PreparedStatement getAllCorsi, getCorsoById, getCorsiByName;
+    private PreparedStatement getAllCorsi, getCorsoById, getCorsiByName, getCorsiNumber;
 
     public CorsiDAO_MySQL(DataLayer d) {
         super(d);
     }
 
+    @Override
     public void init() throws DataException {
         super.init();
 
@@ -28,6 +29,7 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             this.getCorsoById = this.connection.prepareStatement("SELECT * FROM Corso WHERE ID = ?");
             this.getAllCorsi = this.connection.prepareStatement("SELECT * FROM corso ORDER BY nome");
             this.getCorsiByName = this.connection.prepareStatement("SELECT * FROM Corso WHERE nome LIKE ? ORDER BY nome");
+            this.getCorsiNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_corsi FROM Corso");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -41,6 +43,8 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             getCorsoById.close();
             getAllCorsi.close();
             getCorsiByName.close();
+            getCorsiNumber.close();
+
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
         }
@@ -124,6 +128,19 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
         }
 
         return corsi;
+    }
+
+    @Override
+    public int getCorsiNumber() throws DataException {
+        try ( ResultSet rs = getCorsiNumber.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("numero_corsi");
+            } else {
+                return 0;
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile calcolare il numero di corsi", ex);
+        }
     }
 
 }

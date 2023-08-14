@@ -34,18 +34,18 @@ public class Amministrazione extends AuleWebController {
                 switch (page) {
                     case "dashboard" ->
                         action_dashboard(request, response);
-                    /*
-                    case "gruppi" ->
-                        action_gruppi(request, response);
                     case "aule" ->
                         action_aule(request, response);
+                    case "attrezzature" ->
+                        action_attrezzature(request, response);
+                    case "gruppi" ->
+                        action_gruppi(request, response);
+                    case "eventi" ->
+                        action_eventi(request, response);
                     case "corsi" ->
                         action_corsi(request, response);
-                    case "aule_filtered" ->
-                        action_aule_filterd(request, response);
-                    case "corsi_filtered" ->
-                        action_corsi_filterd(request, response);
-                     */
+                    case "responsabili" ->
+                        action_responsabili(request, response);
                     default ->
                         action_dashboard(request, response);
                 }
@@ -61,10 +61,13 @@ public class Amministrazione extends AuleWebController {
         try {
             String[] styles = {"dashboard"};
             List<Statistica> statistiche = new ArrayList<>();
-            statistiche.add(new Statistica("Aule", "chalkboard", 20));
-            statistiche.add(new Statistica("Eventi", "calendar-alt", 50));
-            statistiche.add(new Statistica("Responsabili", "user", 10));
-            statistiche.add(new Statistica("Corsi", "book", 10));
+            statistiche.add(new Statistica("Eventi", "calendar-alt", dataLayer.getEventiDAO().getEventiNumber()));
+            statistiche.add(new Statistica("Aule", "chalkboard", dataLayer.getAuleDAO().getAuleNumber()));
+            statistiche.add(new Statistica("Attrezzature", "tools", dataLayer.getAttrezzatureDAO().getAttrezzatureNumber()));
+            statistiche.add(new Statistica("Responsabili", "user", dataLayer.getResponsabiliDAO().getResponsabiliNumber()));
+            statistiche.add(new Statistica("Corsi", "book", dataLayer.getCorsiDAO().getCorsiNumber()));
+            statistiche.add(new Statistica("Eventi in corso", "flag", dataLayer.getEventiDAO().getActiveEventiNumber()));
+            statistiche.add(new Statistica("Attrezzature Disponibili", "tools", dataLayer.getAttrezzatureDAO().getAttrezzatureDisponibiliNumber()));
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
@@ -77,11 +80,95 @@ public class Amministrazione extends AuleWebController {
         }
     }
 
+    private void action_aule(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String[] styles = {};
+            Map data = new HashMap<>();
+            data.put("styles", styles);
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
+            data.put("outline_tpl", "base/outline_administration.ftl.html");
+            TemplateResult templateResult = new TemplateResult(getServletContext());
+            templateResult.activate("administration/aule.ftl.html", data, response);
+        } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private void action_attrezzature(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String[] styles = {};
+            Map data = new HashMap<>();
+            data.put("styles", styles);
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
+            data.put("outline_tpl", "base/outline_administration.ftl.html");
+            TemplateResult templateResult = new TemplateResult(getServletContext());
+            templateResult.activate("administration/attrezzature.ftl.html", data, response);
+        } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private void action_gruppi(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String[] styles = {};
+            Map data = new HashMap<>();
+            data.put("styles", styles);
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
+            data.put("outline_tpl", "base/outline_administration.ftl.html");
+            TemplateResult templateResult = new TemplateResult(getServletContext());
+            templateResult.activate("administration/gruppi.ftl.html", data, response);
+        } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private void action_eventi(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String[] styles = {};
+            Map data = new HashMap<>();
+            data.put("styles", styles);
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
+            data.put("outline_tpl", "base/outline_administration.ftl.html");
+            TemplateResult templateResult = new TemplateResult(getServletContext());
+            templateResult.activate("administration/eventi.ftl.html", data, response);
+        } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private void action_corsi(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String[] styles = {};
+            Map data = new HashMap<>();
+            data.put("styles", styles);
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
+            data.put("outline_tpl", "base/outline_administration.ftl.html");
+            TemplateResult templateResult = new TemplateResult(getServletContext());
+            templateResult.activate("administration/corsi.ftl.html", data, response);
+        } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private void action_responsabili(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String[] styles = {};
+            Map data = new HashMap<>();
+            data.put("styles", styles);
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
+            data.put("outline_tpl", "base/outline_administration.ftl.html");
+            TemplateResult templateResult = new TemplateResult(getServletContext());
+            templateResult.activate("administration/responsabili.ftl.html", data, response);
+        } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
     public static class Statistica {
 
-        private String titolo;
-        private String icona;
-        private int valore;
+        private final String titolo;
+        private final String icona;
+        private final int valore;
 
         public Statistica(String titolo, String icona, int valore) {
             this.titolo = titolo;

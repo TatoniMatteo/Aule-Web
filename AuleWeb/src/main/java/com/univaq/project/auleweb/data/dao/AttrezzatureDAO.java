@@ -1,4 +1,3 @@
-
 package com.univaq.project.auleweb.data.dao;
 
 import com.univaq.project.auleweb.data.model.Attrezzatura;
@@ -12,5 +11,9 @@ public interface AttrezzatureDAO {
     List<Attrezzatura> getAttrezzaturaByAula(int id) throws DataException;
 
     List<Attrezzatura> getAttrezzaturaDisponibile() throws DataException;
+
+    int getAttrezzatureNumber() throws DataException;
+
+    int getAttrezzatureDisponibiliNumber() throws DataException;
 
 }

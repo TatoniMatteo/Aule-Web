@@ -15,4 +15,6 @@ public interface AuleDAO {
     Aula importAula();
 
     List<Aula> getAuleByName(String filter) throws DataException;
+
+    int getAuleNumber() throws DataException;
 }

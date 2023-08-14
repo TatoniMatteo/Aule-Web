@@ -1,8 +1,13 @@
 main {
     display: flex;
 }
+
+.admin{
+    margin-left: 5%;
+}
+
 .sidebar {
-    margin-top: 20px;
+    margin: 20px;
     width: 240px;
     position: sticky;
     top: 0;
@@ -42,8 +47,7 @@ main {
 
 .content {
     flex: 1;
-    padding: 20px;
-    padding-bottom: 0;
+    padding-top:20px;
 }
 
 @media screen and (max-width: 899px) {
@@ -66,9 +70,15 @@ main {
     .sidebar {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
         position: relative;
         width: -moz-fit-content;
         width: fit-content;
         margin: 10px 20px 0;
+    }
+
+
+    .admin{
+        margin-left: 2.5%;
     }
 }

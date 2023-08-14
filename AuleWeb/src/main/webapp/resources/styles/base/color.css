@@ -51,3 +51,11 @@ body {
 .br-yellow{
     border: 2px solid #fad762;
 }
+
+.br-blu-variant{
+    border: 2px solid #233f8b;
+}
+
+.br-yellow-variant{
+    border: 2px solid #eccc5d;
+}

@@ -23,7 +23,9 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventoById,
             getEventiByCorsoAndDateRange,
             getEventiByDateRange,
-            getEventiByGruppoIdAndDate;
+            getEventiByGruppoIdAndDate,
+            getEventiNumber,
+            getActiveEventiNumber;
 
     public EventiDAO_MySQL(DataLayer d) {
         super(d);
@@ -46,14 +48,14 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND DATE_ADD(?, INTERVAL 6 DAY) AND id_aula = ? "
-                    + "ORDER BY data AND ora_inizio"
+                    + "ORDER BY ora_inizio AND data"
             );
 
             getEventiByCorsoAndWeek = this.dataLayer.getConnection().prepareStatement(
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND DATE_ADD(?, INTERVAL 6 DAY) AND id_corso = ? "
-                    + "ORDER BY data AND ora_inizio"
+                    + "ORDER BY data ASC, ora_inizio"
             );
 
             getEventoById = this.dataLayer.getConnection().prepareStatement(
@@ -65,14 +67,14 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND ? AND id_corso = ? "
-                    + "ORDER BY data AND ora_inizio"
+                    + "ORDER BY ora_inizio AND data"
             );
 
             getEventiByDateRange = this.dataLayer.getConnection().prepareStatement(
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND ? "
-                    + "ORDER BY data AND ora_inizio"
+                    + "ORDER BY data ASC, ora_inizio"
             );
 
             getEventiByGruppoIdAndDate = this.dataLayer.getConnection().prepareStatement(
@@ -81,7 +83,19 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
                     + "JOIN aula ON evento.id_aula = aula.id "
                     + "JOIN aula_gruppo ON aula_gruppo.id_aula = aula.id "
                     + "WHERE aula_gruppo.id_gruppo = ? AND evento.data = ? "
-                    + "ORDER BY data AND ora_inizio"
+                    + "ORDER BY data ASC, ora_inizio"
+            );
+
+            getEventiNumber = this.dataLayer.getConnection().prepareStatement(
+                    "SELECT COUNT(*) AS numero_eventi "
+                    + "FROM evento "
+                    + "WHERE data > CURRENT_DATE() OR (data = CURRENT_DATE() AND ora_fine >= CURRENT_TIME)"
+            );
+
+            getActiveEventiNumber = this.dataLayer.getConnection().prepareStatement(
+                    "SELECT COUNT(*) AS numero_eventi "
+                    + "FROM evento "
+                    + "WHERE data = CURRENT_DATE() AND ora_inizio <= CURRENT_TIME AND ora_fine >= CURRENT_TIME"
             );
 
         } catch (SQLException ex) {
@@ -100,6 +114,8 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventiByCorsoAndDateRange.close();
             getEventiByDateRange.close();
             getEventiByGruppoIdAndDate.close();
+            getEventiNumber.close();
+            getActiveEventiNumber.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -296,6 +312,32 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
         } catch (SQLException ex) {
             throw new DataException("Impossibile scaricare gli eventi per il gruppo con id "
                     + gruppoId + " per il giorno " + data, ex);
+        }
+    }
+
+    @Override
+    public int getEventiNumber() throws DataException {
+        try ( ResultSet rs = getEventiNumber.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("numero_eventi");
+            } else {
+                return 0;
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile calcolare il numero di eventi", ex);
+        }
+    }
+
+    @Override
+    public int getActiveEventiNumber() throws DataException {
+        try ( ResultSet rs = getActiveEventiNumber.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("numero_eventi");
+            } else {
+                return 0;
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile calcolare il numero di eventi", ex);
         }
     }
 }

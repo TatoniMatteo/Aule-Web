@@ -57,6 +57,6 @@
     }
 
     .simple-table-container .small-table{
-        display: block;
+        display: table-cell;
     }
 }

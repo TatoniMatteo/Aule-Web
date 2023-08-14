@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
-    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile;
+    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber;
 
     public AttrezzatureDAO_MySQL(DataLayer d) {
         super(d);
@@ -27,6 +27,8 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
             getAttrezzaturaByAulaId = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id_aula=?");
             getAttrezzaturaDisponibile = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id_aula IS NULL");
+            getAttrezzatureNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura");
+            getAttrezzatureDisponibiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura WHERE id_aula IS NULL");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -39,6 +41,8 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         try {
             getAttrezzaturaByAulaId.close();
             getAttrezzaturaDisponibile.close();
+            getAttrezzatureNumber.close();
+            getAttrezzatureDisponibiliNumber.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -97,6 +101,32 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             throw new DataException("Impossibile caricare la lista di attrezzature disponibili", ex);
         }
         return attrezzature;
+    }
+
+    @Override
+    public int getAttrezzatureNumber() throws DataException {
+        try ( ResultSet rs = getAttrezzatureNumber.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("numero_attrezzature");
+            } else {
+                return 0;
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile calcolare il numero di attrezzature", ex);
+        }
+    }
+    
+    @Override
+    public int getAttrezzatureDisponibiliNumber() throws DataException {
+        try ( ResultSet rs = getAttrezzatureDisponibiliNumber.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("numero_attrezzature");
+            } else {
+                return 0;
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile calcolare il numero di attrezzature", ex);
+        }
     }
 
 }

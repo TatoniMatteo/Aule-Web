@@ -1,28 +1,30 @@
 package com.univaq.project.auleweb.data.dao.mysql;
 
+import com.univaq.project.auleweb.data.dao.ResponsabiliDAO;
 import com.univaq.project.auleweb.data.model.Responsabile;
+import com.univaq.project.auleweb.data.proxy.ResponsabileProxy;
 import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import com.univaq.project.auleweb.data.dao.ResponsabiliDAO;
-import com.univaq.project.auleweb.data.proxy.ResponsabileProxy;
 
 public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
-    private PreparedStatement getResponsabileByID;
+    private PreparedStatement getResponsabileByID, getResponsabiliNumber;
 
     public ResponsabiliDAO_MySQL(DataLayer d) {
         super(d);
     }
 
+    @Override
     public void init() throws DataException {
         try {
             super.init();
             getResponsabileByID = this.connection.prepareStatement("SELECT * FROM responsabile WHERE ID=?");
+            getResponsabiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_responsabili FROM responsabile");
+
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
         }
@@ -33,12 +35,15 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
         try {
             getResponsabileByID.close();
+            getResponsabiliNumber.close();
+
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
         }
         super.destroy();
     }
 
+    @Override
     public Responsabile getResponsabileById(int id_responsabile) throws DataException {
         Responsabile responsabile = null;
         try {
@@ -72,6 +77,19 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
         }
 
         return r;
+    }
+
+    @Override
+    public int getResponsabiliNumber() throws DataException {
+        try ( ResultSet rs = getResponsabiliNumber.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("numero_responsabili");
+            } else {
+                return 0;
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile calcolare il numero di responsabili", ex);
+        }
     }
 
 }

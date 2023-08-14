@@ -18,8 +18,9 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
         super(d);
     }
 
-    private PreparedStatement getAllAule, getAulaByID, getAuleByGruppo, getAuleByName;
+    private PreparedStatement getAllAule, getAulaByID, getAuleByGruppo, getAuleByName, getAuleNumber;
 
+    @Override
     public void init() throws DataException {
 
         try {
@@ -28,17 +29,22 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAulaByID = connection.prepareStatement("SELECT * FROM Aula WHERE ID = ? ORDER BY nome");
             getAuleByGruppo = connection.prepareStatement("SELECT A.* FROM Aula A, Aula_gruppo AG, Gruppo G WHERE G.ID = ? AND AG.ID_gruppo = G.ID AND A.ID = AG.ID_aula ORDER BY A.nome");
             getAuleByName = connection.prepareStatement("SELECT * FROM Aula WHERE nome LIKE ?");
+            getAuleNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_aule FROM Aula");
+
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
     }
 
+    @Override
     public void destroy() throws DataException {
         try {
             getAllAule.close();
             getAulaByID.close();
             getAuleByGruppo.close();
             getAuleByName.close();
+            getAuleNumber.close();
+
             super.destroy();
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -59,6 +65,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
         return aule;
     }
 
+    @Override
     public Aula getAulaById(int id) throws DataException {
         Aula aula = null;
         try {
@@ -133,6 +140,19 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
         }
 
         return aule;
+    }
+
+    @Override
+    public int getAuleNumber() throws DataException {
+        try ( ResultSet rs = getAuleNumber.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("numero_aule");
+            } else {
+                return 0;
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile calcolare il numero di aule", ex);
+        }
     }
 
 }

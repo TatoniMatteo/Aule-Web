@@ -1,7 +1,7 @@
 /* Font Gilroy Bold */
 @font-face {
     font-family: 'Gilroy';
-    src: url('../fonts/Gilroy-Bold.ttf') format('truetype');
+    src: url('../../fonts/Gilroy-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -9,7 +9,7 @@
 /* Font Gilroy Regular */
 @font-face {
     font-family: 'Gilroy';
-    src: url('../fonts/Gilroy-Regular.ttf') format('truetype');
+    src: url('../../fonts/Gilroy-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }

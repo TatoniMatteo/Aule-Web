@@ -7,13 +7,13 @@
         <link rel="stylesheet" href="resources/styles/${style}.css">
         </#list>
         </#if>
-        <link rel="stylesheet" href="resources/styles/administration.css">
+        <link rel="stylesheet" href="resources/styles/base/administration.css">
     </head>
 
     <body>
         <#include "header.ftl.html">
         <main>
-            <div class="sidebar bg-yellow">
+            <div class="sidebar bg-yellow br-blu-variant">
                 <ul>
                     <li><a href="amministrazione?page=dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="amministrazione?page=aule"><i class="fas fa-chalkboard"></i> Aule</a></li>
@@ -24,7 +24,7 @@
                     <li><a href="amministrazione?page=responsabili"><i class="fas fa-user"></i> Responsabili</a></li>
                 </ul>
             </div>
-            <div class="content">
+            <div class="content admin">
                 <#include "../" + content_tpl>
             </div>
         </main>

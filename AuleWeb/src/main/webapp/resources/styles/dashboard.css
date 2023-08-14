@@ -1,8 +1,7 @@
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .box {
@@ -13,8 +12,10 @@
     padding: 20px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease-in-out;
-    aspect-ratio: 1/1;
+    transition: box-shadow 0.2s ease-in-out;
+    width: 150px;
+    aspect-ratio :1/1;
+    margin:20px;
 }
 
 .box:hover {

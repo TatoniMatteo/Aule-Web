@@ -11,7 +11,9 @@ public interface CorsiDAO {
     Corso getCorsoById(int id) throws DataException;
 
     List<Corso> getAllCorsi() throws DataException;
-    
+
     List<Corso> getCorsiByName(String nome) throws DataException;
+
+    int getCorsiNumber() throws DataException;
 
 }
