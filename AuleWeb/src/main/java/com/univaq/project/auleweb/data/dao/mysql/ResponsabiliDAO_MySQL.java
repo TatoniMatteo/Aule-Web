@@ -9,10 +9,12 @@ import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
-    private PreparedStatement getResponsabileByID, getResponsabiliNumber;
+    private PreparedStatement getResponsabileByID, getResponsabiliNumber, getAllResponsabili;
 
     public ResponsabiliDAO_MySQL(DataLayer d) {
         super(d);
@@ -24,6 +26,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             super.init();
             getResponsabileByID = this.connection.prepareStatement("SELECT * FROM responsabile WHERE ID=?");
             getResponsabiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_responsabili FROM responsabile");
+            getAllResponsabili = this.connection.prepareStatement("SELECT * FROM responsabile ORDER BY nome,cognome");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -36,6 +39,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
         try {
             getResponsabileByID.close();
             getResponsabiliNumber.close();
+            getAllResponsabili.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -90,6 +94,21 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
         } catch (SQLException ex) {
             throw new DataException("Impossibile calcolare il numero di responsabili", ex);
         }
+    }
+    
+     @Override
+    public List<Responsabile> getAllResponsabili() throws DataException {
+        List<Responsabile> responsabili = new ArrayList<>();
+        try {
+            try ( ResultSet rs = getAllResponsabili.executeQuery()) {
+                while(rs.next()) {
+                    responsabili.add(importResponsabile(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare la lista di responsabili", ex);
+        }
+        return responsabili;
     }
 
 }
