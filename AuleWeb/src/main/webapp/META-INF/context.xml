@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/AuleWeb">
-    <!--TODO: modificare con i nostri dati-->
     <Resource auth="Container" 
               type="javax.sql.DataSource" 
               url="jdbc:mysql://localhost/auleweb?serverTimezone=UTC"

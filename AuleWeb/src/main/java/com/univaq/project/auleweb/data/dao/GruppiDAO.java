@@ -11,4 +11,6 @@ public interface GruppiDAO {
     Gruppo getGruppoByID(int id) throws DataException;
 
     Gruppo importGruppo();
+
+    List<Gruppo> getGruppiByAula(Integer key) throws DataException;
 }

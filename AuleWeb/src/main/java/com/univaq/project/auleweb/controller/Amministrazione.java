@@ -36,6 +36,8 @@ public class Amministrazione extends AuleWebController {
                         action_dashboard(request, response);
                     case "aule" ->
                         action_aule(request, response);
+                    case "aule_filtered" ->
+                        action_aule(request, response);
                     case "attrezzature" ->
                         action_attrezzature(request, response);
                     case "gruppi" ->
@@ -59,7 +61,7 @@ public class Amministrazione extends AuleWebController {
 
     private void action_dashboard(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {"dashboard"};
+            String[] styles = {"administration/dashboard"};
             List<Statistica> statistiche = new ArrayList<>();
             statistiche.add(new Statistica("Eventi", "calendar-alt", dataLayer.getEventiDAO().getEventiNumber()));
             statistiche.add(new Statistica("Aule", "chalkboard", dataLayer.getAuleDAO().getAuleNumber()));
@@ -82,11 +84,20 @@ public class Amministrazione extends AuleWebController {
 
     private void action_aule(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {};
+            String[] styles = {"administration/aule", "search", "simpleTable"};
+            String filter = request.getParameter("filter");
+
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("outline_tpl", "base/outline_administration.ftl.html");
+            data.put("searchLink", "amministrazione?page=aule");
+            if (filter != null && !filter.isEmpty()) {
+                data.put("filter", filter);
+                data.put("aule", dataLayer.getAuleDAO().getAuleByName(filter));
+            } else {
+                data.put("aule", dataLayer.getAuleDAO().getAllAule());
+            }
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/aule.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {

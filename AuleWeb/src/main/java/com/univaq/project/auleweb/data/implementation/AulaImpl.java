@@ -11,8 +11,8 @@ public class AulaImpl extends DataItemImpl<Integer> implements Aula {
     private String edificio;
     private Integer piano;
     private Integer capienza;
-    private Integer prese_elettriche;
-    private Integer prese_rete;
+    private Integer preseElettriche;
+    private Integer preseRete;
     private String note;
     private Responsabile responsabile;
 
@@ -23,8 +23,8 @@ public class AulaImpl extends DataItemImpl<Integer> implements Aula {
         this.edificio = "";
         this.piano = 0;
         this.capienza = 0;
-        this.prese_elettriche = 0;
-        this.prese_rete = 0;
+        this.preseElettriche = 0;
+        this.preseRete = 0;
         this.note = "";
         this.responsabile = null;
 
@@ -37,8 +37,8 @@ public class AulaImpl extends DataItemImpl<Integer> implements Aula {
         this.edificio = edificio;
         this.piano = piano;
         this.capienza = capienza;
-        this.prese_elettriche = prese_elettriche;
-        this.prese_rete = prese_rete;
+        this.preseElettriche = prese_elettriche;
+        this.preseRete = prese_rete;
         this.note = note;
         this.responsabile = responsabile;
     }
@@ -91,20 +91,20 @@ public class AulaImpl extends DataItemImpl<Integer> implements Aula {
         this.capienza = capienza;
     }
 
-    public Integer getPrese_elettriche() {
-        return prese_elettriche;
+    public Integer getPreseElettriche() {
+        return preseElettriche;
     }
 
-    public void setPrese_elettriche(Integer prese_elettriche) {
-        this.prese_elettriche = prese_elettriche;
+    public void setPreseElettriche(Integer preseElettriche) {
+        this.preseElettriche = preseElettriche;
     }
 
-    public Integer getPrese_rete() {
-        return prese_rete;
+    public Integer getPreseRete() {
+        return preseRete;
     }
 
-    public void setPrese_rete(Integer prese_rete) {
-        this.prese_rete = prese_rete;
+    public void setPreseRete(Integer preseRete) {
+        this.preseRete = preseRete;
     }
 
     public String getNote() {

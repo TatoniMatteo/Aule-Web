@@ -1,0 +1,91 @@
+.simple-form{
+    width: 95%;
+    text-align:left;
+}
+.simple-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+
+.simple-form input,
+.simple-form select,
+.simple-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+.simple-form input,
+.simple-form select{
+    height: 20px;
+}
+
+.simple-form button {
+    width: 200px;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+}
+
+.simple-form button:hover {
+    background-color: #233f8b;
+}
+
+.checkbox-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    max-height: 200px;
+    overflow-y: auto;
+    margin:20px 0;
+    border: #ccc 2px solid;
+    border-radius: 5px;
+    /*padding: 10px*/;
+    gap:0;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-label {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    padding: 10px 30px !important;
+    border-radius: 5px;
+    font-weight: normal !important;
+    color: #000;
+}
+
+.checkbox-label::before {
+    content: "\f111";
+    font-family: "Font Awesome 5 Free";
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+}
+
+input[type="checkbox"]:checked + .checkbox-label::before {
+    color: #209d09;
+    content: "\f058";
+}
+
+.checkbox-label span {
+    margin-left: 10px;
+}
+
+.checkbox-label:hover {
+    background-color: #fad762;
+}
+

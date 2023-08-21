@@ -122,8 +122,8 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             aula.setEdificio(rs.getString("edificio"));
             aula.setPiano(rs.getInt("piano"));
             aula.setCapienza(rs.getInt("capienza"));
-            aula.setPrese_rete(rs.getInt("prese_rete"));
-            aula.setPrese_elettriche(rs.getInt("prese_elettriche"));
+            aula.setPreseRete(rs.getInt("prese_rete"));
+            aula.setPreseElettriche(rs.getInt("prese_elettriche"));
             aula.setNote(rs.getString("note"));
             aula.setId_responsabile(rs.getInt("id_responsabile"));
             aula.setVersion(rs.getLong("versione"));

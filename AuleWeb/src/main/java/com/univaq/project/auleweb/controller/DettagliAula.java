@@ -5,7 +5,6 @@ import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
-import com.univaq.project.framework.security.SecurityHelpers;
 import java.time.LocalDate;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;

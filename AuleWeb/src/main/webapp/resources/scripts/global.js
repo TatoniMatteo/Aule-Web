@@ -1,18 +1,22 @@
-setActiveMenuItem();
+const url = window.location.href;
+var menuItems = document.querySelectorAll('.sidebar li');
+menuItems.forEach(function (item) {
+    item.classList.remove('active');
+});
 
-function setActiveMenuItem() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var currentPage = urlParams.get('page');
+var activeItem = null;
 
-    var menuItems = document.querySelectorAll('.sidebar li');
-    menuItems.forEach(function (item) {
-        item.classList.remove('active');
-    });
-
-    var activeItem = document.querySelector('.sidebar li a[href="amministrazione?page=' + currentPage + '"]');
-    console.log(activeItem);
-    if (!activeItem) {
-        activeItem = document.querySelector('.sidebar li a[href="amministrazione?page=dashboard"]');
+// Cerca tra tutte le voci di menu per trovare una corrispondenza con l'URL
+menuItems.forEach(function (item) {
+    const itemName = item.textContent.toLowerCase().trim();
+    if (url.includes(itemName)) {
+        activeItem = item;
     }
-    activeItem.parentElement.classList.add('active');
+});
+
+// Se nessuna corrispondenza è stata trovata, imposta una voce di default come attiva
+if (!activeItem) {
+    activeItem = document.querySelector('.sidebar li a[href="amministrazione?page=dashboard"]').parentElement;
 }
+
+activeItem.classList.add('active');

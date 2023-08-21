@@ -1,0 +1,104 @@
+<h4 class="text-left back">
+    <a href="amministrazione?page=aule">
+        <i class="fas fa-arrow-left"></i>
+        Torna indietro
+    </a>
+</h4>
+<h1>
+    <#if aula?has_content>
+    Gestisci Aula
+    <#else>
+    Crea Aula
+    </#if>
+</h1>
+
+<form class="simple-form">
+    <label for="nome">Nome Aula:</label>
+    <input type="text" id="nome" name="nome" required value="<#if aula?has_content>${aula.nome}</#if>"><br>
+
+    <label for="luogo">Luogo:</label>
+    <input type="text" id="luogo" name="luogo" required value="<#if aula?has_content>${aula.luogo}</#if>"><br>
+
+    <label for="edificio">Edificio:</label>
+    <input type="text" id="edificio" name="edificio" required value="<#if aula?has_content>${aula.edificio}</#if>"><br>
+
+    <label for="piano">Piano:</label>
+    <input type="number" id="piano" name="piano" required value="<#if aula?has_content>${aula.piano}</#if>"><br>
+
+    <label for="capienza">Capienza:</label>
+    <input type="number" id="capienza" name="capienza" required value="<#if aula?has_content>${aula.capienza}</#if>"><br>
+
+    <label for="prese_elettriche">Prese Elettriche:</label>
+    <input type="number" id="prese_elettriche" name="prese_elettriche" required value="<#if aula?has_content>${aula.preseElettriche}</#if>"><br>
+
+    <label for="prese_rete">Prese di Rete:</label>
+    <input type="number" id="prese_rete" name="prese_rete" required value="<#if aula?has_content>${aula.preseRete}</#if>"><br>
+
+    <label for="note">Note:</label>
+    <textarea id="note" name="note" rows="4" value="<#if aula?has_content>${aula.note}</#if>"></textarea><br>
+
+    <label for="responsabileInput">Responsabile:</label>
+    <div class="custom-element">
+        <input type="text" id="responsabileInput" placeholder="Cerca un responsabile..." value="<#if aula?has_content>${aula.responsabile.nome} ${aula.responsabile.cognome}</#if>">
+        <a class="bg-blue" href="#"><i class="fa-solid fa-plus"></i></a>
+    </div>
+    <div class="options responsabili">
+        <#list responsabili as responsabile>
+        <div class="option responsabile" data-value="${responsabile.key}">${responsabile.nome} ${responsabile.cognome}</div>
+        </#list>
+    </div>
+    <input type="hidden" id="responsabile" name="responsabile" value="<#if aula?has_content>${aula.responsabile.key}</#if>">
+    <label for="attrezzaturainput">Attrezzatura:</label>
+    <div class="custom-element">
+        <input type="text" id="attrezzaturaInput" placeholder="Cerca un attrezzatura...">
+        <a class="bg-blue" href="#"><i class="fa-solid fa-plus"></i></a>
+    </div>
+    <div class="options attrezzature">
+        <#list attrezzatureDisponibili as attrezzatura>
+        <div class="option attrezzatura" data-value="${attrezzatura.key}">${attrezzatura.nome} (${attrezzatura.numeroSerie})</div>
+        </#list>
+    </div>
+    <div class="simple-table-container">
+        <table id="attrezzaturaTable">
+            <thead class="bg-gray">
+                <tr>
+                    <th class="text-center">Nome</th>
+                    <th class="text-center">Codice</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <#if attrezzatureAule?has_content>
+            <tbody>
+                <#list attrezzatureAule as attrezzatura>
+                <tr data-value="${attrezzatura.key}">
+                    <td class="text-center">${attrezzatura.nome}</td>
+                    <td class="text-center">${attrezzatura.numeroSerie}</td>
+                    <td class="text-right"><button class="action-button bg-blue">Rimuovi</button></td>
+                </tr>
+                </#list>
+            </tbody>
+            </#if>
+        </table>
+        <#if !attrezzatureAule?has_content>
+        <h4>Non ci sono attrezzature in questa aula!</h4>
+        </#if>
+    </div>
+
+    <label for="gruppi">Gruppi:</label>
+    <div class="checkbox-container">
+        <#list gruppi as gruppo>
+        <#assign check = ''>
+        <#list gruppiAula as gruppoAula>
+        <#if gruppoAula.key == gruppo.key>
+        <#assign check = 'checked'>
+        </#if>
+        </#list>
+        <input type="checkbox" id="${
+                   gruppo.nome
+               }" value="${gruppo.key}" ${check}>
+        <label class="checkbox-label" for="${gruppo.nome}">${gruppo.nome}</label><br>
+        </#list>
+    </div>
+
+    <button class="bg-blue" type="submit">Salva</button>
+</form>

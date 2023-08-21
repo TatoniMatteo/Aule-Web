@@ -35,10 +35,6 @@ public class Homepage extends AuleWebController {
                     action_aule(request, response);
                 case "corsi" ->
                     action_corsi(request, response);
-                case "aule_filtered" ->
-                    action_aule_filterd(request, response);
-                case "corsi_filtered" ->
-                    action_corsi_filterd(request, response);
                 default ->
                     action_home(request, response);
             }
@@ -65,31 +61,20 @@ public class Homepage extends AuleWebController {
 
     private void action_corsi(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {"corsi", "search", "simpleTable"};
-            Map data = new HashMap<>();
-            data.put("styles", styles);
-            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
-            data.put("corsi", dataLayer.getCorsiDAO().getAllCorsi());
-            data.put("options", true);
-            data.put("searchLink", "homepage?page=corsi");
-            TemplateResult templateResult = new TemplateResult(getServletContext());
-            templateResult.activate("corsi.ftl.html", data, response);
-        } catch (DataException | TemplateManagerException ex) {
-            handleError(ex, request, response);
-        }
-    }
-
-    private void action_corsi_filterd(HttpServletRequest request, HttpServletResponse response) {
-        try {
             String filter = request.getParameter("filter");
             String[] styles = {"corsi", "search", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
-            data.put("corsi", dataLayer.getCorsiDAO().getCorsiByName(filter));
             data.put("options", true);
-            data.put("filter", filter);
             data.put("searchLink", "homepage?page=corsi");
+
+            if (filter != null && !filter.isEmpty()) {
+                data.put("filter", filter);
+                data.put("corsi", dataLayer.getCorsiDAO().getCorsiByName(filter));
+            } else {
+                data.put("corsi", dataLayer.getCorsiDAO().getAllCorsi());
+            }
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("corsi.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
@@ -99,31 +84,20 @@ public class Homepage extends AuleWebController {
 
     private void action_aule(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {"corsi", "search", "simpleTable"};
-            Map data = new HashMap<>();
-            data.put("styles", styles);
-            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
-            data.put("aule", dataLayer.getAuleDAO().getAllAule());
-            data.put("options", true);
-            data.put("searchLink", "homepage?page=aule");
-            TemplateResult templateResult = new TemplateResult(getServletContext());
-            templateResult.activate("aule.ftl.html", data, response);
-        } catch (DataException | TemplateManagerException ex) {
-            handleError(ex, request, response);
-        }
-    }
-
-    private void action_aule_filterd(HttpServletRequest request, HttpServletResponse response) {
-        try {
+            String[] styles = {"aule", "search", "simpleTable"};
             String filter = request.getParameter("filter");
-            String[] styles = {"corsi", "search", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
-            data.put("aule", dataLayer.getAuleDAO().getAuleByName(filter));
             data.put("options", true);
-            data.put("filter", filter);
             data.put("searchLink", "homepage?page=aule");
+
+            if (filter != null && !filter.isEmpty()) {
+                data.put("filter", filter);
+                data.put("aule", dataLayer.getAuleDAO().getAuleByName(filter));
+            } else {
+                data.put("aule", dataLayer.getAuleDAO().getAllAule());
+            }
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("aule.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {

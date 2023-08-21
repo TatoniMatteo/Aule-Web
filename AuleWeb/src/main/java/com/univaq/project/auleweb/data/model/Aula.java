@@ -28,13 +28,13 @@ public interface Aula extends DataItem<Integer> {
 
     void setCapienza(Integer capienza);
 
-    Integer getPrese_elettriche();
+    Integer getPreseElettriche();
 
-    void setPrese_elettriche(Integer prese_elettriche);
+    void setPreseElettriche(Integer prese_elettriche);
 
-    Integer getPrese_rete();
+    Integer getPreseRete();
 
-    void setPrese_rete(Integer prese_rete);
+    void setPreseRete(Integer prese_rete);
 
     String getNote();
 

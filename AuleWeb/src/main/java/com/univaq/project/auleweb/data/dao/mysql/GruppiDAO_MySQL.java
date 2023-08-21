@@ -1,9 +1,7 @@
 package com.univaq.project.auleweb.data.dao.mysql;
 
 import com.univaq.project.auleweb.data.dao.GruppiDAO;
-import com.univaq.project.auleweb.data.model.Categoria;
 import com.univaq.project.auleweb.data.model.Gruppo;
-import com.univaq.project.auleweb.data.proxy.CategoriaProxy;
 import com.univaq.project.auleweb.data.proxy.GruppoProxy;
 import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataException;
@@ -20,14 +18,17 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
         super(d);
     }
 
-    private PreparedStatement getAllGruppi, getGruppoByID;
+    private PreparedStatement getAllGruppi, getGruppoByID, getGruppiByAula;
 
     public void init() throws DataException {
 
         try {
             super.init();
-            getAllGruppi = connection.prepareStatement("SELECT * FROM Gruppo");
+            getAllGruppi = connection.prepareStatement("SELECT * FROM Gruppo ORDER BY nome");
             getGruppoByID = connection.prepareStatement("SELECT * FROM Gruppo WHERE ID = ?");
+            getGruppiByAula = connection.prepareStatement(
+                    "SELECT g.id, g.nome, g.descrizione, g.id_categoria, g.versione FROM gruppo g JOIN aula_gruppo ag ON g.id = ag.id_gruppo WHERE ag.id_aula =  ?"
+            );
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
@@ -37,6 +38,8 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
         try {
             getAllGruppi.close();
             getGruppoByID.close();
+            getGruppiByAula.close();
+
             super.destroy();
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -93,6 +96,23 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             throw new DataException("Errore durante l'importazione dell' oggetto Gruppo", ex);
         }
         return gruppo;
+    }
+
+    @Override
+    public List<Gruppo> getGruppiByAula(Integer id) throws DataException {
+        List<Gruppo> gruppi = new ArrayList<>();
+        try {
+            getGruppiByAula.setInt(1, id);
+            try ( ResultSet rs = getGruppiByAula.executeQuery()) {
+                while (rs.next()) {
+                    Gruppo gruppo = importGruppo(rs);
+                    gruppi.add(gruppo);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare il gruppo", ex);
+        }
+        return gruppi;
     }
 
 }
