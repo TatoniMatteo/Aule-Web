@@ -5,10 +5,12 @@ import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.auleweb.data.proxy.AulaProxy;
 import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataException;
+import com.univaq.project.framework.data.DataItemProxy;
 import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,9 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
     }
 
     private PreparedStatement getAllAule, getAulaByID, getAuleByGruppo, getAuleByName, getAuleNumber;
+    private PreparedStatement insertAula, updateAula;
+    private PreparedStatement assignGruppo;
+    private PreparedStatement removeAssignGruppo;
 
     @Override
     public void init() throws DataException {
@@ -30,7 +35,10 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAuleByGruppo = connection.prepareStatement("SELECT A.* FROM Aula A, Aula_gruppo AG, Gruppo G WHERE G.ID = ? AND AG.ID_gruppo = G.ID AND A.ID = AG.ID_aula ORDER BY A.nome");
             getAuleByName = connection.prepareStatement("SELECT * FROM Aula WHERE nome LIKE ?");
             getAuleNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_aule FROM Aula");
-
+            insertAula = connection.prepareStatement("INSERT INTO aula (nome,luogo,edificio,piano,capienza,prese_elettriche,prese_rete,note,id_responsabile) VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            updateAula = connection.prepareStatement("UPDATE aula SET nome=?,luogo=?,edificio=?,piano=?,capienza=?,prese_elettriche=?,prese_rete=?,note = ?,id_responsabile =?, versione=? WHERE ID=? and versione=?");
+            assignGruppo = connection.prepareStatement("INSERT INTO aula_gruppo(id_aula, id_gruppo) values (?,?)");
+            removeAssignGruppo = connection.prepareStatement("DELETE FROM aula_gruppo WHERE id_aula = ? and id_gruppo = ?");
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
@@ -44,6 +52,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAuleByGruppo.close();
             getAuleByName.close();
             getAuleNumber.close();
+            insertAula.close();
 
             super.destroy();
         } catch (SQLException ex) {
@@ -154,5 +163,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             throw new DataException("Impossibile calcolare il numero di aule", ex);
         }
     }
+    
+    
 
 }
