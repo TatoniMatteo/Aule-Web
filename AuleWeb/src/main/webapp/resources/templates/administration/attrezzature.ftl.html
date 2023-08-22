@@ -1,1 +1,35 @@
-<h1>Attrezzature</h1>
+<h1 class="space">Gestione Attrezzature</h1>
+<div class="btn_container">
+    <a href="attrezzatureform" class="bg-blue text-right">
+        <i class="fa-solid fa-plus"></i> 
+        Aggiungi Attrezzatura
+    </a>
+</div>
+<#include "../base/search.ftl.html">
+<div class="simple-table-container">
+    <table>
+        <thead class="bg-gray">
+            <tr>
+                <th class="text-left">Nome</th>
+                <th class="text-left">Codice</th>
+                <th>Aula</th>
+                <th></th>
+            </tr>
+        </thead>
+        <#if attrezzature?has_content>
+        <tbody>
+            <#list attrezzature as attrezzatura>
+            <tr>
+                <td class="text-left">${attrezzatura.nome}</td>
+                <td class="text-left">${attrezzatura.numeroSerie}</td>
+                <td class=><#if attrezzatura.aula?has_content>${attrezzatura.aula.nome}<#else>Non assegnato</#if></td>
+                <td><a href="managedata?type=2&object=2&id=${attrezzatura.key}" class="action-button bg-blue">Elimina</a></td>
+            </tr>
+            </#list>
+        </tbody>
+        </#if>
+    </table>
+    <#if !attrezzature?has_content>
+    <h4>Non ci sono attrezzature!</h4>
+    </#if>
+</div>

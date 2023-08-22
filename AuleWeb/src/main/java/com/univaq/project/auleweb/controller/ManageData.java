@@ -25,6 +25,7 @@ public class ManageData extends AuleWebController {
     
     OGGETTI:
     - 1 = aule
+    - 2 = attrezzature
      */
     private DataLayerImpl dataLayer;
     private Amministratore amministratore;
@@ -38,50 +39,52 @@ public class ManageData extends AuleWebController {
             if (amministratore == null) {
                 response.sendRedirect("homepage");
             }
+
+            String typeParam = request.getParameter("type");
+            String objectParam = request.getParameter("object");
+
+            if (typeParam == null || objectParam == null) {
+                // Parametri mancanti, gestisci l'errore
+                handleError("Richiesta non valida (parametri -> type: " + typeParam + ", object: " + objectParam + ")", request, response);
+                return;
+            }
+
+            int type = SecurityHelpers.checkNumeric(typeParam);
+            int object = SecurityHelpers.checkNumeric(objectParam);
+
+            switch (type) {
+                case 1 -> {
+                    // insert/update
+                    switch (object) {
+                        case 1 -> // aule
+                            auleInsertOrUpdate(request, response);
+                        default ->
+                            handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
+                    }
+                }
+                case 2 -> {
+                    // remove
+                    switch (object) {
+                        case 1 -> // aule
+                            auleRemove(request, response);
+                        case 2 ->
+                            attrezzatureRemove(request, response);
+                        default ->
+                            handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
+                    }
+                }
+                default ->
+                    handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
+
+            }
         } catch (DataException | IOException ex) {
             handleError(ex, request, response);
         }
-
-        String typeParam = request.getParameter("type");
-        String objectParam = request.getParameter("object");
-
-        if (typeParam == null || objectParam == null) {
-            // Parametri mancanti, gestisci l'errore
-            handleError("Richiesta non valida (parametri -> type: " + typeParam + ", object: " + objectParam + ")", request, response);
-            return;
-        }
-
-        int type = SecurityHelpers.checkNumeric(typeParam);
-        int object = SecurityHelpers.checkNumeric(objectParam);
-
-        switch (type) {
-            case 1 -> {
-                // insert/update
-                switch (object) {
-                    case 1 -> // aule
-                        auleInsertOrUpdate(request, response);
-                    default ->
-                        handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
-                }
-            }
-            case 2 -> {
-                // remove
-                switch (object) {
-                    case 1 -> // aule
-                        auleRemove(request, response);
-                    default ->
-                        handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
-                }
-            }
-            default ->
-                handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
-
-        }
     }
 
-    private void ErrorPage(String destination, String message, HttpServletRequest request, HttpServletResponse response) {
+    private void errorPage(String destination, String message, HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {""};
+            String[] styles = {"formError"};
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
@@ -95,7 +98,7 @@ public class ManageData extends AuleWebController {
         }
     }
 
-    private void SuccessPage(String destination, String message, HttpServletRequest request, HttpServletResponse response) {
+    private void successPage(String destination, String message, HttpServletRequest request, HttpServletResponse response) {
         try {
             String[] styles = {""};
             Map data = new HashMap<>();
@@ -112,21 +115,19 @@ public class ManageData extends AuleWebController {
     }
 
     private void auleInsertOrUpdate(HttpServletRequest request, HttpServletResponse response) {
-
         try {
-            // Recupera i dati dal modulo inviati tramite FormData
-            int id = Integer.parseInt(request.getParameter("id"));
-            int versione = Integer.parseInt(request.getParameter("versione"));
+            int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
+            int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
 
             String nome = request.getParameter("nome");
             String luogo = request.getParameter("luogo");
             String edificio = request.getParameter("edificio");
-            int piano = Integer.parseInt(request.getParameter("piano"));
-            int capienza = Integer.parseInt(request.getParameter("capienza"));
-            int preseRete = Integer.parseInt(request.getParameter("prese_rete"));
-            int preseElettriche = Integer.parseInt(request.getParameter("prese_elettriche"));
+            int piano = SecurityHelpers.checkNumeric(request.getParameter("piano"));
+            int capienza = SecurityHelpers.checkNumeric(request.getParameter("capienza"));
+            int preseRete = SecurityHelpers.checkNumeric(request.getParameter("prese_rete"));
+            int preseElettriche = SecurityHelpers.checkNumeric(request.getParameter("prese_elettriche"));
             String note = request.getParameter("note");
-            int responsabile = Integer.parseInt(request.getParameter("responsabile"));
+            int responsabile = SecurityHelpers.checkNumeric(request.getParameter("responsabile"));
 
             // Recupera attrezzature selezionate (array di stringhe)
             String[] attrezzatureArray = request.getParameterValues("attrezzaturaTable[]");
@@ -143,7 +144,6 @@ public class ManageData extends AuleWebController {
             Aula aula;
             if (id != -1) {
                 aula = dataLayer.getAuleDAO().getAulaById(id);
-
             } else {
                 aula = new AulaImpl();
             }
@@ -161,12 +161,26 @@ public class ManageData extends AuleWebController {
 
             System.out.println("Oggetto Aula: " + aula);
 
-        } catch (DataException ex) {
+            /*
+            response.setContentType("text/plain");
+            response.getWriter().write("Dati ricevuti con successo!");
+             */
+        } catch (NumberFormatException | DataException ex) {
             handleError(ex, request, response);
         }
     }
 
     private void auleRemove(HttpServletRequest request, HttpServletResponse response) {
+        int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
+        try {
+            dataLayer.getAttrezzatureDAO().deleteAttrezzaturabyId(id);
+            successPage("amministrazione?page=attrezzature", "L'attrezzatura è stata eliminata con successo", request, response);
+        } catch (DataException ex) {
+            errorPage("amministrazione?page=attrezzature", ex, request, response);
+        }
+    }
+
+    private void attrezzatureRemove(HttpServletRequest request, HttpServletResponse response) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

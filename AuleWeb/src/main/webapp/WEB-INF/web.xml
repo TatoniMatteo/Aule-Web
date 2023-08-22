@@ -37,11 +37,11 @@
         <servlet-name>AulaForm</servlet-name>
         <servlet-class>com.univaq.project.auleweb.controller.AulaForm</servlet-class>
     </servlet>
-    <!-- servlet-mapping -->
     <servlet>
         <servlet-name>ManageData</servlet-name>
         <servlet-class>com.univaq.project.auleweb.controller.ManageData</servlet-class>
     </servlet>
+    <!-- servlet-mapping -->
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -78,15 +78,15 @@
         <servlet-name>AulaForm</servlet-name>
         <url-pattern>/auleform</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageData</servlet-name>
+        <url-pattern>/managedata</url-pattern>
+    </servlet-mapping>
     <!-- welcome -->
     <welcome-file-list>
         <welcome-file>homepage</welcome-file>
     </welcome-file-list>
     <!-- session -->
-    <servlet-mapping>
-        <servlet-name>ManageData</servlet-name>
-        <url-pattern>/managedata</url-pattern>
-    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

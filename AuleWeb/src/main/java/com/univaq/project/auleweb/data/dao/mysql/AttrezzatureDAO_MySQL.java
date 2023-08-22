@@ -14,9 +14,14 @@ import java.util.List;
 
 public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
+<<<<<<< Updated upstream
     private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzatura;
     private PreparedStatement deleteAttrezzaturaById;
     
+=======
+    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByName;
+
+>>>>>>> Stashed changes
     public AttrezzatureDAO_MySQL(DataLayer d) {
         super(d);
     }
@@ -30,8 +35,13 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzaturaDisponibile = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id_aula IS NULL");
             getAttrezzatureNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura");
             getAttrezzatureDisponibiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura WHERE id_aula IS NULL");
+<<<<<<< Updated upstream
             getAllAttrezzatura = this.connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
             deleteAttrezzaturaById = this.connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ?");
+=======
+            getAllAttrezzature = this.connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
+            getAttrezzatureByName = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? ORDER BY nome");
+>>>>>>> Stashed changes
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -46,8 +56,12 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzaturaDisponibile.close();
             getAttrezzatureNumber.close();
             getAttrezzatureDisponibiliNumber.close();
+<<<<<<< Updated upstream
             getAllAttrezzatura.close();
             deleteAttrezzaturaById.close();
+=======
+            getAllAttrezzature.close();
+>>>>>>> Stashed changes
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -134,9 +148,10 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         }
     }
 
-    public List<Attrezzatura> getAllAttrezzatura() throws DataException {
+    @Override
+    public List<Attrezzatura> getAllAttrezzature() throws DataException {
         List<Attrezzatura> attrezzature = new ArrayList<>();
-        try ( ResultSet rs = getAllAttrezzatura.executeQuery()) {
+        try ( ResultSet rs = getAllAttrezzature.executeQuery()) {
             while (rs.next()) {
                 attrezzature.add(importAttrezzatura(rs));
             }
@@ -156,6 +171,24 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         } catch (SQLException ex) {
             throw new DataException("Non è stato possibile eliminare l'attrezzatura", ex);
         }
+    }
+
+    @Override
+    public List<Attrezzatura> getAttrezzatureByName(String filter) throws DataException {
+        List<Attrezzatura> attrezzature = new ArrayList<>();
+        try {
+            getAttrezzatureByName.setString(1, "%" + filter + "%");
+            try ( ResultSet rs = getAttrezzatureByName.executeQuery()) {
+                while (rs.next()) {
+                    Attrezzatura attrezzatura = importAttrezzatura(rs);
+                    attrezzature.add(attrezzatura);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare le attrezzature con nome : " + filter, ex);
+        }
+
+        return attrezzature;
     }
 
 }

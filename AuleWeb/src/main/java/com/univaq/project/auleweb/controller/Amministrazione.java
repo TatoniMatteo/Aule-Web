@@ -84,7 +84,7 @@ public class Amministrazione extends AuleWebController {
 
     private void action_aule(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {"administration/aule", "search", "simpleTable"};
+            String[] styles = {"administration/administrationButtons", "search", "simpleTable"};
             String filter = request.getParameter("filter");
 
             Map data = new HashMap<>();
@@ -107,11 +107,20 @@ public class Amministrazione extends AuleWebController {
 
     private void action_attrezzature(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {};
+            String[] styles = {"search", "simpleTable", "administration/administrationButtons"};
+            String filter = request.getParameter("filter");
+
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("outline_tpl", "base/outline_administration.ftl.html");
+            data.put("searchLink", "amministrazione?page=attrezzature");
+            if (filter != null && !filter.isEmpty()) {
+                data.put("filter", filter);
+                data.put("attrezzature", dataLayer.getAttrezzatureDAO().getAttrezzatureByName(filter));
+            } else {
+                data.put("attrezzature", dataLayer.getAttrezzatureDAO().getAllAttrezzature());
+            }
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/attrezzature.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {

@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AuleDAO_MySQL extends DAO implements AuleDAO {
 
@@ -171,7 +169,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             throw new DataException("Impossibile calcolare il numero di aule", ex);
         }
     }
-	
+
     @Override
     public void assignGruppo(int aulaId, List<Integer> gruppiId) throws DataException {
         try {
@@ -185,6 +183,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
         }
 
     }
+
     @Override
     public void removeAssignGruppo(int aulaId, List<Integer> gruppiId) throws DataException {
         try {
