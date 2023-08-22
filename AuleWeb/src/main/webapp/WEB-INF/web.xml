@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    
     <!-- servlet -->
-    
     <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>com.univaq.project.auleweb.controller.Login</servlet-class>
@@ -39,9 +37,11 @@
         <servlet-name>AulaForm</servlet-name>
         <servlet-class>com.univaq.project.auleweb.controller.AulaForm</servlet-class>
     </servlet>
-    
-    <!-- servlet-mapping --> 
-    
+    <!-- servlet-mapping -->
+    <servlet>
+        <servlet-name>ManageData</servlet-name>
+        <servlet-class>com.univaq.project.auleweb.controller.ManageData</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -78,32 +78,28 @@
         <servlet-name>AulaForm</servlet-name>
         <url-pattern>/auleform</url-pattern>
     </servlet-mapping>
-    
     <!-- welcome -->
-    
     <welcome-file-list>
         <welcome-file>homepage</welcome-file>
     </welcome-file-list>
-    
     <!-- session -->
-    
+    <servlet-mapping>
+        <servlet-name>ManageData</servlet-name>
+        <url-pattern>/managedata</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-   
     <!-- resource -->
-    
     <resource-ref>
         <res-ref-name>jdbc/auleweb</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref>
-   
     <!-- context params -->
-   
     <context-param>
         <param-name>data.source</param-name>
         <param-value>jdbc/auleweb</param-value>

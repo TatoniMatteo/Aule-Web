@@ -5,7 +5,6 @@ import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.auleweb.data.proxy.AulaProxy;
 import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataException;
-import com.univaq.project.framework.data.DataItemProxy;
 import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -163,7 +162,5 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             throw new DataException("Impossibile calcolare il numero di aule", ex);
         }
     }
-    
-    
 
 }

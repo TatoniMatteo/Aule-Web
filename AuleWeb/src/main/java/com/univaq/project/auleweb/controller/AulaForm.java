@@ -4,6 +4,7 @@ import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
 import com.univaq.project.auleweb.data.model.Amministratore;
 import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
+import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
@@ -38,7 +39,7 @@ public class AulaForm extends AuleWebController {
             }
 
             String[] styles = {"administration/aulaForm", "simpleTable", "simpleForm"};
-            String[] scripts = {"selectResponsabile", "selectAttrezzatura"};
+            String[] scripts = {"selectResponsabile", "selectAttrezzatura", "aulaForm"};
 
             Map data = new HashMap<>();
             data.put("styles", styles);
@@ -50,7 +51,7 @@ public class AulaForm extends AuleWebController {
             data.put("attrezzatureAule", aula != null ? dataLayer.getAttrezzatureDAO().getAttrezzaturaByAula(aula.getKey()) : new ArrayList<Attrezzatura>());
             data.put("attrezzatureDisponibili", dataLayer.getAttrezzatureDAO().getAttrezzaturaDisponibile());
             data.put("gruppi", dataLayer.getGruppiDAO().getAllGruppi());
-            data.put("gruppiAula", dataLayer.getGruppiDAO().getGruppiByAula(aula.getKey()));
+            data.put("gruppiAula", aula != null ? dataLayer.getGruppiDAO().getGruppiByAula(aula.getKey()) : new ArrayList<Gruppo>());
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/aulaForm.ftl.html", data, response);
         } catch (IOException | DataException | TemplateManagerException ex) {
