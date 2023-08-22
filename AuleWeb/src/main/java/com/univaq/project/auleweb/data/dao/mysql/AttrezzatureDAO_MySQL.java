@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
-    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber;
+    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzatura;
 
     public AttrezzatureDAO_MySQL(DataLayer d) {
         super(d);
@@ -29,6 +29,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzaturaDisponibile = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id_aula IS NULL");
             getAttrezzatureNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura");
             getAttrezzatureDisponibiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura WHERE id_aula IS NULL");
+            getAllAttrezzatura = this.connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -43,6 +44,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzaturaDisponibile.close();
             getAttrezzatureNumber.close();
             getAttrezzatureDisponibiliNumber.close();
+            getAllAttrezzatura.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -115,7 +117,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             throw new DataException("Impossibile calcolare il numero di attrezzature", ex);
         }
     }
-    
+
     @Override
     public int getAttrezzatureDisponibiliNumber() throws DataException {
         try ( ResultSet rs = getAttrezzatureDisponibiliNumber.executeQuery()) {
@@ -127,6 +129,18 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         } catch (SQLException ex) {
             throw new DataException("Impossibile calcolare il numero di attrezzature", ex);
         }
+    }
+
+    public List<Attrezzatura> getAllAttrezzatura() throws DataException {
+        List<Attrezzatura> attrezzature = new ArrayList<>();
+        try ( ResultSet rs = getAllAttrezzatura.executeQuery()) {
+            while (rs.next()) {
+                attrezzature.add(importAttrezzatura(rs));
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare le Attrezzature", ex);
+        }
+        return attrezzature;
     }
 
 }
