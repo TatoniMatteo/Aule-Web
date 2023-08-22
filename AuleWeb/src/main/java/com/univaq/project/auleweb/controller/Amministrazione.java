@@ -117,7 +117,7 @@ public class Amministrazione extends AuleWebController {
             data.put("searchLink", "amministrazione?page=attrezzature");
             if (filter != null && !filter.isEmpty()) {
                 data.put("filter", filter);
-                data.put("attrezzature", dataLayer.getAttrezzatureDAO().getAttrezzatureByName(filter));
+                data.put("attrezzature", dataLayer.getAttrezzatureDAO().getAttrezzatureByNameOrCode(filter));
             } else {
                 data.put("attrezzature", dataLayer.getAttrezzatureDAO().getAllAttrezzature());
             }

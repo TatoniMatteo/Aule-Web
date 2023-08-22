@@ -15,13 +15,11 @@ public interface AttrezzatureDAO {
     int getAttrezzatureNumber() throws DataException;
 
     int getAttrezzatureDisponibiliNumber() throws DataException;
-    
-    List<Attrezzatura> getAllAttrezzatura() throws DataException;
-    
-    void deleteAttrezzaturaById(int id) throws DataException;
 
     List<Attrezzatura> getAllAttrezzature() throws DataException;
 
-    List<Attrezzatura> getAttrezzatureByName(String filter) throws DataException;
+    void deleteAttrezzaturaById(int id) throws DataException;
+
+    List<Attrezzatura> getAttrezzatureByNameOrCode(String filter) throws DataException;
 
 }

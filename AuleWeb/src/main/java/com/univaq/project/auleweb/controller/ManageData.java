@@ -84,7 +84,7 @@ public class ManageData extends AuleWebController {
 
     private void errorPage(String destination, String message, HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {"formError"};
+            String[] styles = {"administration/formError"};
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
@@ -100,7 +100,7 @@ public class ManageData extends AuleWebController {
 
     private void successPage(String destination, String message, HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {""};
+            String[] styles = {"administration/formSuccess"};
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
@@ -171,16 +171,16 @@ public class ManageData extends AuleWebController {
     }
 
     private void auleRemove(HttpServletRequest request, HttpServletResponse response) {
-        int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
-        try {
-            dataLayer.getAttrezzatureDAO().deleteAttrezzaturabyId(id);
-            successPage("amministrazione?page=attrezzature", "L'attrezzatura è stata eliminata con successo", request, response);
-        } catch (DataException ex) {
-            errorPage("amministrazione?page=attrezzature", ex, request, response);
-        }
+
     }
 
     private void attrezzatureRemove(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
+        try {
+            dataLayer.getAttrezzatureDAO().deleteAttrezzaturaById(id);
+            successPage("amministrazione?page=attrezzature", "L'attrezzatura è stata eliminata con successo", request, response);
+        } catch (DataException ex) {
+            errorPage("amministrazione?page=attrezzature", ex.getMessage(), request, response);
+        }
     }
 }

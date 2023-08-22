@@ -14,14 +14,9 @@ import java.util.List;
 
 public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
-<<<<<<< Updated upstream
-    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzatura;
+    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByNameOrCode;
     private PreparedStatement deleteAttrezzaturaById;
-    
-=======
-    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByName;
 
->>>>>>> Stashed changes
     public AttrezzatureDAO_MySQL(DataLayer d) {
         super(d);
     }
@@ -35,13 +30,9 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzaturaDisponibile = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id_aula IS NULL");
             getAttrezzatureNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura");
             getAttrezzatureDisponibiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura WHERE id_aula IS NULL");
-<<<<<<< Updated upstream
-            getAllAttrezzatura = this.connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
-            deleteAttrezzaturaById = this.connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ?");
-=======
             getAllAttrezzature = this.connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
-            getAttrezzatureByName = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? ORDER BY nome");
->>>>>>> Stashed changes
+            deleteAttrezzaturaById = this.connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ?");
+            getAttrezzatureByNameOrCode = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -56,12 +47,9 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzaturaDisponibile.close();
             getAttrezzatureNumber.close();
             getAttrezzatureDisponibiliNumber.close();
-<<<<<<< Updated upstream
-            getAllAttrezzatura.close();
-            deleteAttrezzaturaById.close();
-=======
             getAllAttrezzature.close();
->>>>>>> Stashed changes
+            deleteAttrezzaturaById.close();
+            getAllAttrezzature.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -160,25 +148,26 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         }
         return attrezzature;
     }
-    
+
     @Override
     public void deleteAttrezzaturaById(int id) throws DataException {
         try {
-           
+
             deleteAttrezzaturaById.setInt(1, id);
             deleteAttrezzaturaById.execute();
-           
+
         } catch (SQLException ex) {
             throw new DataException("Non è stato possibile eliminare l'attrezzatura", ex);
         }
     }
 
     @Override
-    public List<Attrezzatura> getAttrezzatureByName(String filter) throws DataException {
+    public List<Attrezzatura> getAttrezzatureByNameOrCode(String filter) throws DataException {
         List<Attrezzatura> attrezzature = new ArrayList<>();
         try {
-            getAttrezzatureByName.setString(1, "%" + filter + "%");
-            try ( ResultSet rs = getAttrezzatureByName.executeQuery()) {
+            getAttrezzatureByNameOrCode.setString(1, "%" + filter + "%");
+            getAttrezzatureByNameOrCode.setString(2, "%" + filter + "%");
+            try ( ResultSet rs = getAttrezzatureByNameOrCode.executeQuery()) {
                 while (rs.next()) {
                     Attrezzatura attrezzatura = importAttrezzatura(rs);
                     attrezzature.add(attrezzatura);
