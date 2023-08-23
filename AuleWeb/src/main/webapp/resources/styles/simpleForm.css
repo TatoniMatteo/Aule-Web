@@ -20,9 +20,13 @@
     border-radius: 4px;
 }
 
-.simple-form input,
-.simple-form select{
+.simple-form input{
     height: 20px;
+}
+
+.simple-form select{
+    width: 101%;
+    height: 45px;
 }
 
 .simple-form button {
@@ -87,5 +91,11 @@ input[type="checkbox"]:checked + .checkbox-label::before {
 
 .checkbox-label:hover {
     background-color: #fad762;
+}
+
+.error-message {
+    display: none;
+    color: red;
+    margin-top: 5px;
 }
 

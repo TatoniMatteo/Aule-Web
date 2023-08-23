@@ -1,7 +1,7 @@
 <form action="${searchLink}" method="post" class="search">
     <#assign filter = filter?default("")>
     <div class="searchBar">
-        <input type="text" id="filter" name="filter" placeholder="Cerca categoria..." class="text-input br-yellow" required value="${filter}">
+        <input type="text" id="filter" name="filter" placeholder="Cerca..." class="text-input br-yellow" required value="${filter}">
         <#if filter?length gt 0>
         <a href="${searchLink}" class="button bg-yellow br-yellow middle"><i class="fas fa-close"></i></a>
         </#if>

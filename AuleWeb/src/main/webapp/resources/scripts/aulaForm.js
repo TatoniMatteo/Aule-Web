@@ -1,3 +1,9 @@
+function displayErrorMessage(message) {
+    const errorMessage = document.getElementById("error-message");
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+}
+
 // Ottieni il riferimento al modulo
 const form = document.querySelector('.simple-form');
 // Aggiungi un ascoltatore per l'evento di invio del modulo
@@ -25,18 +31,23 @@ form.addEventListener('submit', function (event) {
     // Validazione dei dati
     if (!nomeAula || !luogo || !edificio || isNaN(piano) || isNaN(capienza) || isNaN(preseElettriche) ||
             isNaN(preseRete) || isNaN(responsabileKey) || attrezzatureKeys.includes(NaN) || gruppiKeys.includes(NaN)) {
-        console.error('Tutti i campi obbligatori devono essere compilati con valori validi.');
+        displayErrorMessage('Tutti i campi obbligatori devono essere compilati con valori validi.');
         return; // Non procedere con l'invio dei dati
     }
 
     if (piano < 0 || capienza <= 0 || preseElettriche < 0 || preseRete < 0 || responsabileKey <= 0 ||
             attrezzatureKeys.some(key => key <= 0) || gruppiKeys.some(key => key <= 0)) {
-        console.error('I valori numerici devono essere maggiori di 0 o rispettare le condizioni specificate.');
+        displayErrorMessage('I valori numerici devono essere maggiori di 0 o rispettare le condizioni specificate.');
         return; // Non procedere con l'invio dei dati
     }
 
     if (new Set(attrezzatureKeys).size !== attrezzatureKeys.length || new Set(gruppiKeys).size !== gruppiKeys.length) {
-        console.error('Le liste non possono contenere valori duplicati.');
+        displayErrorMessage('Le liste non possono contenere valori duplicati.');
+        return; // Non procedere con l'invio dei dati
+    }
+
+    if (gruppiKeys.length <= 0) {
+        displayErrorMessage('L\'aula deve essere assegnata ad almeno un gruppo');
         return; // Non procedere con l'invio dei dati
     }
 
@@ -59,7 +70,7 @@ form.addEventListener('submit', function (event) {
     formData.append('capienza', capienza);
     formData.append('preseElettriche', preseElettriche);
     formData.append('preseRete', preseRete);
-    formData.append('note', note);
+    formData.append('note', note.length > 0 ? note : "");
     formData.append('responsabile', responsabileKey);
     formData.append('attrezzature', attrezzatureKeys.join(','));
     formData.append('gruppi', gruppiKeys.join(','));
