@@ -6,8 +6,6 @@ import com.univaq.project.auleweb.data.proxy.AmministratoreProxy;
 import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.data.DataLayer;
-import com.univaq.project.framework.security.SecurityHelpers;
-import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -92,31 +90,28 @@ public class AmministratoriDAO_MySQL extends DAO implements AmministratoriDAO {
                     amministratore = importAmministratore(rs);
                 }
             }
-        } catch ( SQLException ex) {
+        } catch (SQLException ex) {
             throw new DataException("Impossibile recuperare l'amministratore con username: " + username, ex);
         }
         return amministratore;
     }
-    
-    
+
     @Override
     public String getPasswordByUsername(String username) throws DataException {
-       String password = null;
+        String password = null;
         try {
 
             getPasswordByUsername.setString(1, username);
             try ( ResultSet rs = getPasswordByUsername.executeQuery()) {
                 if (rs.next()) {
                     password = rs.getString("password");
-                
+
                 }
             }
-        } catch ( SQLException ex) {
+        } catch (SQLException ex) {
             throw new DataException("Impossibile recuperare l'amministratore con username: " + username, ex);
         }
         return password;
     }
-    
 
-  
 }
