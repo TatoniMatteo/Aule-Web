@@ -272,6 +272,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         }
     }
 
+    @Override
     public Integer insertAttrezzatura(String nome, String codice) throws DataException {
         int attrezzaturaId = -1;
         try {
