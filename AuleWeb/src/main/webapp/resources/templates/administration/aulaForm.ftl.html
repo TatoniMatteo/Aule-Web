@@ -13,31 +13,31 @@
 </h1>
 
 <form class="simple-form" data-key="<#if aula?has_content>${aula.key}</#if>" data-version="<#if aula?has_content>${aula.version}</#if>">
-    <label for="nome">Nome Aula:</label>
+    <label for="nome">Nome Aula*:</label>
     <input type="text" id="nome" name="nome" required value="<#if aula?has_content>${aula.nome}</#if>"><br>
 
-    <label for="luogo">Luogo:</label>
+    <label for="luogo">Luogo*:</label>
     <input type="text" id="luogo" name="luogo" required value="<#if aula?has_content>${aula.luogo}</#if>"><br>
 
-    <label for="edificio">Edificio:</label>
+    <label for="edificio">Edificio*:</label>
     <input type="text" id="edificio" name="edificio" required value="<#if aula?has_content>${aula.edificio}</#if>"><br>
 
-    <label for="piano">Piano:</label>
+    <label for="piano">Piano*:</label>
     <input type="number" id="piano" name="piano" required value="<#if aula?has_content>${aula.piano}</#if>"><br>
 
-    <label for="capienza">Capienza:</label>
+    <label for="capienza">Capienza*:</label>
     <input type="number" id="capienza" name="capienza" required value="<#if aula?has_content>${aula.capienza}</#if>"><br>
 
-    <label for="prese_elettriche">Prese Elettriche:</label>
+    <label for="prese_elettriche">Prese Elettriche*:</label>
     <input type="number" id="prese_elettriche" name="prese_elettriche" required value="<#if aula?has_content>${aula.preseElettriche}</#if>"><br>
 
-    <label for="prese_rete">Prese di Rete:</label>
+    <label for="prese_rete">Prese di Rete*:</label>
     <input type="number" id="prese_rete" name="prese_rete" required value="<#if aula?has_content>${aula.preseRete}</#if>"><br>
 
     <label for="note">Note:</label>
     <textarea id="note" name="note" rows="4" value="<#if aula?has_content>${aula.note}</#if>"></textarea><br>
 
-    <label for="responsabileInput">Responsabile:</label>
+    <label for="responsabileInput">Responsabile*:</label>
     <div class="custom-element">
         <input type="text" id="responsabileInput" placeholder="Cerca un responsabile..." value="<#if aula?has_content>${aula.responsabile.nome} ${aula.responsabile.cognome}</#if>">
         <a class="bg-blue" href="#"><i class="fa-solid fa-plus"></i></a>
@@ -67,7 +67,6 @@
                     <th></th>
                 </tr>
             </thead>
-            <#if attrezzatureAule?has_content>
             <tbody>
                 <#list attrezzatureAule as attrezzatura>
                 <tr data-value="${attrezzatura.key}">
@@ -77,14 +76,11 @@
                 </tr>
                 </#list>
             </tbody>
-            </#if>
         </table>
-        <#if !attrezzatureAule?has_content>
-        <h4>Non ci sono attrezzature in questa aula!</h4>
-        </#if>
+        <h4 class="empty-message">Non ci sono attrezzature in questa aula!</h4>
     </div>
 
-    <label for="gruppi">Gruppi:</label>
+    <label for="gruppi">Gruppi*:</label>
     <div class="checkbox-container">
         <#list gruppi as gruppo>
         <#assign check = ''>
@@ -100,5 +96,6 @@
         </#list>
     </div>
 
+    <p id="error-message" class="error-message"></p>
     <button class="bg-blue" type="submit">Salva</button>
 </form>

@@ -42,6 +42,10 @@
         <servlet-class>com.univaq.project.auleweb.controller.ManageData</servlet-class>
     </servlet>
     <!-- servlet-mapping -->
+    <servlet>
+        <servlet-name>AttrezzatureForm</servlet-name>
+        <servlet-class>com.univaq.project.auleweb.controller.AttrezzatureForm</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -87,6 +91,10 @@
         <welcome-file>homepage</welcome-file>
     </welcome-file-list>
     <!-- session -->
+    <servlet-mapping>
+        <servlet-name>AttrezzatureForm</servlet-name>
+        <url-pattern>/attrezzatureform</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

@@ -6,19 +6,16 @@
 </h4>
 <h1>Crea attrezzatura</h1>
 
-<form method="post" class="simple-form" >
-    <label for="nome">Tipo Attrezzatura</label>
-    <select type="text" id="nome" name="nome" required>
+<form action="managedata?type=1&object=2" method="post" class="simple-form" >
+    <label for="nome">Tipo Attrezzatura*:</label>
+    <select id="nome" name="nome" required>
         <#list tipi as tipo>
-
+        <option value="${tipo}">${tipo}</option>
         </#list>
     </select><br>
 
-    <label for="codice">Luogo:</label>
-    <input type="text" id="luogo" name="luogo" required value="<#if aula?has_content>${aula.luogo}</#if>"><br>
-
-    <label for="edificio">Edificio:</label>
-    <input type="text" id="edificio" name="edificio" required value="<#if aula?has_content>${aula.edificio}</#if>"><br>
+    <label for="codice">Codice*:</label>
+    <input type="text" id="codice" name="codice" required><br>
 
     <button class="bg-blue" type="submit">Salva</button>
 </form>

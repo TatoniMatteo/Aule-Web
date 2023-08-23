@@ -9,6 +9,7 @@ import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
 import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -60,8 +61,10 @@ public class ManageData extends AuleWebController {
                 case 1 -> {
                     // insert/update
                     switch (object) {
-                        case 1 -> // aule
+                        case 1 ->
                             auleInsertOrUpdate(request, response);
+                        case 2 ->
+                            attrezzatureInsert(request, response);
                         default ->
                             handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
                     }
@@ -69,8 +72,6 @@ public class ManageData extends AuleWebController {
                 case 2 -> {
                     // remove
                     switch (object) {
-                        case 1 -> // aule
-                            auleRemove(request, response);
                         case 2 ->
                             attrezzatureRemove(request, response);
                         default ->
@@ -134,7 +135,8 @@ public class ManageData extends AuleWebController {
             int responsabile = SecurityHelpers.checkNumeric(request.getParameter("responsabile"));
 
             // Recupera attrezzature selezionate
-            List<Integer> attrezzature = Arrays.asList(request.getParameter("attrezzature").split(","))
+            String attrezzatureString = request.getParameter("attrezzature");
+            List<Integer> attrezzature = attrezzatureString.isEmpty() ? new ArrayList<>() : Arrays.asList(attrezzatureString.split(","))
                     .stream()
                     .map(SecurityHelpers::checkNumeric)
                     .collect(Collectors.toList());
@@ -172,10 +174,6 @@ public class ManageData extends AuleWebController {
         }
     }
 
-    private void auleRemove(HttpServletRequest request, HttpServletResponse response) {
-
-    }
-
     private void attrezzatureRemove(HttpServletRequest request, HttpServletResponse response) {
         int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
         try {
@@ -183,6 +181,20 @@ public class ManageData extends AuleWebController {
             successPage("amministrazione?page=attrezzature", "L'attrezzatura è stata eliminata con successo", request, response);
         } catch (DataException ex) {
             errorPage("amministrazione?page=attrezzature", ex.getMessage(), request, response);
+        }
+    }
+
+    private void attrezzatureInsert(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String nome = request.getParameter("nome");
+            String codice = request.getParameter("codice");
+
+            dataLayer.getAttrezzatureDAO().insertAttrezzatura(nome, codice);
+
+            successPage("amministrazione?page=attrezzatura", "Operazione completata con successo", request, response);
+
+        } catch (DataException ex) {
+            errorPage("amministrazione?page=attrezzature", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
     }
 }
