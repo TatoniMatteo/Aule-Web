@@ -3,7 +3,9 @@ package com.univaq.project.auleweb.controller;
 import com.univaq.project.auleweb.data.implementation.AulaImpl;
 import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
 import com.univaq.project.auleweb.data.model.Amministratore;
+import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
+import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
@@ -11,11 +13,15 @@ import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@MultipartConfig
 public class ManageData extends AuleWebController {
 
     /*
@@ -124,22 +130,22 @@ public class ManageData extends AuleWebController {
             String edificio = request.getParameter("edificio");
             int piano = SecurityHelpers.checkNumeric(request.getParameter("piano"));
             int capienza = SecurityHelpers.checkNumeric(request.getParameter("capienza"));
-            int preseRete = SecurityHelpers.checkNumeric(request.getParameter("prese_rete"));
-            int preseElettriche = SecurityHelpers.checkNumeric(request.getParameter("prese_elettriche"));
+            int preseRete = SecurityHelpers.checkNumeric(request.getParameter("preseRete"));
+            int preseElettriche = SecurityHelpers.checkNumeric(request.getParameter("preseElettriche"));
             String note = request.getParameter("note");
             int responsabile = SecurityHelpers.checkNumeric(request.getParameter("responsabile"));
 
-            // Recupera attrezzature selezionate (array di stringhe)
-            String[] attrezzatureArray = request.getParameterValues("attrezzaturaTable[]");
-            int[] attrezzature = Arrays.stream(attrezzatureArray)
-                    .mapToInt(Integer::parseInt)
-                    .toArray();
+            // Recupera attrezzature selezionate
+            List<Attrezzatura> attrezzature = Arrays.stream(request.getParameter("attrezzature").split(","))
+                    .mapToInt(SecurityHelpers::checkNumeric)
+                    .mapToObj(key =  > dataLayer.getAttrezzatureDAO().getAttrezzaturaById(key))
+                    .collect(Collectors.toList());
 
-            // Recupera gruppi selezionati (array di stringhe)
-            String[] gruppiArray = request.getParameterValues("gruppi[]");
-            int[] gruppi = Arrays.stream(gruppiArray)
-                    .mapToInt(Integer::parseInt)
-                    .toArray();
+            // Recupera gruppi selezionati
+            List<Gruppo> gruppi = Arrays.stream(request.getParameter("gruppi").split(","))
+                    .mapToInt(SecurityHelpers::checkNumeric)
+                    .mapToObj(key -> dataLayer.getGruppiDAO().getGruppoByID(key))
+                    .collect(Collectors.toList());
 
             Aula aula;
             if (id != -1) {
@@ -160,12 +166,7 @@ public class ManageData extends AuleWebController {
             aula.setVersion(versione);
 
             System.out.println("Oggetto Aula: " + aula);
-
-            /*
-            response.setContentType("text/plain");
-            response.getWriter().write("Dati ricevuti con successo!");
-             */
-        } catch (NumberFormatException | DataException ex) {
+        } catch (DataException | NumberFormatException ex) {
             handleError(ex, request, response);
         }
     }

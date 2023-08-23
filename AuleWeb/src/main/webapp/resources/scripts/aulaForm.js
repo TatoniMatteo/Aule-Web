@@ -61,8 +61,8 @@ form.addEventListener('submit', function (event) {
     formData.append('preseRete', preseRete);
     formData.append('note', note);
     formData.append('responsabile', responsabileKey);
-    formData.append('attrezzature', JSON.stringify(attrezzatureKeys));
-    formData.append('gruppi', JSON.stringify(gruppiKeys));
+    formData.append('attrezzature', attrezzatureKeys.join(','));
+    formData.append('gruppi', gruppiKeys.join(','));
 
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {

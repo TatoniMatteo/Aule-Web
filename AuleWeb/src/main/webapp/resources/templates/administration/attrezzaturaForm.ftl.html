@@ -1,0 +1,24 @@
+<h4 class="text-left back">
+    <a href="amministrazione?page=attrezzature">
+        <i class="fas fa-arrow-left"></i>
+        Torna indietro
+    </a>
+</h4>
+<h1>Crea attrezzatura</h1>
+
+<form method="post" class="simple-form" >
+    <label for="nome">Tipo Attrezzatura</label>
+    <select type="text" id="nome" name="nome" required>
+        <#list tipi as tipo>
+
+        </#list>
+    </select><br>
+
+    <label for="codice">Luogo:</label>
+    <input type="text" id="luogo" name="luogo" required value="<#if aula?has_content>${aula.luogo}</#if>"><br>
+
+    <label for="edificio">Edificio:</label>
+    <input type="text" id="edificio" name="edificio" required value="<#if aula?has_content>${aula.edificio}</#if>"><br>
+
+    <button class="bg-blue" type="submit">Salva</button>
+</form>
