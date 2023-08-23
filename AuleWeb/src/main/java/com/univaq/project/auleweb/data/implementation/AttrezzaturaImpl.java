@@ -3,6 +3,7 @@ package com.univaq.project.auleweb.data.implementation;
 import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.framework.data.DataItemImpl;
+import java.util.Objects;
 
 
 public class AttrezzaturaImpl extends DataItemImpl<Integer> implements Attrezzatura {
@@ -48,5 +49,27 @@ public class AttrezzaturaImpl extends DataItemImpl<Integer> implements Attrezzat
     public void setAula(Aula aula) {
         this.aula = aula;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AttrezzaturaImpl other = (AttrezzaturaImpl) obj;
+        return this.numeroSerie.equals(other.numeroSerie);
+    }
+    
 
 }
