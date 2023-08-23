@@ -42,7 +42,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzatureByNameOrCode = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
             getAttrezzaturaById = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
             setAula = this.connection.prepareStatement("UPDATE attrezzatura SET id_aula=?, versione=? WHERE id=? AND versione=?");
-            insertAttrezzatura = this.connection.prepareStatement("INSERT INTO attrezzatura (nome,codice) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
+            insertAttrezzatura = this.connection.prepareStatement("INSERT INTO attrezzatura (nome,numero_serie) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
