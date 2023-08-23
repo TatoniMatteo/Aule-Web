@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.univaq.project.framework.data;
 
 import java.sql.Connection;
 
 public class DAO {
-    
+
     protected final DataLayer dataLayer;
     protected final Connection connection;
 
@@ -31,5 +27,5 @@ public class DAO {
     public void destroy() throws DataException {
 
     }
-    
+
 }

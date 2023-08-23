@@ -9,6 +9,7 @@ import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
     private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByNameOrCode, getAttrezzaturaById;
     private PreparedStatement deleteAttrezzaturaById;
+    private PreparedStatement setAula;
 
     public AttrezzatureDAO_MySQL(DataLayer d) {
         super(d);
@@ -34,6 +36,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             deleteAttrezzaturaById = this.connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ?");
             getAttrezzatureByNameOrCode = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
             getAttrezzaturaById = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
+            setAula = this.connection.prepareStatement("UPDATE attrezzatura SET id_aula=?, versione=? WHERE id=? AND versione=?");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -52,6 +55,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             deleteAttrezzaturaById.close();
             getAllAttrezzature.close();
             getAttrezzaturaById.close();
+            setAula.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -197,6 +201,68 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             throw new DataException("Impossibile caricare l'attrezzatura con Id: " + id, ex);
         }
         return attrezzatura;
+    }
+
+    @Override
+    public void updateAula(List<Integer> keys, int aulaId) throws DataException {
+        boolean autocommit = false;
+
+        try {
+            autocommit = connection.getAutoCommit();
+            if (!autocommit) {
+                connection.setAutoCommit(false);
+            }
+            List<Attrezzatura> currentAttrezzatura = getAttrezzaturaByAula(aulaId);
+            List<Attrezzatura> newAttrezzatura = new ArrayList<>();
+            for (Integer key : keys) {
+                newAttrezzatura.add(getAttrezzaturaById(key));
+            }
+
+            for (Attrezzatura a1 : currentAttrezzatura) {
+                boolean isOld = true;
+                for (Attrezzatura a2 : newAttrezzatura) {
+                    if (a1.equals(a2)) {
+                        newAttrezzatura.remove(a2);
+                        isOld = false;
+                        break;
+                    }
+                }
+                if (isOld) {
+                    setAula.setNull(1, Types.INTEGER);
+                    setAula.setLong(2, a1.getVersion() + 1);
+                    setAula.setInt(3, a1.getKey());
+                    setAula.setLong(4, a1.getVersion());
+                    setAula.executeUpdate();
+                }
+            }
+
+            for (Attrezzatura a : newAttrezzatura) {
+                setAula.setInt(1, aulaId);
+                setAula.setLong(2, a.getVersion() + 1);
+                setAula.setInt(3, a.getKey());
+                setAula.setLong(4, a.getVersion());
+                setAula.executeUpdate();
+            }
+
+            if (!autocommit) {
+                connection.commit();
+            }
+        } catch (SQLException ex) {
+            if (!autocommit) try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                throw new DataException("Errore durante l'esecuzione del rollback", ex1);
+            }
+            throw new DataException("Impossibile aggiornare l'aula delle attrezzature indicate", ex);
+        } finally {
+            if (!autocommit) {
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException ex) {
+                    throw new DataException("Errore durante il ripristino dell'autocommit", ex);
+                }
+            }
+        }
     }
 
 }

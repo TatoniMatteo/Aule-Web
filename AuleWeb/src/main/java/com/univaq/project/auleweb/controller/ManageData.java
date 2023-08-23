@@ -3,9 +3,7 @@ package com.univaq.project.auleweb.controller;
 import com.univaq.project.auleweb.data.implementation.AulaImpl;
 import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
 import com.univaq.project.auleweb.data.model.Amministratore;
-import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
-import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
@@ -28,7 +26,7 @@ public class ManageData extends AuleWebController {
     OPERAZIONI:
     - 1 = insert/update
     - 2 = remove
-    
+ 
     OGGETTI:
     - 1 = aule
     - 2 = attrezzature
@@ -136,15 +134,15 @@ public class ManageData extends AuleWebController {
             int responsabile = SecurityHelpers.checkNumeric(request.getParameter("responsabile"));
 
             // Recupera attrezzature selezionate
-            List<Attrezzatura> attrezzature = Arrays.stream(request.getParameter("attrezzature").split(","))
-                    .mapToInt(SecurityHelpers::checkNumeric)
-                    .mapToObj(key =  > dataLayer.getAttrezzatureDAO().getAttrezzaturaById(key))
+            List<Integer> attrezzature = Arrays.asList(request.getParameter("attrezzature").split(","))
+                    .stream()
+                    .map(SecurityHelpers::checkNumeric)
                     .collect(Collectors.toList());
 
             // Recupera gruppi selezionati
-            List<Gruppo> gruppi = Arrays.stream(request.getParameter("gruppi").split(","))
-                    .mapToInt(SecurityHelpers::checkNumeric)
-                    .mapToObj(key -> dataLayer.getGruppiDAO().getGruppoByID(key))
+            List<Integer> gruppi = Arrays.asList(request.getParameter("gruppi").split(","))
+                    .stream()
+                    .map(SecurityHelpers::checkNumeric)
                     .collect(Collectors.toList());
 
             Aula aula;
@@ -165,9 +163,12 @@ public class ManageData extends AuleWebController {
             aula.setNote(note);
             aula.setVersion(versione);
 
-            System.out.println("Oggetto Aula: " + aula);
+            dataLayer.getAuleDAO().storeAula(aula, gruppi, attrezzature);
+
+            successPage("amministrazione?page=aule", "Operazione completata con successo", request, response);
+
         } catch (DataException | NumberFormatException ex) {
-            handleError(ex, request, response);
+            errorPage("amministrazione?page=aule", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
     }
 

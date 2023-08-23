@@ -65,17 +65,21 @@ form.addEventListener('submit', function (event) {
     formData.append('gruppi', gruppiKeys.join(','));
 
     const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log('Risposta dalla servlet:', xhr.responseText);
-        } else {
-            console.error('Errore durante la richiesta:', xhr.statusText);
-        }
-    };
-
     xhr.open('post', 'managedata?type=1&object=1', true);
-    xhr.send(formData);
 
+    xhr.addEventListener('load', function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            const responseHtml = xhr.responseText;
+
+            // Sostituisci l'intero contenuto del DOM con l'HTML ricevuto
+            document.documentElement.innerHTML = responseHtml;
+        } else {
+            // Errore di rete o del server
+            console.error('Errore di rete o del server:', xhr.statusText);
+        }
+    });
+
+    xhr.send(formData);
 });
 
 

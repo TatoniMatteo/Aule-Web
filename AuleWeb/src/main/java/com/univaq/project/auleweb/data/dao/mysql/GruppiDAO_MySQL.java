@@ -19,6 +19,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
     }
 
     private PreparedStatement getAllGruppi, getGruppoByID, getGruppiByAula;
+    private PreparedStatement removeAulaGruppo, insertAulaGruppo;
 
     public void init() throws DataException {
 
@@ -29,6 +30,8 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             getGruppiByAula = connection.prepareStatement(
                     "SELECT g.id, g.nome, g.descrizione, g.id_categoria, g.versione FROM gruppo g JOIN aula_gruppo ag ON g.id = ag.id_gruppo WHERE ag.id_aula =  ?"
             );
+            removeAulaGruppo = connection.prepareStatement("DELETE FROM aula_gruppo WHERE id_aula = ?");
+            insertAulaGruppo = connection.prepareStatement("INSERT INTO aula_gruppo(id_aula, id_gruppo) values (?,?)");
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
@@ -39,6 +42,8 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             getAllGruppi.close();
             getGruppoByID.close();
             getGruppiByAula.close();
+            removeAulaGruppo.close();
+            insertAulaGruppo.close();
 
             super.destroy();
         } catch (SQLException ex) {
@@ -113,6 +118,46 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             throw new DataException("Impossibile caricare il gruppo", ex);
         }
         return gruppi;
+    }
+
+    @Override
+    public void updateAula(List<Integer> keys, int aulaId) throws DataException {
+        boolean autocommit = false;
+
+        try {
+            autocommit = connection.getAutoCommit();
+            if (!autocommit) {
+                connection.setAutoCommit(false);
+            }
+
+            removeAulaGruppo.setInt(1, aulaId);
+            removeAulaGruppo.executeUpdate();
+
+            for (Integer key : keys) {
+                insertAulaGruppo.setInt(1, aulaId);
+                insertAulaGruppo.setInt(2, key);
+                insertAulaGruppo.executeUpdate();
+            }
+
+            if (!autocommit) {
+                connection.commit();
+            }
+        } catch (SQLException ex) {
+            if (!autocommit) try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                throw new DataException("Errore durante l'esecuzione del rollback", ex1);
+            }
+            throw new DataException("Impossibile aggiornare l'aula dei gruppi indicati", ex);
+        } finally {
+            if (!autocommit) {
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException ex) {
+                    throw new DataException("Errore durante il ripristino dell'autocommit", ex);
+                }
+            }
+        }
     }
 
 }

@@ -1,8 +1,11 @@
 package com.univaq.project.auleweb.data.dao.mysql;
 
+import com.univaq.project.auleweb.data.dao.AttrezzatureDAO;
 import com.univaq.project.auleweb.data.dao.AuleDAO;
+import com.univaq.project.auleweb.data.dao.GruppiDAO;
 import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
+import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.auleweb.data.proxy.AulaProxy;
 import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataException;
@@ -22,9 +25,6 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
 
     private PreparedStatement getAllAule, getAulaByID, getAuleByGruppo, getAuleByName, getAuleNumber;
     private PreparedStatement insertAula, updateAula;
-    private PreparedStatement assignGruppo;
-    private PreparedStatement removeAssignGruppo;
-    private PreparedStatement updateAttrezzatura;
 
     @Override
     public void init() throws DataException {
@@ -38,9 +38,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAuleNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_aule FROM Aula");
             insertAula = connection.prepareStatement("INSERT INTO aula (nome,luogo,edificio,piano,capienza,prese_elettriche,prese_rete,note,id_responsabile) VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             updateAula = connection.prepareStatement("UPDATE aula SET nome=?,luogo=?,edificio=?,piano=?,capienza=?,prese_elettriche=?,prese_rete=?,note = ?,id_responsabile =?, versione=? WHERE ID=? and versione=?");
-            assignGruppo = connection.prepareStatement("INSERT INTO aula_gruppo(id_aula, id_gruppo) values (?,?)");
-            removeAssignGruppo = connection.prepareStatement("DELETE FROM aula_gruppo WHERE id_aula = ? and id_gruppo = ?");
-            updateAttrezzatura = connection.prepareStatement("UPDATE attrezzatura SET id_aula=?, versione=? WHERE ID=? and versione=?");
+
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
@@ -56,9 +54,6 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAuleNumber.close();
             insertAula.close();
             updateAula.close();
-            assignGruppo.close();
-            removeAssignGruppo.close();
-            updateAttrezzatura.close();
 
             super.destroy();
         } catch (SQLException ex) {
@@ -171,38 +166,16 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
     }
 
     @Override
-    public void assignGruppo(int aulaId, List<Integer> gruppiId) throws DataException {
-        try {
-            for (Integer gId : gruppiId) {
-                assignGruppo.setInt(1, aulaId);
-                assignGruppo.setInt(2, gId);
-                assignGruppo.executeUpdate();
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Error DB", ex);
-        }
-
-    }
-
-    @Override
-    public void removeAssignGruppo(int aulaId, List<Integer> gruppiId) throws DataException {
-        try {
-            for (Integer gId : gruppiId) {
-                removeAssignGruppo.setInt(1, aulaId);
-                removeAssignGruppo.setInt(2, gId);
-                removeAssignGruppo.executeUpdate();
-            }
-
-        } catch (SQLException ex) {
-            throw new DataException("Error DB", ex);
-        }
-    }
-
-    @Override
-    public int insertAula(Aula aula) throws DataException {
+    public int insertAula(Aula aula, List<Integer> gruppi, List<Integer> attrezzature) throws DataException {
         int aulaId = -1;
         try {
+            AttrezzatureDAO attrezzatureDao = (AttrezzatureDAO) dataLayer.getDAO(Attrezzatura.class);
+            GruppiDAO gruppiDao = (GruppiDAO) dataLayer.getDAO(Gruppo.class);
 
+            // Blocchiamo l'autocommit
+            connection.setAutoCommit(false);
+
+            //Creiamo la nuova aula
             insertAula.setString(1, aula.getNome());
             insertAula.setString(2, aula.getLuogo());
             insertAula.setString(3, aula.getEdificio());
@@ -211,32 +184,56 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             insertAula.setInt(6, aula.getPreseElettriche());
             insertAula.setInt(7, aula.getPreseRete());
             insertAula.setString(8, aula.getNote());
-            if (aula.getResponsabile() != null) {
-                insertAula.setInt(9, aula.getResponsabile().getKey());
-            } else {
-                insertAula.setNull(9, java.sql.Types.INTEGER);
-            }
+            insertAula.setInt(9, aula.getResponsabile().getKey());
             insertAula.executeUpdate();
 
-            // Ottieni l'id dell'aula appena inserita
+            // Otteniamo l'id dell'aula appena inserita
             try ( ResultSet generatedKeys = insertAula.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     aulaId = generatedKeys.getInt(1);
                 }
             }
 
+            // Aggiorniamo le associazioni aula gruppo
+            gruppiDao.updateAula(gruppi, aulaId);
+
+            // aggiorniamo le attrezzature
+            attrezzatureDao.updateAula(attrezzature, aulaId);
+
+            // Riattiviamo l'autocommit
+            connection.commit();
+
+            // Restituiamo l'id della nuova aula
+            return aulaId;
+
         } catch (SQLException ex) {
-            throw new DataException("Error DB", ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                throw new DataException("Errore durante il rollback della transazione", ex1);
+            }
+            throw new DataException("Errore durante l'inserimento dell'aula", ex);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new DataException("Errore durante il ripristino dell'autocommit", ex);
+            }
         }
 
-        return aulaId; // Ritorna l'id dell'aula appena inserita
     }
 
     @Override
-    public void updateAula(Aula aula) throws DataException {
+    public int updateAula(Aula aula, List<Integer> gruppi, List<Integer> attrezzature) throws DataException {
 
         try {
+            AttrezzatureDAO attrezzatureDao = (AttrezzatureDAO) dataLayer.getDAO(Attrezzatura.class);
+            GruppiDAO gruppiDao = (GruppiDAO) dataLayer.getDAO(Gruppo.class);
 
+            // Blocchiamo l'autocommit
+            connection.setAutoCommit(false);
+
+            // Aggiorniamo l'aula
             updateAula.setString(1, aula.getNome());
             updateAula.setString(2, aula.getLuogo());
             updateAula.setString(3, aula.getEdificio());
@@ -245,36 +242,46 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             updateAula.setInt(6, aula.getPreseElettriche());
             updateAula.setInt(7, aula.getPreseRete());
             updateAula.setString(8, aula.getNote());
-            if (aula.getResponsabile() != null) {
-                updateAula.setInt(9, aula.getResponsabile().getKey());
-            } else {
-                updateAula.setNull(9, java.sql.Types.INTEGER);
-            }
+            updateAula.setInt(9, aula.getResponsabile().getKey());
             updateAula.setLong(10, aula.getVersion() + 1);
+            updateAula.setInt(11, aula.getKey());
+            updateAula.setLong(12, aula.getVersion());
             updateAula.executeUpdate();
 
-            // Ottieni l'id dell'aula appena inserita
+            // Aggiorniamo le associazioni aula gruppo
+            gruppiDao.updateAula(gruppi, aula.getKey());
+
+            // aggiorniamo le attrezzature
+            attrezzatureDao.updateAula(attrezzature, aula.getKey());
+
+            // Riattiviamo l'autocommit
+            connection.commit();
+
+            // Restituiamo l'id dell'aula
+            return aula.getKey();
+
         } catch (SQLException ex) {
-            throw new DataException("Error DB", ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                throw new DataException("Errore durante il rollback della transazione", ex1);
+            }
+            throw new DataException("Errore durante l'aggiornamento dell'aula con id " + aula.getKey(), ex);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new DataException("Errore durante il ripristino dell'autocommit", ex);
+            }
         }
 
     }
 
-    @Override
-    public void updateAttrezzatura(int aulaId, Attrezzatura attrezzatura) throws DataException {
-        try {
-
-            updateAttrezzatura.setInt(1, aulaId);
-            updateAttrezzatura.setLong(2, attrezzatura.getVersion() + 1);
-            updateAttrezzatura.setInt(3, attrezzatura.getKey());
-            updateAttrezzatura.setLong(4, attrezzatura.getVersion());
-
-            updateAttrezzatura.executeUpdate();
-
-        } catch (SQLException ex) {
-            throw new DataException("Error DB", ex);
+    public Integer storeAula(Aula aula, List<Integer> gruppiKeys, List<Integer> attrezzature) throws DataException {
+        if (aula.getKey() != null) {
+            return updateAula(aula, gruppiKeys, attrezzature);
+        } else {
+            return insertAula(aula, gruppiKeys, attrezzature);
         }
-
     }
-
 }
