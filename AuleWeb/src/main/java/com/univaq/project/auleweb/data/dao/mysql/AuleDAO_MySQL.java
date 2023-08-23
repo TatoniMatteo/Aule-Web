@@ -210,14 +210,14 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             try {
                 connection.rollback();
             } catch (SQLException ex1) {
-                throw new DataException("Errore durante il rollback della transazione", ex1);
+                throw new DataException("Errore durante il rollback della transazione  (aule)", ex1);
             }
             throw new DataException("Errore durante l'inserimento dell'aula", ex);
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException ex) {
-                throw new DataException("Errore durante il ripristino dell'autocommit", ex);
+                throw new DataException("Errore durante il ripristino dell'autocommit (aule)", ex);
             }
         }
 
@@ -254,7 +254,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             // aggiorniamo le attrezzature
             attrezzatureDao.updateAula(attrezzature, aula.getKey());
 
-            // Riattiviamo l'autocommit
+            // Eseguiamo il commit
             connection.commit();
 
             // Restituiamo l'id dell'aula
@@ -264,19 +264,20 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             try {
                 connection.rollback();
             } catch (SQLException ex1) {
-                throw new DataException("Errore durante il rollback della transazione", ex1);
+                throw new DataException("Errore durante il rollback della transazione (aule)", ex1);
             }
             throw new DataException("Errore durante l'aggiornamento dell'aula con id " + aula.getKey(), ex);
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException ex) {
-                throw new DataException("Errore durante il ripristino dell'autocommit", ex);
+                throw new DataException("Errore durante il ripristino dell'autocommit (aule)", ex);
             }
         }
 
     }
 
+    @Override
     public Integer storeAula(Aula aula, List<Integer> gruppiKeys, List<Integer> attrezzature) throws DataException {
         if (aula.getKey() != null) {
             return updateAula(aula, gruppiKeys, attrezzature);

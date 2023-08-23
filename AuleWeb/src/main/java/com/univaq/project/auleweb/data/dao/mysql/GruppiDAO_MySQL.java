@@ -126,7 +126,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
 
         try {
             autocommit = connection.getAutoCommit();
-            if (!autocommit) {
+            if (autocommit) {
                 connection.setAutoCommit(false);
             }
 
@@ -139,22 +139,22 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
                 insertAulaGruppo.executeUpdate();
             }
 
-            if (!autocommit) {
+            if (autocommit) {
                 connection.commit();
             }
         } catch (SQLException ex) {
-            if (!autocommit) try {
+            if (autocommit) try {
                 connection.rollback();
             } catch (SQLException ex1) {
-                throw new DataException("Errore durante l'esecuzione del rollback", ex1);
+                throw new DataException("Errore durante l'esecuzione del rollback  (gruppi)", ex1);
             }
             throw new DataException("Impossibile aggiornare l'aula dei gruppi indicati", ex);
         } finally {
-            if (!autocommit) {
+            if (autocommit) {
                 try {
                     connection.setAutoCommit(true);
                 } catch (SQLException ex) {
-                    throw new DataException("Errore durante il ripristino dell'autocommit", ex);
+                    throw new DataException("Errore durante il ripristino dell'autocommit  (gruppi)", ex);
                 }
             }
         }

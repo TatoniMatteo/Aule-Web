@@ -209,7 +209,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
         try {
             autocommit = connection.getAutoCommit();
-            if (!autocommit) {
+            if (autocommit) {
                 connection.setAutoCommit(false);
             }
             List<Attrezzatura> currentAttrezzatura = getAttrezzaturaByAula(aulaId);
@@ -244,22 +244,22 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
                 setAula.executeUpdate();
             }
 
-            if (!autocommit) {
+            if (autocommit) {
                 connection.commit();
             }
         } catch (SQLException ex) {
-            if (!autocommit) try {
+            if (autocommit) try {
                 connection.rollback();
             } catch (SQLException ex1) {
-                throw new DataException("Errore durante l'esecuzione del rollback", ex1);
+                throw new DataException("Errore durante l'esecuzione del rollback (attrezzature)", ex1);
             }
             throw new DataException("Impossibile aggiornare l'aula delle attrezzature indicate", ex);
         } finally {
-            if (!autocommit) {
+            if (autocommit) {
                 try {
                     connection.setAutoCommit(true);
                 } catch (SQLException ex) {
-                    throw new DataException("Errore durante il ripristino dell'autocommit", ex);
+                    throw new DataException("Errore durante il ripristino dell'autocommit (attrezzature)", ex);
                 }
             }
         }
