@@ -48,6 +48,8 @@ public class Amministrazione extends AuleWebController {
                         action_corsi(request, response);
                     case "responsabili" ->
                         action_responsabili(request, response);
+                    case "dati" ->
+                        action_dati(request, response);
                     default ->
                         action_dashboard(request, response);
                 }
@@ -158,11 +160,20 @@ public class Amministrazione extends AuleWebController {
 
     private void action_corsi(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {};
+            String[] styles = {"search", "simpleTable", "administration/administrationButtons"};
+            String filter = request.getParameter("filter");
+
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("outline_tpl", "base/outline_administration.ftl.html");
+            data.put("searchLink", "amministrazione?page=aule");
+            if (filter != null && !filter.isEmpty()) {
+                data.put("filter", filter);
+                data.put("corsi", dataLayer.getCorsiDAO().getCorsiByName(filter));
+            } else {
+                data.put("corsi", dataLayer.getCorsiDAO().getAllCorsi());
+            }
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/corsi.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
@@ -179,6 +190,20 @@ public class Amministrazione extends AuleWebController {
             data.put("outline_tpl", "base/outline_administration.ftl.html");
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/responsabili.ftl.html", data, response);
+        } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private void action_dati(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String[] styles = {};
+            Map data = new HashMap<>();
+            data.put("styles", styles);
+            data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
+            data.put("outline_tpl", "base/outline_administration.ftl.html");
+            TemplateResult templateResult = new TemplateResult(getServletContext());
+            templateResult.activate("administration/dati.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }
