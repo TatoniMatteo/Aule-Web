@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
-    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByNameOrCode;
+    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByNameOrCode, getAttrezzaturaById;
     private PreparedStatement deleteAttrezzaturaById;
 
     public AttrezzatureDAO_MySQL(DataLayer d) {
@@ -33,6 +33,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAllAttrezzature = this.connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
             deleteAttrezzaturaById = this.connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ?");
             getAttrezzatureByNameOrCode = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
+            getAttrezzaturaById = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -50,6 +51,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAllAttrezzature.close();
             deleteAttrezzaturaById.close();
             getAllAttrezzature.close();
+            getAttrezzaturaById.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -178,6 +180,23 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         }
 
         return attrezzature;
+    }
+
+    @Override
+    public Attrezzatura getAttrezzaturaById(int id) throws DataException {
+        Attrezzatura attrezzatura = null;
+        try {
+            getAttrezzaturaById.setInt(1, id);
+
+            try ( ResultSet rs = getAttrezzaturaById.executeQuery()) {
+                if (rs.next()) {
+                    attrezzatura = importAttrezzatura(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare l'attrezzatura con Id: " + id, ex);
+        }
+        return attrezzatura;
     }
 
 }
