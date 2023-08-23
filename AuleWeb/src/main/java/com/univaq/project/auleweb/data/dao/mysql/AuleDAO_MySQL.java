@@ -198,7 +198,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             gruppiDao.updateAula(gruppi, aulaId);
 
             // aggiorniamo le attrezzature
-            attrezzatureDao.updateAula(attrezzature, aulaId);
+            attrezzatureDao.updateAulaAttrezzatura(attrezzature, aulaId);
 
             // Riattiviamo l'autocommit
             connection.commit();
@@ -252,7 +252,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             gruppiDao.updateAula(gruppi, aula.getKey());
 
             // aggiorniamo le attrezzature
-            attrezzatureDao.updateAula(attrezzature, aula.getKey());
+            attrezzatureDao.updateAulaAttrezzatura(attrezzature, aula.getKey());
 
             // Eseguiamo il commit
             connection.commit();

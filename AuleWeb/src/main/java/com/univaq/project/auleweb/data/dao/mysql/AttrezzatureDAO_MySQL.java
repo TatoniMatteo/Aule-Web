@@ -9,15 +9,20 @@ import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
     private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByNameOrCode, getAttrezzaturaById;
     private PreparedStatement deleteAttrezzaturaById;
     private PreparedStatement setAula;
+
+    private PreparedStatement insertAttrezzatura;
 
     public AttrezzatureDAO_MySQL(DataLayer d) {
         super(d);
@@ -37,6 +42,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzatureByNameOrCode = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
             getAttrezzaturaById = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
             setAula = this.connection.prepareStatement("UPDATE attrezzatura SET id_aula=?, versione=? WHERE id=? AND versione=?");
+            insertAttrezzatura = this.connection.prepareStatement("INSERT INTO attrezzatura (nome,codice) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -56,6 +62,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAllAttrezzature.close();
             getAttrezzaturaById.close();
             setAula.close();
+            insertAttrezzatura.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -204,7 +211,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
     }
 
     @Override
-    public void updateAula(List<Integer> keys, int aulaId) throws DataException {
+    public void updateAulaAttrezzatura(List<Integer> keys, int aulaId) throws DataException {
         boolean autocommit = false;
 
         try {
@@ -263,6 +270,26 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
                 }
             }
         }
+    }
+
+    public Integer insertAttrezzatura(String nome, String codice) throws DataException {
+        int attrezzaturaId = -1;
+        try {
+            insertAttrezzatura.setString(1, nome);
+            insertAttrezzatura.setString(2, codice);
+            insertAttrezzatura.executeUpdate();
+
+            try ( ResultSet generatedKeys = insertAttrezzatura.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    attrezzaturaId = generatedKeys.getInt(1);
+                }
+            }
+            return attrezzaturaId;
+
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile aggiungere l'attrezzatura", ex);
+        }
+
     }
 
 }

@@ -24,6 +24,6 @@ public interface AttrezzatureDAO {
     
     Attrezzatura getAttrezzaturaById(int id) throws DataException;
     
-    void updateAula(List<Integer> keys, int aulaId) throws DataException;
+    void updateAulaAttrezzatura(List<Integer> keys, int aulaId) throws DataException;
 
 }
