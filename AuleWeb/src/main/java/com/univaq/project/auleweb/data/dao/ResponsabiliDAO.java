@@ -22,4 +22,6 @@ public interface ResponsabiliDAO {
 
     Integer storeResponsabile(Responsabile responsabile) throws DataException;
 
+    void deleteResponsabileById(int responsabileId, long versione) throws DataException;
+
 }

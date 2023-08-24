@@ -173,10 +173,11 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
     }
 
     @Override
-    public void deleteCorsoById(int id) throws DataException {
+    public void deleteCorsoById(int corsoId, long versione) throws DataException {
         try {
 
-            deleteCorsoById.setInt(1, id);
+            deleteCorsoById.setInt(1, corsoId);
+            deleteCorsoById.setLong(1, versione);
             deleteCorsoById.execute();
 
         } catch (SQLException ex) {

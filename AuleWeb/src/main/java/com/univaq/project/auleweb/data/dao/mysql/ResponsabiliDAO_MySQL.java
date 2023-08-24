@@ -16,7 +16,7 @@ import java.util.List;
 public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
     private PreparedStatement getResponsabileByID, getResponsabiliNumber, getAllResponsabili, getResponsabileByName;
-    private PreparedStatement insertResponsabile, updateResponsabile;
+    private PreparedStatement insertResponsabile, updateResponsabile, deleteResponsabileById;
 
     public ResponsabiliDAO_MySQL(DataLayer d) {
         super(d);
@@ -32,6 +32,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             getResponsabileByName = this.connection.prepareStatement("SELECT * FROM responsabile WHERE nome LIKE ? OR cognome LIKE ? OR CONCAT(nome, ' ', cognome) LIKE ? ORDER BY nome, cognome");
             insertResponsabile = this.connection.prepareStatement("INSERT INTO responsabile(nome,cognome,email) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
             updateResponsabile = this.connection.prepareStatement("UPDATE responsabile SET nome=?,cognome=?,email=?,versione=? WHERE ID=? and versione=?");
+            deleteResponsabileById = this.connection.prepareStatement("DELETE FROM responsabile WHERE ID=? AND versione=? ");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -48,6 +49,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             getResponsabileByName.close();
             insertResponsabile.close();
             updateResponsabile.close();
+            deleteResponsabileById.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -204,6 +206,19 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             return updateResponsabile(responsabile);
         } else {
             return insertResponsabile(responsabile);
+        }
+    }
+    
+    @Override
+    public void deleteResponsabileById(int responsabileId, long versione) throws DataException{
+         try {
+
+            deleteResponsabileById.setInt(1, responsabileId);
+            deleteResponsabileById.setLong(2, versione);
+            deleteResponsabileById.execute();
+
+        } catch (SQLException ex) {
+            throw new DataException("Non è stato possibile eliminare il responsabile", ex);
         }
     }
    

@@ -20,7 +20,7 @@ public class CategorieDAO_MySQL extends DAO implements CategorieDAO {
     }
 
     private PreparedStatement getAllCategorie, getCategoriaByID;
-    private PreparedStatement insertCategoria;
+    private PreparedStatement insertCategoria, deleteCategoriaById;
 
     public void init() throws DataException {
 
@@ -29,6 +29,7 @@ public class CategorieDAO_MySQL extends DAO implements CategorieDAO {
             getAllCategorie = connection.prepareStatement("SELECT * FROM Categoria");
             getCategoriaByID = connection.prepareStatement("SELECT * FROM Categoria WHERE ID = ?");
             insertCategoria = connection.prepareStatement("INSERT INTO categoria(nome) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+            deleteCategoriaById = connection.prepareStatement("DELETE FROM categoria WHERE ID=? AND versione=?");
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
@@ -111,6 +112,19 @@ public class CategorieDAO_MySQL extends DAO implements CategorieDAO {
 
         } catch (SQLException ex) {
             throw new DataException("Impossibile aggiungere la categoria", ex);
+        }
+    }
+
+    @Override
+    public void deleteCategoriaById(int categoriaId, long versione) throws DataException {
+         try {
+
+            deleteCategoriaById.setInt(1, categoriaId);
+            deleteCategoriaById.setLong(2, versione);
+            deleteCategoriaById.execute();
+
+        } catch (SQLException ex) {
+            throw new DataException("Non è stato possibile eliminare la categoria", ex);
         }
     }
 
