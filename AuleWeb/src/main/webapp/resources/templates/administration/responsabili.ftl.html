@@ -25,7 +25,7 @@
                 <td>${responsabile.cognome}</td>
                 <td class="large-table">${responsabile.email}</td>
                 <td><a href="responsabiliform?id=${responsabile.key}" class="action-button bg-blue">Modifica</a></td>
-                <td><a href="managedata?type=2&object=4&id=${responsabile.key}" class="action-button bg-blue">Elimina</a></td>
+                <td><a href="managedata?type=2&object=4&id=${responsabile.key}&versione=${responsabile.version}" class="action-button bg-blue">Elimina</a></td>
             </tr>
             </#list>
         </tbody>

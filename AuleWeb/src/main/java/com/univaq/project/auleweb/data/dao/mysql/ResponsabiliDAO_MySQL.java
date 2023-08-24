@@ -150,11 +150,11 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             // Aggiorniamo il corso
             updateResponsabile.setString(1, responsabile.getNome());
             updateResponsabile.setString(2, responsabile.getCognome());
-            updateResponsabile.setString(2, responsabile.getEmail());
+            updateResponsabile.setString(3, responsabile.getEmail());
 
-            updateResponsabile.setLong(3, responsabile.getVersion() + 1);
-            updateResponsabile.setInt(4, responsabile.getKey());
-            updateResponsabile.setLong(5, responsabile.getVersion());
+            updateResponsabile.setLong(4, responsabile.getVersion() + 1);
+            updateResponsabile.setInt(5, responsabile.getKey());
+            updateResponsabile.setLong(6, responsabile.getVersion());
 
             updateResponsabile.executeUpdate();
 
@@ -199,7 +199,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             throw new DataException("Impossibile aggiungere il responsabile", ex);
         }
     }
-    
+
     @Override
     public Integer storeResponsabile(Responsabile responsabile) throws DataException {
         if (responsabile.getKey() != null) {
@@ -208,10 +208,10 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             return insertResponsabile(responsabile);
         }
     }
-    
+
     @Override
-    public void deleteResponsabileById(int responsabileId, long versione) throws DataException{
-         try {
+    public void deleteResponsabileById(int responsabileId, long versione) throws DataException {
+        try {
 
             deleteResponsabileById.setInt(1, responsabileId);
             deleteResponsabileById.setLong(2, versione);
@@ -221,6 +221,5 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             throw new DataException("Non è stato possibile eliminare il responsabile", ex);
         }
     }
-   
 
 }

@@ -29,7 +29,7 @@
                     ${gruppo.descrizione}
                     </#if></td>
                 <td><a href="gruppiform?id=${gruppo.key}" class="action-button bg-blue">Modifica</a></td>
-                <td><a href="managedata?type=2&object=5&id=${gruppo.key}" class="action-button bg-blue">Elimina</a></td>
+                <td><a href="managedata?type=2&object=5&id=${gruppo.key}&versione=${gruppo.version}" class="action-button bg-blue">Elimina</a></td>
             </tr>
             </#list>
         </tbody>

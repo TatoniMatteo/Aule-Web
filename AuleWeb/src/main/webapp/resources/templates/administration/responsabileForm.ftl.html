@@ -1,0 +1,28 @@
+<h4 class="text-left back">
+    <a href="amministrazione?page=responsabili">
+        <i class="fas fa-arrow-left"></i>
+        Torna indietro
+    </a>
+</h4>
+<h1>
+    <#if responsabile?has_content>
+    Modifica Responsabile
+    <#else>
+    Crea Responsabile
+    </#if>
+</h1>
+
+<form class="simple-form" method="post" action="managedata?type=1&object=4">
+    <input type="hidden" name="id" value="<#if responsabile?has_content>${responsabile.key}<#else>-1</#if>">
+    <input type="hidden" name="versione" value="<#if responsabile?has_content>${responsabile.version}<#else>0</#if>">
+    <label for="nome">Nome*:</label>
+    <input type="text" id="nome" name="nome" required value="<#if responsabile?has_content>${responsabile.nome}</#if>"><br>
+
+    <label for="cognome">Cognome*:</label>
+    <input type="text" id="cognome" name="cognome" required value="<#if responsabile?has_content>${responsabile.cognome}></#if>"<br>
+
+    <label for="email">Email*:</label>
+    <input type="email" id="email" name="email" required value="<#if responsabile?has_content>${responsabile.email}></#if>"<br>
+
+    <button class="bg-blue" type="submit">Salva</button>
+</form>
