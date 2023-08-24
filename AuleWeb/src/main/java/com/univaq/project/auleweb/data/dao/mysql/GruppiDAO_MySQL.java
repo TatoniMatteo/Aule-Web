@@ -35,7 +35,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             );
             removeAulaGruppo = connection.prepareStatement("DELETE FROM aula_gruppo WHERE id_aula = ?");
             insertAulaGruppo = connection.prepareStatement("INSERT INTO aula_gruppo(id_aula, id_gruppo) values (?,?)");
-            deleteGruppoById = connection.prepareStatement("DELETE FROM gruppo WHERE ID=?");
+            deleteGruppoById = connection.prepareStatement("DELETE FROM gruppo WHERE ID=? AND versione=?");
             getGruppiByName = connection.prepareStatement("SELECT * FROM gruppo WHERE nome LIKE ? ORDER BY nome");
             insertGruppo = connection.prepareStatement("INSERT INTO gruppo(nome,descrizione,id_categoria) values(?,?,?)", Statement.RETURN_GENERATED_KEYS);
             updateGruppo = connection.prepareStatement("UPDATE gruppo SET nome=?,descrizione=?,id_categoria=?,versione=? WHERE ID=? and versione=?");
@@ -190,10 +190,11 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
     }
 
     @Override
-    public void deleteGruppoById(int gruppoId) throws DataException {
+    public void deleteGruppoById(int gruppoId, long versione) throws DataException {
         try {
 
             deleteGruppoById.setInt(1, gruppoId);
+            deleteGruppoById.setLong(2, versione);
             deleteGruppoById.execute();
 
         } catch (SQLException ex) {
@@ -224,7 +225,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
 
     @Override
     public Integer updateGruppo(Gruppo gruppo) throws DataException {
-         try {
+        try {
 
             // Blocchiamo l'autocommit
             connection.setAutoCommit(false);
@@ -261,14 +262,14 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             }
         }
     }
-    
+
     @Override
-     public Integer storeGruppo(Gruppo gruppo) throws DataException{
-         if (gruppo.getKey() != null) {
+    public Integer storeGruppo(Gruppo gruppo) throws DataException {
+        if (gruppo.getKey() != null) {
             return updateGruppo(gruppo);
         } else {
             return insertGruppo(gruppo);
         }
-     }
+    }
 
 }

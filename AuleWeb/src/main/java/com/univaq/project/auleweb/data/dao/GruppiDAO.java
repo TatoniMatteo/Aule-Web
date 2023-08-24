@@ -22,7 +22,7 @@ public interface GruppiDAO {
 
     Integer updateGruppo(Gruppo gruppo) throws DataException;
 
-    void deleteGruppoById(int gruppoId) throws DataException;
+    void deleteGruppoById(int gruppoId, long versione) throws DataException;
     
     Integer storeGruppo(Gruppo gruppo) throws DataException;
 }
