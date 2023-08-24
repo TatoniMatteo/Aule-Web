@@ -92,16 +92,15 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
         }
         return gruppo;
     }
-    
+
     @Override
-    public List<Gruppo> getGruppiByName(String filter)throws DataException{
+    public List<Gruppo> getGruppiByName(String filter) throws DataException {
         List<Gruppo> gruppi = new ArrayList<>();
         try {
             getGruppiByName.setString(1, "%" + filter + "%");
             try ( ResultSet rs = getGruppiByName.executeQuery()) {
                 while (rs.next()) {
-                    Gruppo gruppo = importGruppo(rs);
-                    gruppi.add(gruppo);
+                    gruppi.add(importGruppo(rs));
                 }
             }
         } catch (SQLException ex) {
@@ -207,10 +206,10 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
         }
 
     }
-    
+
     @Override
-    public void deleteGruppoById(int gruppoId) throws DataException{
-         try {
+    public void deleteGruppoById(int gruppoId) throws DataException {
+        try {
 
             deleteGruppoById.setInt(1, gruppoId);
             deleteGruppoById.execute();

@@ -1,4 +1,3 @@
-
 package com.univaq.project.auleweb.data.dao.mysql;
 
 import com.univaq.project.auleweb.data.dao.CorsiDAO;
@@ -126,8 +125,7 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             getCorsiByName.setString(1, "%" + filter + "%");
             try ( ResultSet rs = getCorsiByName.executeQuery()) {
                 while (rs.next()) {
-                    Corso corso = importCorso(rs);
-                    corsi.add(corso);
+                    corsi.add(importCorso(rs));
                 }
             }
         } catch (SQLException ex) {
@@ -149,16 +147,16 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             throw new DataException("Impossibile calcolare il numero di corsi", ex);
         }
     }
-    
+
     @Override
-    public Integer insertCorso(String nome, String descrizione, Laurea laurea) throws DataException{
+    public Integer insertCorso(String nome, String descrizione, Laurea laurea) throws DataException {
         int corsoId = -1;
-        try{
+        try {
             insertCorso.setString(1, nome);
             insertCorso.setString(2, descrizione);
             insertCorso.setString(3, laurea.name());
             insertCorso.executeUpdate();
-          try ( ResultSet generatedKeys = insertCorso.getGeneratedKeys()) {
+            try ( ResultSet generatedKeys = insertCorso.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     corsoId = generatedKeys.getInt(1);
                 }
@@ -170,7 +168,7 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
         }
 
     }
-    
+
     @Override
     public void deleteCorsoById(int id) throws DataException {
         try {

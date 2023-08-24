@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
-    private PreparedStatement getResponsabileByID, getResponsabiliNumber, getAllResponsabili,  getResponsabileByName;
+    private PreparedStatement getResponsabileByID, getResponsabiliNumber, getAllResponsabili, getResponsabileByName;
 
     public ResponsabiliDAO_MySQL(DataLayer d) {
         super(d);
@@ -27,7 +27,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             getResponsabileByID = this.connection.prepareStatement("SELECT * FROM responsabile WHERE ID=?");
             getResponsabiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_responsabili FROM responsabile");
             getAllResponsabili = this.connection.prepareStatement("SELECT * FROM responsabile ORDER BY nome,cognome");
-             getResponsabileByName = this.connection.prepareStatement("SELECT * FROM responsabile WHERE nome=? ORDER BY nome");
+            getResponsabileByName = this.connection.prepareStatement("SELECT * FROM responsabile WHERE nome=? ORDER BY nome");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -97,16 +97,15 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             throw new DataException("Impossibile calcolare il numero di responsabili", ex);
         }
     }
-    
+
     @Override
-    public List<Responsabile> getResponsabileByName(String nome, String filter) throws DataException {
-       List<Responsabile> responsabili = new ArrayList<>();
+    public List<Responsabile> getResponsabileByName(String filter) throws DataException {
+        List<Responsabile> responsabili = new ArrayList<>();
         try {
             getResponsabileByName.setString(1, "%" + filter + "%");
             try ( ResultSet rs = getResponsabileByName.executeQuery()) {
                 while (rs.next()) {
-                    Responsabile aula = importResponsabile(rs);
-                    responsabili.add(aula);
+                    responsabili.add(importResponsabile(rs));
                 }
             }
         } catch (SQLException ex) {
@@ -115,13 +114,13 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
         return responsabili;
     }
-    
-     @Override
+
+    @Override
     public List<Responsabile> getAllResponsabili() throws DataException {
         List<Responsabile> responsabili = new ArrayList<>();
         try {
             try ( ResultSet rs = getAllResponsabili.executeQuery()) {
-                while(rs.next()) {
+                while (rs.next()) {
                     responsabili.add(importResponsabile(rs));
                 }
             }
