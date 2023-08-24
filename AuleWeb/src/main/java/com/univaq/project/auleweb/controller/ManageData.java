@@ -71,7 +71,6 @@ public class ManageData extends AuleWebController {
 
             switch (type) {
                 case 1 -> {
-                    // insert/update
                     switch (object) {
                         case 1 ->
                             auleInsertOrUpdate(request, response);
@@ -96,6 +95,10 @@ public class ManageData extends AuleWebController {
                             attrezzatureRemove(request, response);
                         case 3 ->
                             corsoRemove(request, response);
+                        case 4 ->
+                            responsabiliRemove(request, response);
+                        case 5 ->
+                            gruppiRemove(request, response);
                         default ->
                             handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
                     }
@@ -200,7 +203,7 @@ public class ManageData extends AuleWebController {
         int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
         int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
         try {
-            dataLayer.getAuleDao().deleteAulaById(id, versione);
+            dataLayer.getAuleDAO().deleteAulaById(id, versione);
             successPage("amministrazione?page=aule", "L'aula è stata eliminata con successo", request, response);
         } catch (DataException ex) {
             errorPage("amministrazione?page=aule", "Si è verificato un errore: " + ex.getMessage(), request, response);
@@ -214,7 +217,7 @@ public class ManageData extends AuleWebController {
             dataLayer.getAttrezzatureDAO().deleteAttrezzaturaById(id, versione);
             successPage("amministrazione?page=attrezzature", "L'attrezzatura è stata eliminata con successo", request, response);
         } catch (DataException ex) {
-            errorPage("amministrazione?page=attrezzature", ex.getMessage(), request, response);
+            errorPage("amministrazione?page=attrezzature", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
     }
 
@@ -279,9 +282,9 @@ public class ManageData extends AuleWebController {
         int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
         try {
             dataLayer.getCorsiDAO().deleteCorsoById(id, versione);
-            successPage("amministrazione?page=attrezzature", "L'attrezzatura è stata eliminata con successo", request, response);
+            successPage("amministrazione?page=corsi", "L'attrezzatura è stata eliminata con successo", request, response);
         } catch (DataException ex) {
-            errorPage("amministrazione?page=attrezzature", ex.getMessage(), request, response);
+            errorPage("amministrazione?page=corsi", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
     }
 
@@ -310,6 +313,17 @@ public class ManageData extends AuleWebController {
 
             successPage("amministrazione?page=responsabili", "Operazione completata con successo", request, response);
 
+        } catch (DataException ex) {
+            errorPage("amministrazione?page=responsabili", "Si è verificato un errore: " + ex.getMessage(), request, response);
+        }
+    }
+
+    private void responsabiliRemove(HttpServletRequest request, HttpServletResponse response) {
+        int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
+        int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
+        try {
+            dataLayer.getResponsabiliDAO().deleteResponsabileById(id, versione);
+            successPage("amministrazione?page=responsabili", "L'attrezzatura è stata eliminata con successo", request, response);
         } catch (DataException ex) {
             errorPage("amministrazione?page=responsabili", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
@@ -348,6 +362,17 @@ public class ManageData extends AuleWebController {
 
         } catch (DataException ex) {
             errorPage("amministrazione?page=gruppi", "Si è verificato un errore: " + ex.getMessage(), request, response);
+        }
+    }
+
+    private void gruppiRemove(HttpServletRequest request, HttpServletResponse response) {
+        int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
+        int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
+        try {
+            dataLayer.getGruppiDAO().deleteGruppoById(id, versione);
+            successPage("amministrazione?page=responsabili", "L'attrezzatura è stata eliminata con successo", request, response);
+        } catch (DataException ex) {
+            errorPage("amministrazione?page=responsabili", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
     }
 

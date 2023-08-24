@@ -18,7 +18,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
     private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByNameOrCode, getAttrezzaturaById;
     private PreparedStatement deleteAttrezzaturaById;
-    private PreparedStatement setAula;
+    private PreparedStatement setAula, removeAulaFromAttrezzature;
 
     private PreparedStatement insertAttrezzatura;
 
@@ -41,6 +41,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzaturaById = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
             setAula = this.connection.prepareStatement("UPDATE attrezzatura SET id_aula=?, versione=? WHERE id=? AND versione=?");
             insertAttrezzatura = this.connection.prepareStatement("INSERT INTO attrezzatura (nome,numero_serie) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
+            removeAulaFromAttrezzature = this.connection.prepareStatement("UPDATE attrezzatura SET id_aula = NULL WHERE id_aula = ?;");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -62,6 +63,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             setAula.close();
             insertAttrezzatura.close();
             deleteAttrezzaturaById.close();
+            removeAulaFromAttrezzature.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -290,6 +292,17 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
         } catch (SQLException ex) {
             throw new DataException("Non è stato possibile eliminare l'attrezzatura con id: " + attrezzaturaId, ex);
+        }
+    }
+
+    @Override
+    public void removeAulaFromAttrezzature(int aulaId) throws DataException {
+        try {
+            removeAulaFromAttrezzature.setInt(1, aulaId);
+            removeAulaFromAttrezzature.executeUpdate();
+
+        } catch (SQLException ex) {
+            throw new DataException("Non è stato possibile rimuovere l'aula con id: " + aulaId + " dalle attrezzature", ex);
         }
     }
 

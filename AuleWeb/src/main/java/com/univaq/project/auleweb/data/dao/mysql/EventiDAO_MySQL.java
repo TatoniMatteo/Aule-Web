@@ -25,7 +25,8 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventiByDateRange,
             getEventiByGruppoIdAndDate,
             getEventiNumber,
-            getActiveEventiNumber;
+            getActiveEventiNumber,
+            removeOldAulaEventi;
 
     public EventiDAO_MySQL(DataLayer d) {
         super(d);
@@ -98,6 +99,8 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
                     + "WHERE data = CURRENT_DATE() AND ora_inizio <= CURRENT_TIME AND ora_fine >= CURRENT_TIME"
             );
 
+            removeOldAulaEventi = this.dataLayer.getConnection().prepareStatement("DELETE FROM evento WHERE id_aula = ? AND data < CURDATE();");
+
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
         }
@@ -116,6 +119,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventiByGruppoIdAndDate.close();
             getEventiNumber.close();
             getActiveEventiNumber.close();
+            removeOldAulaEventi.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -336,6 +340,17 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             } else {
                 return 0;
             }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile calcolare il numero di eventi", ex);
+        }
+    }
+
+    @Override
+    public void removeOldAulaEventi(int aulaId) throws DataException {
+        try {
+            removeOldAulaEventi.setInt(1, aulaId);
+            removeOldAulaEventi.executeUpdate();
+
         } catch (SQLException ex) {
             throw new DataException("Impossibile calcolare il numero di eventi", ex);
         }

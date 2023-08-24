@@ -23,7 +23,9 @@ public interface EventiDAO {
     List<Evento> getEventiByGruppoIdAndDate(int gruppoId, String data) throws DataException;
 
     int getEventiNumber() throws DataException;
-    
+
     int getActiveEventiNumber() throws DataException;
+
+    void removeOldAulaEventi(int aulaId) throws DataException;
 
 }

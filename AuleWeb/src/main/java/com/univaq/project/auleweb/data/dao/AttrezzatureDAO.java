@@ -28,4 +28,6 @@ public interface AttrezzatureDAO {
 
     void deleteAttrezzaturaById(int attrezzaturaId, long versione) throws DataException;
 
+    void removeAulaFromAttrezzature(int aulaId) throws DataException;
+
 }

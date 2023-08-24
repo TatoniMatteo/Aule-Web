@@ -2,9 +2,11 @@ package com.univaq.project.auleweb.data.dao.mysql;
 
 import com.univaq.project.auleweb.data.dao.AttrezzatureDAO;
 import com.univaq.project.auleweb.data.dao.AuleDAO;
+import com.univaq.project.auleweb.data.dao.EventiDAO;
 import com.univaq.project.auleweb.data.dao.GruppiDAO;
 import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
+import com.univaq.project.auleweb.data.model.Evento;
 import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.auleweb.data.proxy.AulaProxy;
 import com.univaq.project.framework.data.DAO;
@@ -24,7 +26,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
     }
 
     private PreparedStatement getAllAule, getAulaByID, getAuleByGruppo, getAuleByName, getAuleNumber;
-    private PreparedStatement insertAula, updateAula, deleteAulaById;
+    private PreparedStatement insertAula, updateAula, deleteAulaById, deleteAulaGruppo;
 
     @Override
     public void init() throws DataException {
@@ -38,8 +40,12 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAuleNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_aule FROM Aula");
             insertAula = connection.prepareStatement("INSERT INTO aula (nome,luogo,edificio,piano,capienza,prese_elettriche,prese_rete,note,id_responsabile) VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             updateAula = connection.prepareStatement("UPDATE aula SET nome=?,luogo=?,edificio=?,piano=?,capienza=?,prese_elettriche=?,prese_rete=?,note = ?,id_responsabile =?, versione=? WHERE ID=? and versione=?");
-            deleteAulaById = connection.prepareStatement("DELETE FROM aula WHERE ID=? AND versione=?");
+            deleteAulaById = connection.prepareStatement("DELETE FROM aula WHERE id = ? AND versione = ?;");
+            deleteAulaGruppo = connection.prepareStatement("DELETE FROM aula_gruppo WHERE id_aula = ?;");
 
+            /*
+            "DELETE FROM evento WHERE id_aula = ? AND data < CURDATE(); "
+             */
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
@@ -56,6 +62,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             insertAula.close();
             updateAula.close();
             deleteAulaById.close();
+            deleteAulaGruppo.close();
 
             super.destroy();
         } catch (SQLException ex) {
@@ -287,16 +294,41 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             return insertAula(aula, gruppiKeys, attrezzature);
         }
     }
-    
-    public void deleteAulaById(int aulaId, long versione) throws DataException{
+
+    @Override
+    public void deleteAulaById(int aulaId, long versione) throws DataException {
         try {
+            AttrezzatureDAO attrezzatureDao = (AttrezzatureDAO) dataLayer.getDAO(Attrezzatura.class);
+            EventiDAO eventiDao = (EventiDAO) dataLayer.getDAO(Evento.class);
+
+            connection.setAutoCommit(false);
+
+            deleteAulaGruppo.setInt(1, aulaId);
+            deleteAulaGruppo.executeUpdate();
+
+            attrezzatureDao.removeAulaFromAttrezzature(aulaId);
+
+            eventiDao.removeOldAulaEventi(aulaId);
 
             deleteAulaById.setInt(1, aulaId);
             deleteAulaById.setLong(2, versione);
-            deleteAulaById.execute();
+            deleteAulaById.executeUpdate();
+
+            connection.commit();
 
         } catch (SQLException ex) {
-            throw new DataException("Non è stato possibile eliminare l'aula con id: " + aulaId, ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                throw new DataException("Errore durante il rollback della transazione (aule)", ex1);
+            }
+            throw new DataException("Errore durante l'eliminazione dell'aula con id " + aulaId, ex);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new DataException("Errore durante il ripristino dell'autocommit (aule)", ex);
+            }
         }
     }
 }
