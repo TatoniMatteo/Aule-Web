@@ -23,7 +23,7 @@
                 <td class="text-left">${attrezzatura.nome}</td>
                 <td class="text-left">${attrezzatura.numeroSerie}</td>
                 <td class=><#if attrezzatura.aula?has_content>${attrezzatura.aula.nome}<#else>Non assegnato</#if></td>
-                <td><a href="managedata?type=2&object=2&id=${attrezzatura.key}" class="action-button bg-blue">Elimina</a></td>
+                <td><a href="managedata?type=2&object=2&id=${attrezzatura.key}&versione=${attrezzatura.version}" class="action-button bg-blue">Elimina</a></td>
             </tr>
             </#list>
         </tbody>
