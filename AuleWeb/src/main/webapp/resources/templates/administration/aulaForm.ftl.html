@@ -12,7 +12,9 @@
     </#if>
 </h1>
 
-<form class="simple-form" data-key="<#if aula?has_content>${aula.key}</#if>" data-version="<#if aula?has_content>${aula.version}</#if>">
+<form class="simple-form">
+    <input type="hidden" id="key" value="<#if aula?has_content>${aula.key}</#if>">
+    <input type="hidden" id="version" value="<#if aula?has_content>${aula.version}</#if>">
     <label for="nome">Nome Aula*:</label>
     <input type="text" id="nome" name="nome" required value="<#if aula?has_content>${aula.nome}</#if>"><br>
 

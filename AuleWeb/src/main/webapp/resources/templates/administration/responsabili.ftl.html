@@ -1,1 +1,37 @@
-<h1>Responsabili</h1>
+<h1 class="space">Gestione Responsabili</h1>
+<div class="btn_container">
+    <a href="responsabiliform" class="bg-blue text-right">
+        <i class="fa-solid fa-plus"></i> 
+        Aggiungi Responsabile
+    </a>
+</div>
+<#include "../base/search.ftl.html">
+<div class="simple-table-container">
+    <table>
+        <thead class="bg-gray">
+            <tr>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th class="large-table">Email</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <#if responsabili?has_content>
+        <tbody>
+            <#list responsabili as responsabile>
+            <tr>
+                <td>${responsabile.nome}</td>
+                <td>${responsabile.cognome}</td>
+                <td class="large-table">${responsabile.email}</td>
+                <td><a href="responsabiliform?id=${responsabile.key}" class="action-button bg-blue">Modifica</a></td>
+                <td><a href="managedata?type=2&object=4&id=${responsabile.key}" class="action-button bg-blue">Elimina</a></td>
+            </tr>
+            </#list>
+        </tbody>
+        </#if>
+    </table>
+    <#if !responsabili?has_content>
+    <h4>Non ci sono responsabili!</h4>
+    </#if>
+</div>

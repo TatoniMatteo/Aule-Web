@@ -1,9 +1,16 @@
 package com.univaq.project.auleweb.controller;
 
 import com.univaq.project.auleweb.data.implementation.AulaImpl;
+import com.univaq.project.auleweb.data.implementation.CorsoImpl;
 import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
+import com.univaq.project.auleweb.data.implementation.GruppoImpl;
+import com.univaq.project.auleweb.data.implementation.ResponsabileImpl;
+import com.univaq.project.auleweb.data.implementation.enumType.Laurea;
 import com.univaq.project.auleweb.data.model.Amministratore;
 import com.univaq.project.auleweb.data.model.Aula;
+import com.univaq.project.auleweb.data.model.Corso;
+import com.univaq.project.auleweb.data.model.Gruppo;
+import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
@@ -24,13 +31,17 @@ import javax.servlet.http.HttpServletResponse;
 public class ManageData extends AuleWebController {
 
     /*
-    OPERAZIONI:
+    OPERAZIONI (type):
     - 1 = insert/update
     - 2 = remove
  
-    OGGETTI:
+    ENTITÀ (object):
     - 1 = aule
     - 2 = attrezzature
+    - 3 = corsi
+    - 4 = responsabili
+    - 5 = gruppi
+    - 6 = eventi
      */
     private DataLayerImpl dataLayer;
     private Amministratore amministratore;
@@ -65,6 +76,12 @@ public class ManageData extends AuleWebController {
                             auleInsertOrUpdate(request, response);
                         case 2 ->
                             attrezzatureInsert(request, response);
+                        case 3 ->
+                            corsiInsertOrUpdate(request, response);
+                        case 4 ->
+                            responsabiliInsertOrUpdate(request, response);
+                        case 5 ->
+                            gruppiInsert(request, response);
                         default ->
                             handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
                     }
@@ -197,4 +214,105 @@ public class ManageData extends AuleWebController {
             errorPage("amministrazione?page=attrezzature", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
     }
+
+    private void corsiInsertOrUpdate(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
+            int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
+            String nome = request.getParameter("nome");
+            String descrizione = request.getParameter("descrizione");
+            String laureaString = request.getParameter("laurea");
+
+            Corso corso;
+            Laurea laurea = null;
+
+            for (Laurea l : Laurea.values()) {
+                if (l.toString().equals(laureaString)) {
+                    laurea = l;
+                    break;
+                }
+            }
+
+            if (laurea == null) {
+                throw new DataException("Corso di laurea non valido");
+            }
+
+            if (id >= 0) {
+                corso = dataLayer.getCorsiDAO().getCorsoById(id);
+            } else {
+                corso = new CorsoImpl();
+            }
+
+            corso.setVersion(versione);
+            corso.setNome(nome);
+            corso.setDescrizione(descrizione);
+            corso.setCorsoLaurea(laurea);
+
+            dataLayer.getCorsiDAO().storeCorso(corso);
+
+            successPage("amministrazione?page=corsi", "Operazione completata con successo", request, response);
+
+        } catch (DataException ex) {
+            errorPage("amministrazione?page=corsi", "Si è verificato un errore: " + ex.getMessage(), request, response);
+        }
+    }
+
+    private void responsabiliInsertOrUpdate(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
+            int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
+            String nome = request.getParameter("nome");
+            String cognome = request.getParameter("cognome");
+            String email = request.getParameter("email");
+
+            Responsabile responsabile;
+
+            if (id >= 0) {
+                responsabile = dataLayer.getResponsabiliDAO().getResponsabileById(id);
+            } else {
+                responsabile = new ResponsabileImpl();
+            }
+
+            responsabile.setVersion(versione);
+            responsabile.setNome(nome);
+            responsabile.setCognome(cognome);
+            responsabile.setEmail(email);
+
+            dataLayer.getResponsabiliDAO().storeResponsabile(responsabile);
+
+            successPage("amministrazione?page=responsabili", "Operazione completata con successo", request, response);
+
+        } catch (DataException ex) {
+            errorPage("amministrazione?page=responsabili", "Si è verificato un errore: " + ex.getMessage(), request, response);
+        }
+    }
+
+    private void gruppiInsert(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
+            int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
+            String nome = request.getParameter("nome");
+            String descrizione = request.getParameter("descrizione");
+
+            Gruppo gruppo;
+
+            if (id >= 0) {
+                gruppo = dataLayer.getGruppiDAO().getGruppoByID(id);
+            } else {
+                gruppo = new GruppoImpl();
+            }
+
+            gruppo.setVersion(versione);
+            gruppo.setNome(nome);
+            gruppo.setDescrizione(descrizione);
+
+            dataLayer.getGruppiDAO().storeGruppo(gruppo);
+
+            successPage("amministrazione?page=gruppi", "Operazione completata con successo", request, response);
+
+        } catch (DataException ex) {
+            errorPage("amministrazione?page=gruppi", "Si è verificato un errore: " + ex.getMessage(), request, response);
+        }
+    }
+
 }

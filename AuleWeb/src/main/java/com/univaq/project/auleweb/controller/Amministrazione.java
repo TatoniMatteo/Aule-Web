@@ -132,11 +132,20 @@ public class Amministrazione extends AuleWebController {
 
     private void action_gruppi(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {};
+            String[] styles = {"search", "simpleTable", "administration/administrationButtons"};
+            String filter = request.getParameter("filter");
+
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("outline_tpl", "base/outline_administration.ftl.html");
+            data.put("searchLink", "amministrazione?page=gruppi");
+            if (filter != null && !filter.isEmpty()) {
+                data.put("filter", filter);
+                data.put("gruppi", dataLayer.getGruppiDAO().getGruppiByName(filter));
+            } else {
+                data.put("gruppi", dataLayer.getGruppiDAO().getAllGruppi());
+            }
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/gruppi.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
@@ -167,7 +176,7 @@ public class Amministrazione extends AuleWebController {
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("outline_tpl", "base/outline_administration.ftl.html");
-            data.put("searchLink", "amministrazione?page=aule");
+            data.put("searchLink", "amministrazione?page=corsi");
             if (filter != null && !filter.isEmpty()) {
                 data.put("filter", filter);
                 data.put("corsi", dataLayer.getCorsiDAO().getCorsiByName(filter));
@@ -183,11 +192,20 @@ public class Amministrazione extends AuleWebController {
 
     private void action_responsabili(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {};
+            String[] styles = {"search", "simpleTable", "administration/administrationButtons"};
+            String filter = request.getParameter("filter");
+
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("outline_tpl", "base/outline_administration.ftl.html");
+            data.put("searchLink", "amministrazione?page=responsabili");
+            if (filter != null && !filter.isEmpty()) {
+                data.put("filter", filter);
+                data.put("responsabili", dataLayer.getResponsabiliDAO().getResponsabileByName(filter));
+            } else {
+                data.put("responsabili", dataLayer.getResponsabiliDAO().getAllResponsabili());
+            }
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/responsabili.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {

@@ -1,6 +1,14 @@
 <h1 class="space">Scegli un gruppo</h1>
 <ul class="category-list">
     <#list categorie as categoria>
+    <#assign hasGroups = false>
+    <#list gruppi as gruppo>
+    <#if gruppo.categoria.key == categoria.key>
+    <#assign hasGroups = true>
+    </#if>
+    </#list>
+
+    <#if hasGroups>
     <li class="category-item bg-blue">
         <h3>${categoria.nome?cap_first}</h3>
         <ul class="sub-category-list">
@@ -11,6 +19,8 @@
             </#list>
         </ul>
     </li>
+    </#if>
     </#list>
 </ul>
+
 

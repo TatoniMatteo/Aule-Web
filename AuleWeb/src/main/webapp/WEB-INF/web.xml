@@ -46,6 +46,10 @@
         <servlet-name>AttrezzatureForm</servlet-name>
         <servlet-class>com.univaq.project.auleweb.controller.AttrezzatureForm</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CorsoForm</servlet-name>
+        <servlet-class>com.univaq.project.auleweb.controller.CorsoForm</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -94,6 +98,10 @@
     <servlet-mapping>
         <servlet-name>AttrezzatureForm</servlet-name>
         <url-pattern>/attrezzatureform</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CorsoForm</servlet-name>
+        <url-pattern>/corsiform</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

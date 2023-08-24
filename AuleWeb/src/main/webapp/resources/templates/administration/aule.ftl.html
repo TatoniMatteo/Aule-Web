@@ -1,10 +1,6 @@
 <h1 class="space">Gestione Aule</h1>
 <div class="btn_container">
     <a href="auleform" class="bg-blue text-right">
-        <i class="fa-solid fa-file-import"></i> 
-        Importa Aule
-    </a>
-    <a href="auleform" class="bg-blue text-right">
         <i class="fa-solid fa-plus"></i> 
         Aggiungi Aula
     </a>
@@ -20,6 +16,7 @@
                 <th class="large-table">Piano</th>
                 <th>Capienza</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <#if aule?has_content>
@@ -31,6 +28,7 @@
                 <td class="text-left">${aula.edificio}</td>
                 <td class="large-table">${aula.piano}</td>
                 <td>${aula.capienza}</td>
+                <td><a href="managedata?type=2&object=1&id=${aula.key}" class="action-button bg-blue">Elimina</a></td>
                 <td><a href="auleform?id=${aula.key}" class="action-button bg-blue">Modifica</a></td>
             </tr>
             </#list>

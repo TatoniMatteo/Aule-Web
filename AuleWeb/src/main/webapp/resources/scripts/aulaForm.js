@@ -4,15 +4,14 @@ function displayErrorMessage(message) {
     errorMessage.style.display = "block";
 }
 
-// Ottieni il riferimento al modulo
+
 const form = document.querySelector('.simple-form');
-// Aggiungi un ascoltatore per l'evento di invio del modulo
 form.addEventListener('submit', function (event) {
-    event.preventDefault(); // Evita l'invio del modulo automatico
+    event.preventDefault();
 
     // Recupero dei dati dal form
-    let aulaKey = parseInt(form.getAttribute('data-key'), 10);
-    let aulaVersion = parseInt(form.getAttribute('data-version'), 10);
+    let aulaKey = parseInt(form.querySelector('#key').value, 10);
+    let aulaVersion = parseInt(form.querySelector('#version').value, 10);
     const nomeAula = form.querySelector('#nome').value;
     const luogo = form.querySelector('#luogo').value;
     const edificio = form.querySelector('#edificio').value;
@@ -28,6 +27,7 @@ form.addEventListener('submit', function (event) {
     const gruppiKeys = Array
             .from(form.querySelectorAll('.checkbox-container input[type="checkbox"]:checked'))
             .map(checkbox => parseInt(checkbox.value, 10));
+
     // Validazione dei dati
     if (!nomeAula || !luogo || !edificio || isNaN(piano) || isNaN(capienza) || isNaN(preseElettriche) ||
             isNaN(preseRete) || isNaN(responsabileKey) || attrezzatureKeys.includes(NaN) || gruppiKeys.includes(NaN)) {

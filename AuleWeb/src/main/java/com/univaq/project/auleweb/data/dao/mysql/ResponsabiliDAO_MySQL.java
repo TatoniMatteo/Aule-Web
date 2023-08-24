@@ -27,7 +27,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             getResponsabileByID = this.connection.prepareStatement("SELECT * FROM responsabile WHERE ID=?");
             getResponsabiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_responsabili FROM responsabile");
             getAllResponsabili = this.connection.prepareStatement("SELECT * FROM responsabile ORDER BY nome,cognome");
-            getResponsabileByName = this.connection.prepareStatement("SELECT * FROM responsabile WHERE nome=? ORDER BY nome");
+            getResponsabileByName = this.connection.prepareStatement("SELECT * FROM responsabile WHERE nome LIKE ? OR cognome LIKE ? OR CONCAT(nome, ' ', cognome) LIKE ? ORDER BY nome, cognome");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -103,6 +103,8 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
         List<Responsabile> responsabili = new ArrayList<>();
         try {
             getResponsabileByName.setString(1, "%" + filter + "%");
+            getResponsabileByName.setString(2, "%" + filter + "%");
+            getResponsabileByName.setString(3, "%" + filter + "%");
             try ( ResultSet rs = getResponsabileByName.executeQuery()) {
                 while (rs.next()) {
                     responsabili.add(importResponsabile(rs));

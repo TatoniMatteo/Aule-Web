@@ -12,7 +12,8 @@
             <tr>
                 <th class="text-left">Nome</th>
                 <th class="text-left">Corso di Laurea</th>
-                <th>Azione</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <#if corsi?has_content>
@@ -21,10 +22,11 @@
             <tr>
                 <td class="text-left">${corso.nome}</td>
                 <td class="text-left">${corso.corsoLaurea}</td>
+                <td><a href="corsiform?id=${corso.key}" class="action-button bg-blue">Modifica</a></td>
                 <td><a href="managedata?type=2&object=3&id=${corso.key}" class="action-button bg-blue">Elimina</a></td>
             </tr>
-        </tbody>
         </#list>
+        </tbody>
         </#if>
     </table>
     <#if !corsi?has_content>

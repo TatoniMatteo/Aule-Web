@@ -48,3 +48,9 @@ h2{
 .text-left{
     text-align: start;
 }
+
+.troncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

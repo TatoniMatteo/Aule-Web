@@ -1,1 +1,41 @@
-<h1>Gruppi</h1>
+<h1 class="space">Gestione Gruppi</h1>
+<div class="btn_container">
+    <a href="gruppiform" class="bg-blue text-right">
+        <i class="fa-solid fa-plus"></i> 
+        Aggiungi Gruppo
+    </a>
+</div>
+<#include "../base/search.ftl.html">
+<div class="simple-table-container">
+    <table>
+        <thead class="bg-gray">
+            <tr>
+                <th class="text-left">Nome</th>
+                <th class="text-left large-table">Descrizione</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <#if gruppi?has_content>
+        <tbody>
+            <#assign maxLength = 50>
+            <#list gruppi as gruppo>
+            <tr>
+                <td class="text-left">${gruppo.nome}</td>
+                <td class="text-left large-table">
+                    <#if (gruppo.descrizione?length > maxLength)>
+                    ${gruppo.descrizione?truncate(maxLength)}
+                    <#else>
+                    ${gruppo.descrizione}
+                    </#if></td>
+                <td><a href="gruppiform?id=${gruppo.key}" class="action-button bg-blue">Modifica</a></td>
+                <td><a href="managedata?type=2&object=5&id=${gruppo.key}" class="action-button bg-blue">Elimina</a></td>
+            </tr>
+            </#list>
+        </tbody>
+        </#if>
+    </table>
+    <#if !gruppi?has_content>
+    <h4>Non ci sono gruppi!</h4>
+    </#if>
+</div>

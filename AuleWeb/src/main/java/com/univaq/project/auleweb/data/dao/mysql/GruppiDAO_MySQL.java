@@ -1,7 +1,6 @@
 package com.univaq.project.auleweb.data.dao.mysql;
 
 import com.univaq.project.auleweb.data.dao.GruppiDAO;
-import com.univaq.project.auleweb.data.model.Categoria;
 import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.auleweb.data.proxy.GruppoProxy;
 import com.univaq.project.framework.data.DAO;
@@ -24,6 +23,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
     private PreparedStatement removeAulaGruppo, insertAulaGruppo;
     private PreparedStatement insertGruppo, deleteGruppoById;
 
+    @Override
     public void init() throws DataException {
 
         try {
@@ -37,12 +37,13 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             insertAulaGruppo = connection.prepareStatement("INSERT INTO aula_gruppo(id_aula, id_gruppo) values (?,?)");
             insertGruppo = connection.prepareStatement("INSERT INTO gruppo(nome,descrizione,id_categoria) values(?,?,?)", Statement.RETURN_GENERATED_KEYS);
             deleteGruppoById = connection.prepareStatement("DELETE FROM gruppo WHERE ID=?");
-            getGruppiByName = connection.prepareStatement("SELECT * FROM gruppo WHERE nome=? ORDER BY nome");
+            getGruppiByName = connection.prepareStatement("SELECT * FROM gruppo WHERE nome LIKE ? ORDER BY nome");
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
     }
 
+    @Override
     public void destroy() throws DataException {
         try {
             getAllGruppi.close();
