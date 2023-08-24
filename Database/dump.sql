@@ -37,7 +37,7 @@ CREATE TABLE `amministratore` (
 --
 
 /*!40000 ALTER TABLE `amministratore` DISABLE KEYS */;
-INSERT INTO `amministratore` (`id`, `username`, `password`, `email`, `versione`) VALUES (1,'Matteo','f8360d6f939bb6125a853f54ca17309eab1d892a4ec8ec4b90e7ab871443d289bb01a5ca3207d964f5c3be1c8df417dc','matteo.tatoni@student.univaq.it',0),(2,'Davide','f8360d6f939bb6125a853f54ca17309eab1d892a4ec8ec4b90e7ab871443d289bb01a5ca3207d964f5c3be1c8df417dc','davide.dirocco@student.univaq.it',0);
+INSERT INTO `amministratore` VALUES (1,'Matteo','f8360d6f939bb6125a853f54ca17309eab1d892a4ec8ec4b90e7ab871443d289bb01a5ca3207d964f5c3be1c8df417dc','matteo.tatoni@student.univaq.it',0),(2,'Davide','f8360d6f939bb6125a853f54ca17309eab1d892a4ec8ec4b90e7ab871443d289bb01a5ca3207d964f5c3be1c8df417dc','davide.dirocco@student.univaq.it',0);
 /*!40000 ALTER TABLE `amministratore` ENABLE KEYS */;
 
 --
@@ -64,5 +64,5 @@ CREATE TABLE `attrezzatura` (
 --
 
 /*!40000 ALTER TABLE `attrezzatura` DISABLE KEYS */;
-INSERT INTO `attrezzatura` (`id`, `nome`, `numero_serie`, `id_aula`, `versione`) VALUES (1,'Proiettore','P12345',4,2),(2,'Lavagna','L54321',2,0),(3,'Computer','C67890',3,0),(9,'Proiettore','PR456',2,0),(11,'Microfono','MI111',4,2),(12,'Microfono','MI222',NULL,1),(13,'Microfono','MS333',NULL,0),(14,'Microfono','MX444',3,0),(15,'Computer','CO555',2,0),(18,'Lavagna','LB888',NULL,0),(20,'Lavagna','LD000',2,0),(22,'Microfono con Filo','M45678',NULL,0);
+INSERT INTO `attrezzatura` VALUES (1,'Proiettore','P12345',4,2),(2,'Lavagna','L54321',2,0),(3,'Computer','C67890',3,0),(9,'Proiettore','PR456',2,0),(11,'Microfono','MI111',4,2),(12,'Microfono','MI222',NULL,1),(13,'Microfono','MS333',NULL,0),(14,'Microfono','MX444',3,0),(15,'Computer','CO555',2,0),(18,'Lavagna','LB888',NULL,0),(20,'Lavagna','LD000',2,0),(22,'Microfono con Filo','M45678',NULL,0);
 /*!40000 ALTER TABLE `attrezzatura` ENABLE KEYS */;

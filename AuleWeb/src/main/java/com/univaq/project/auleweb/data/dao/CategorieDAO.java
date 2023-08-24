@@ -13,6 +13,6 @@ public interface CategorieDAO {
     Categoria importCategoria();
 
     Integer insertCategoria(String nome) throws DataException;
-    
-    void deleteCategoria(int categoriaId, long versione) throws DataException;
+
+    void deleteCategoriaById(int categoriaId, long versione) throws DataException;
 }
