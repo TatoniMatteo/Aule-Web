@@ -9,12 +9,14 @@ import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
     private PreparedStatement getResponsabileByID, getResponsabiliNumber, getAllResponsabili, getResponsabileByName;
+    private PreparedStatement insertResponsabile, updateResponsabile;
 
     public ResponsabiliDAO_MySQL(DataLayer d) {
         super(d);
@@ -28,6 +30,8 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             getResponsabiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_responsabili FROM responsabile");
             getAllResponsabili = this.connection.prepareStatement("SELECT * FROM responsabile ORDER BY nome,cognome");
             getResponsabileByName = this.connection.prepareStatement("SELECT * FROM responsabile WHERE nome LIKE ? OR cognome LIKE ? OR CONCAT(nome, ' ', cognome) LIKE ? ORDER BY nome, cognome");
+            insertResponsabile = this.connection.prepareStatement("INSERT INTO responsabile(nome,cognome,email) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            updateResponsabile = this.connection.prepareStatement("UPDATE responsabile SET nome=?,cognome=?,email=?,versione=? WHERE ID=? and versione=?");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -42,6 +46,8 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             getResponsabiliNumber.close();
             getAllResponsabili.close();
             getResponsabileByName.close();
+            insertResponsabile.close();
+            updateResponsabile.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -131,5 +137,75 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
         }
         return responsabili;
     }
+
+    @Override
+    public Integer updateResponsabile(Responsabile responsabile) throws DataException {
+        try {
+
+            // Blocchiamo l'autocommit
+            connection.setAutoCommit(false);
+
+            // Aggiorniamo il corso
+            updateResponsabile.setString(1, responsabile.getNome());
+            updateResponsabile.setString(2, responsabile.getCognome());
+            updateResponsabile.setString(2, responsabile.getEmail());
+
+            updateResponsabile.setLong(3, responsabile.getVersion() + 1);
+            updateResponsabile.setInt(4, responsabile.getKey());
+            updateResponsabile.setLong(5, responsabile.getVersion());
+
+            updateResponsabile.executeUpdate();
+
+            // Eseguiamo il commit
+            connection.commit();
+
+            // Restituiamo l'id dell'aula
+            return responsabile.getKey();
+
+        } catch (SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                throw new DataException("Errore durante il rollback della transazione (aule)", ex1);
+            }
+            throw new DataException("Errore durante l'aggiornamento del responsabile con id " + responsabile.getKey(), ex);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new DataException("Errore durante il ripristino dell'autocommit (aule)", ex);
+            }
+        }
+    }
+
+    @Override
+    public Integer insertResponsabile(Responsabile responsabile) throws DataException {
+        int responsabileId = -1;
+        try {
+            insertResponsabile.setString(1, responsabile.getNome());
+            insertResponsabile.setString(2, responsabile.getCognome());
+            insertResponsabile.setString(3, responsabile.getEmail());
+            insertResponsabile.executeUpdate();
+            try ( ResultSet generatedKeys = insertResponsabile.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    responsabileId = generatedKeys.getInt(1);
+                }
+            }
+            return responsabileId;
+
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile aggiungere il responsabile", ex);
+        }
+    }
+    
+    @Override
+    public Integer storeCorso(Responsabile responsabile) throws DataException {
+        if (responsabile.getKey() != null) {
+            return updateResponsabile(responsabile);
+        } else {
+            return insertResponsabile(responsabile);
+        }
+    }
+   
 
 }
