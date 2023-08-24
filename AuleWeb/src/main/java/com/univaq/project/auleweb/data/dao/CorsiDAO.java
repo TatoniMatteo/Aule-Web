@@ -19,7 +19,7 @@ public interface CorsiDAO {
 
     Integer insertCorso(Corso corso) throws DataException;
 
-    void deleteCorsoById(int id) throws DataException;
+    void deleteCorsoById(int id, long versione) throws DataException;
 
     Integer updateCorso(Corso corso) throws DataException;
     
