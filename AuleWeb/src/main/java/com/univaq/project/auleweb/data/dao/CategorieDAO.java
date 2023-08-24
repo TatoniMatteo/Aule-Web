@@ -11,4 +11,6 @@ public interface CategorieDAO {
     Categoria getCategoriaById(int id) throws DataException;
 
     Categoria importCategoria();
+
+    Integer insertCategoria(String nome) throws DataException;
 }

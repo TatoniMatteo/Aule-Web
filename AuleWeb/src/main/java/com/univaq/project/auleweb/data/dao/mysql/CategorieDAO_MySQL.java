@@ -9,6 +9,7 @@ import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class CategorieDAO_MySQL extends DAO implements CategorieDAO {
     }
 
     private PreparedStatement getAllCategorie, getCategoriaByID;
+    private PreparedStatement insertCategoria;
 
     public void init() throws DataException {
 
@@ -26,6 +28,7 @@ public class CategorieDAO_MySQL extends DAO implements CategorieDAO {
             super.init();
             getAllCategorie = connection.prepareStatement("SELECT * FROM Categoria");
             getCategoriaByID = connection.prepareStatement("SELECT * FROM Categoria WHERE ID = ?");
+            insertCategoria = connection.prepareStatement("INSERT INTO categoria(nome) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
@@ -35,6 +38,7 @@ public class CategorieDAO_MySQL extends DAO implements CategorieDAO {
         try {
             getAllCategorie.close();
             getCategoriaByID.close();
+            insertCategoria.close();
             super.destroy();
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -89,6 +93,25 @@ public class CategorieDAO_MySQL extends DAO implements CategorieDAO {
             throw new DataException("Errore l'importazione dell'oggetto Categoria", ex);
         }
         return categoria;
+    }
+
+    @Override
+    public Integer insertCategoria(String nome) throws DataException {
+        int categoriaId = -1;
+        try {
+            insertCategoria.setString(1, nome);
+            insertCategoria.executeUpdate();
+            
+            try ( ResultSet generatedKeys = insertCategoria.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    categoriaId = generatedKeys.getInt(1);
+                }
+            }
+            return categoriaId;
+
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile aggiungere la categoria", ex);
+        }
     }
 
 }

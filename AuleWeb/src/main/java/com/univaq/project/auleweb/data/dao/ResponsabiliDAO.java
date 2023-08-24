@@ -11,7 +11,9 @@ public interface ResponsabiliDAO {
     Responsabile getResponsabileById(int id) throws DataException;
 
     int getResponsabiliNumber() throws DataException;
-    
+
     List<Responsabile> getAllResponsabili() throws DataException;
+
+    List<Responsabile> getResponsabileByName(String nome, String filter) throws DataException;
 
 }

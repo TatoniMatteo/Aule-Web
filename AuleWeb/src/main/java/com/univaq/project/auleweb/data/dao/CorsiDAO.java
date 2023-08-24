@@ -1,5 +1,6 @@
 package com.univaq.project.auleweb.data.dao;
 
+import com.univaq.project.auleweb.data.implementation.enumType.Laurea;
 import com.univaq.project.auleweb.data.model.Corso;
 import com.univaq.project.framework.data.DataException;
 import java.util.List;
@@ -16,6 +17,8 @@ public interface CorsiDAO {
 
     int getCorsiNumber() throws DataException;
 
-    Integer insertCorso(String nome, String descrizione, String corsoLaurea) throws DataException;
+    Integer insertCorso(String nome, String descrizione, Laurea laurea) throws DataException;
+
+    void deleteCorsoById(int id) throws DataException;
 
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
-    private PreparedStatement getResponsabileByID, getResponsabiliNumber, getAllResponsabili;
+    private PreparedStatement getResponsabileByID, getResponsabiliNumber, getAllResponsabili,  getResponsabileByName;
 
     public ResponsabiliDAO_MySQL(DataLayer d) {
         super(d);
@@ -27,6 +27,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             getResponsabileByID = this.connection.prepareStatement("SELECT * FROM responsabile WHERE ID=?");
             getResponsabiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_responsabili FROM responsabile");
             getAllResponsabili = this.connection.prepareStatement("SELECT * FROM responsabile ORDER BY nome,cognome");
+             getResponsabileByName = this.connection.prepareStatement("SELECT * FROM responsabile WHERE nome=? ORDER BY nome");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -40,6 +41,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             getResponsabileByID.close();
             getResponsabiliNumber.close();
             getAllResponsabili.close();
+            getResponsabileByName.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -94,6 +96,24 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
         } catch (SQLException ex) {
             throw new DataException("Impossibile calcolare il numero di responsabili", ex);
         }
+    }
+    
+    @Override
+    public List<Responsabile> getResponsabileByName(String nome, String filter) throws DataException {
+       List<Responsabile> responsabili = new ArrayList<>();
+        try {
+            getResponsabileByName.setString(1, "%" + filter + "%");
+            try ( ResultSet rs = getResponsabileByName.executeQuery()) {
+                while (rs.next()) {
+                    Responsabile aula = importResponsabile(rs);
+                    responsabili.add(aula);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare i responsabili con questo filtro : '" + filter + "'", ex);
+        }
+
+        return responsabili;
     }
     
      @Override

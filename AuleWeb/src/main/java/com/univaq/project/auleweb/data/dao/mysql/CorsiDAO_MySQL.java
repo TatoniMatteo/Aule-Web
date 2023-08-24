@@ -1,3 +1,4 @@
+
 package com.univaq.project.auleweb.data.dao.mysql;
 
 import com.univaq.project.auleweb.data.dao.CorsiDAO;
@@ -17,7 +18,7 @@ import java.util.List;
 public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
 
     private PreparedStatement getAllCorsi, getCorsoById, getCorsiByName, getCorsiNumber;
-    private PreparedStatement insertCorso;
+    private PreparedStatement insertCorso, deleteCorsoById;
 
     public CorsiDAO_MySQL(DataLayer d) {
         super(d);
@@ -33,6 +34,7 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             getCorsiByName = this.connection.prepareStatement("SELECT * FROM Corso WHERE nome LIKE ? ORDER BY nome");
             getCorsiNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_corsi FROM Corso");
             insertCorso = this.connection.prepareStatement("INSERT INTO Corso(nome, descrizione, corso_laurea) VALUES (?,?,?,)", Statement.RETURN_GENERATED_KEYS);
+            deleteCorsoById = this.connection.prepareStatement("DELETE FROM corso WHERE ID = ?");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -47,6 +49,8 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             getAllCorsi.close();
             getCorsiByName.close();
             getCorsiNumber.close();
+            insertCorso.close();
+            deleteCorsoById.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -166,5 +170,16 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
         }
 
     }
+    
+    @Override
+    public void deleteCorsoById(int id) throws DataException {
+        try {
 
+            deleteCorsoById.setInt(1, id);
+            deleteCorsoById.execute();
+
+        } catch (SQLException ex) {
+            throw new DataException("Non è stato possibile eliminare il corso", ex);
+        }
+    }
 }

@@ -195,7 +195,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             }
 
             // Aggiorniamo le associazioni aula gruppo
-            gruppiDao.updateAula(gruppi, aulaId);
+            gruppiDao.updateAulaGruppo(gruppi, aulaId);
 
             // aggiorniamo le attrezzature
             attrezzatureDao.updateAulaAttrezzatura(attrezzature, aulaId);
@@ -249,7 +249,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             updateAula.executeUpdate();
 
             // Aggiorniamo le associazioni aula gruppo
-            gruppiDao.updateAula(gruppi, aula.getKey());
+            gruppiDao.updateAulaGruppo(gruppi, aula.getKey());
 
             // aggiorniamo le attrezzature
             attrezzatureDao.updateAulaAttrezzatura(attrezzature, aula.getKey());
