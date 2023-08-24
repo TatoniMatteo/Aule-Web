@@ -16,4 +16,6 @@ public interface CorsiDAO {
 
     int getCorsiNumber() throws DataException;
 
+    Integer insertCorso(String nome, String descrizione, String corsoLaurea) throws DataException;
+
 }

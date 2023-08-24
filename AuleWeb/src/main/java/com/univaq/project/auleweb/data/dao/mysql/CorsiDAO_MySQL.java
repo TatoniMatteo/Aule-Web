@@ -10,12 +10,14 @@ import com.univaq.project.framework.data.DataLayer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
 
     private PreparedStatement getAllCorsi, getCorsoById, getCorsiByName, getCorsiNumber;
+    private PreparedStatement insertCorso;
 
     public CorsiDAO_MySQL(DataLayer d) {
         super(d);
@@ -26,10 +28,11 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
         super.init();
 
         try {
-            this.getCorsoById = this.connection.prepareStatement("SELECT * FROM Corso WHERE ID = ?");
-            this.getAllCorsi = this.connection.prepareStatement("SELECT * FROM corso ORDER BY nome");
-            this.getCorsiByName = this.connection.prepareStatement("SELECT * FROM Corso WHERE nome LIKE ? ORDER BY nome");
-            this.getCorsiNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_corsi FROM Corso");
+            getCorsoById = this.connection.prepareStatement("SELECT * FROM Corso WHERE ID = ?");
+            getAllCorsi = this.connection.prepareStatement("SELECT * FROM corso ORDER BY nome");
+            getCorsiByName = this.connection.prepareStatement("SELECT * FROM Corso WHERE nome LIKE ? ORDER BY nome");
+            getCorsiNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_corsi FROM Corso");
+            insertCorso = this.connection.prepareStatement("INSERT INTO Corso(nome, descrizione, corso_laurea) VALUES (?,?,?,)", Statement.RETURN_GENERATED_KEYS);
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -141,6 +144,27 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
         } catch (SQLException ex) {
             throw new DataException("Impossibile calcolare il numero di corsi", ex);
         }
+    }
+    
+    @Override
+    public Integer insertCorso(String nome, String descrizione, Laurea laurea) throws DataException{
+        int corsoId = -1;
+        try{
+            insertCorso.setString(1, nome);
+            insertCorso.setString(2, descrizione);
+            insertCorso.setString(3, laurea.name());
+            insertCorso.executeUpdate();
+          try ( ResultSet generatedKeys = insertCorso.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    corsoId = generatedKeys.getInt(1);
+                }
+            }
+            return corsoId;
+
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile aggiungere il corso", ex);
+        }
+
     }
 
 }
