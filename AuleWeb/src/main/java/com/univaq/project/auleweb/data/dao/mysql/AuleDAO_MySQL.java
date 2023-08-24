@@ -38,7 +38,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAuleNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_aule FROM Aula");
             insertAula = connection.prepareStatement("INSERT INTO aula (nome,luogo,edificio,piano,capienza,prese_elettriche,prese_rete,note,id_responsabile) VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             updateAula = connection.prepareStatement("UPDATE aula SET nome=?,luogo=?,edificio=?,piano=?,capienza=?,prese_elettriche=?,prese_rete=?,note = ?,id_responsabile =?, versione=? WHERE ID=? and versione=?");
-            deleteAulaById = connection.prepareStatement("DELETE FROM aula WHERE ID=? ");
+            deleteAulaById = connection.prepareStatement("DELETE FROM aula WHERE ID=? AND versione=?");
 
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
@@ -285,6 +285,18 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             return updateAula(aula, gruppiKeys, attrezzature);
         } else {
             return insertAula(aula, gruppiKeys, attrezzature);
+        }
+    }
+    
+    public void deleteAulaById(int aulaId, long versione) throws DataException{
+        try {
+
+            deleteAulaById.setInt(1, aulaId);
+            deleteAulaById.setLong(2, versione);
+            deleteAulaById.execute();
+
+        } catch (SQLException ex) {
+            throw new DataException("Non è stato possibile eliminare l'aula con id: " + aulaId, ex);
         }
     }
 }

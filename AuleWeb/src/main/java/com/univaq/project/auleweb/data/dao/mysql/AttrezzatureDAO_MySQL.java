@@ -162,18 +162,6 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
     }
 
     @Override
-    public void deleteAttrezzaturaById(int id) throws DataException {
-        try {
-
-            deleteAttrezzaturaById.setInt(1, id);
-            deleteAttrezzaturaById.execute();
-
-        } catch (SQLException ex) {
-            throw new DataException("Non è stato possibile eliminare l'attrezzatura", ex);
-        }
-    }
-
-    @Override
     public List<Attrezzatura> getAttrezzatureByNameOrCode(String filter) throws DataException {
         List<Attrezzatura> attrezzature = new ArrayList<>();
         try {
@@ -294,7 +282,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
     @Override
     public void deleteAttrezzaturaById(int attrezzaturaId, long versione) throws DataException {
-         try {
+        try {
 
             deleteAttrezzaturaById.setInt(1, attrezzaturaId);
             deleteAttrezzaturaById.setLong(2, versione);

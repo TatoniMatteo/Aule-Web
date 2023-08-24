@@ -21,6 +21,8 @@ public interface AuleDAO {
     int insertAula(Aula aula, List<Integer> gruppi, List<Integer> attrezzature) throws DataException;
 
     int updateAula(Aula aula, List<Integer> gruppi, List<Integer> attrezzature) throws DataException;
-    
+
     Integer storeAula(Aula aula, List<Integer> gruppiKeys, List<Integer> attrezzature) throws DataException;
+
+    void deleteAulaById(int aulaId, long versione) throws DataException;
 }
