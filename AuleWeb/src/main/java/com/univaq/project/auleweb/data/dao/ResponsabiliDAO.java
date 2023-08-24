@@ -16,4 +16,10 @@ public interface ResponsabiliDAO {
 
     List<Responsabile> getResponsabileByName(String filter) throws DataException;
 
+    Integer updateResponsabile(Responsabile responsabile) throws DataException;
+
+    Integer insertResponsabile(Responsabile responsabile) throws DataException;
+
+    Integer storeCorso(Responsabile responsabile) throws DataException;
+
 }

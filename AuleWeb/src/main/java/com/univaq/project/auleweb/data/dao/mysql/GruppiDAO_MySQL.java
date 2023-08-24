@@ -1,7 +1,6 @@
 package com.univaq.project.auleweb.data.dao.mysql;
 
 import com.univaq.project.auleweb.data.dao.GruppiDAO;
-import com.univaq.project.auleweb.data.model.Categoria;
 import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.auleweb.data.proxy.GruppoProxy;
 import com.univaq.project.framework.data.DAO;
@@ -21,9 +20,10 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
     }
 
     private PreparedStatement getAllGruppi, getGruppoByID, getGruppiByAula, getGruppiByName;
-    private PreparedStatement removeAulaGruppo, insertAulaGruppo;
-    private PreparedStatement insertGruppo, deleteGruppoById;
+    private PreparedStatement removeAulaGruppo, insertAulaGruppo, deleteGruppoById;
+    private PreparedStatement insertGruppo, updateGruppo;
 
+    @Override
     public void init() throws DataException {
 
         try {
@@ -35,14 +35,16 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             );
             removeAulaGruppo = connection.prepareStatement("DELETE FROM aula_gruppo WHERE id_aula = ?");
             insertAulaGruppo = connection.prepareStatement("INSERT INTO aula_gruppo(id_aula, id_gruppo) values (?,?)");
-            insertGruppo = connection.prepareStatement("INSERT INTO gruppo(nome,descrizione,id_categoria) values(?,?,?)", Statement.RETURN_GENERATED_KEYS);
             deleteGruppoById = connection.prepareStatement("DELETE FROM gruppo WHERE ID=?");
             getGruppiByName = connection.prepareStatement("SELECT * FROM gruppo WHERE nome=? ORDER BY nome");
+            insertGruppo = connection.prepareStatement("INSERT INTO gruppo(nome,descrizione,id_categoria) values(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            updateGruppo = connection.prepareStatement("UPDATE gruppo SET nome=?,descrizione=?,id_categoria=?,versione=? WHERE ID=? and versione=?");
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
     }
 
+    @Override
     public void destroy() throws DataException {
         try {
             getAllGruppi.close();
@@ -53,6 +55,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             insertAulaGruppo.close();
             insertGruppo.close();
             deleteGruppoById.close();
+            updateGruppo.close();
 
             super.destroy();
         } catch (SQLException ex) {
@@ -187,12 +190,24 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
     }
 
     @Override
-    public Integer insertGruppo(String nome, String descrizione, int idCategoria) throws DataException {
+    public void deleteGruppoById(int gruppoId) throws DataException {
+        try {
+
+            deleteGruppoById.setInt(1, gruppoId);
+            deleteGruppoById.execute();
+
+        } catch (SQLException ex) {
+            throw new DataException("Non è stato possibile eliminare il gruppo", ex);
+        }
+    }
+
+    @Override
+    public Integer insertGruppo(Gruppo gruppo) throws DataException {
         int gruppoId = -1;
         try {
-            insertGruppo.setString(1, nome);
-            insertGruppo.setString(2, descrizione);
-            insertGruppo.setInt(3, idCategoria);
+            insertGruppo.setString(1, gruppo.getNome());
+            insertGruppo.setString(2, gruppo.getDescrizione());
+            insertGruppo.setInt(3, gruppo.getCategoria().getKey());
             insertGruppo.executeUpdate();
             try ( ResultSet generatedKeys = insertGruppo.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -208,15 +223,52 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
     }
 
     @Override
-    public void deleteGruppoById(int gruppoId) throws DataException {
-        try {
+    public Integer updateGruppo(Gruppo gruppo) throws DataException {
+         try {
 
-            deleteGruppoById.setInt(1, gruppoId);
-            deleteGruppoById.execute();
+            // Blocchiamo l'autocommit
+            connection.setAutoCommit(false);
+
+            // Aggiorniamo il gruppo
+            updateGruppo.setString(1, gruppo.getNome());
+            updateGruppo.setString(2, gruppo.getDescrizione());
+            updateGruppo.setInt(3, gruppo.getCategoria().getKey());
+
+            updateGruppo.setLong(4, gruppo.getVersion() + 1);
+            updateGruppo.setInt(5, gruppo.getKey());
+            updateGruppo.setLong(6, gruppo.getVersion());
+
+            updateGruppo.executeUpdate();
+
+            // Eseguiamo il commit
+            connection.commit();
+
+            // Restituiamo l'id dell'aula
+            return gruppo.getKey();
 
         } catch (SQLException ex) {
-            throw new DataException("Non è stato possibile eliminare il gruppo", ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                throw new DataException("Errore durante il rollback della transazione (aule)", ex1);
+            }
+            throw new DataException("Errore durante l'aggiornamento del gruppo con id " + gruppo.getKey(), ex);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new DataException("Errore durante il ripristino dell'autocommit (aule)", ex);
+            }
         }
     }
+    
+    @Override
+     public Integer storeGruppo(Gruppo gruppo) throws DataException{
+         if (gruppo.getKey() != null) {
+            return updateGruppo(gruppo);
+        } else {
+            return insertGruppo(gruppo);
+        }
+     }
 
 }

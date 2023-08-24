@@ -17,7 +17,8 @@ import java.util.List;
 public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
 
     private PreparedStatement getAllCorsi, getCorsoById, getCorsiByName, getCorsiNumber;
-    private PreparedStatement insertCorso, deleteCorsoById;
+    private PreparedStatement deleteCorsoById;
+    private PreparedStatement insertCorso, updateCorso;
 
     public CorsiDAO_MySQL(DataLayer d) {
         super(d);
@@ -34,6 +35,7 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             getCorsiNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_corsi FROM Corso");
             insertCorso = this.connection.prepareStatement("INSERT INTO Corso(nome, descrizione, corso_laurea) VALUES (?,?,?,)", Statement.RETURN_GENERATED_KEYS);
             deleteCorsoById = this.connection.prepareStatement("DELETE FROM corso WHERE ID = ?");
+            updateCorso = this.connection.prepareStatement("UPDATE corso SET nome=?,descrizione=?,corso_laurea=?,versione=? WHERE ID=? and versione=?");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -50,6 +52,7 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             getCorsiNumber.close();
             insertCorso.close();
             deleteCorsoById.close();
+            updateCorso.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -149,12 +152,12 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
     }
 
     @Override
-    public Integer insertCorso(String nome, String descrizione, Laurea laurea) throws DataException {
+    public Integer insertCorso(Corso corso) throws DataException {
         int corsoId = -1;
         try {
-            insertCorso.setString(1, nome);
-            insertCorso.setString(2, descrizione);
-            insertCorso.setString(3, laurea.name());
+            insertCorso.setString(1, corso.getNome());
+            insertCorso.setString(2, corso.getDescrizione());
+            insertCorso.setString(3, corso.getCorsoLaurea().name());
             insertCorso.executeUpdate();
             try ( ResultSet generatedKeys = insertCorso.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -180,4 +183,54 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             throw new DataException("Non è stato possibile eliminare il corso", ex);
         }
     }
+
+    @Override
+    public Integer updateCorso(Corso corso) throws DataException {
+
+        try {
+
+            // Blocchiamo l'autocommit
+            connection.setAutoCommit(false);
+
+            // Aggiorniamo il corso
+            updateCorso.setString(1, corso.getNome());
+            updateCorso.setString(2, corso.getDescrizione());
+
+            updateCorso.setLong(3, corso.getVersion() + 1);
+            updateCorso.setInt(4, corso.getKey());
+            updateCorso.setLong(5, corso.getVersion());
+
+            updateCorso.executeUpdate();
+
+            // Eseguiamo il commit
+            connection.commit();
+
+            // Restituiamo l'id dell'aula
+            return corso.getKey();
+
+        } catch (SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                throw new DataException("Errore durante il rollback della transazione (aule)", ex1);
+            }
+            throw new DataException("Errore durante l'aggiornamento del corso con id " + corso.getKey(), ex);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new DataException("Errore durante il ripristino dell'autocommit (aule)", ex);
+            }
+        }
+    }
+
+    @Override
+    public Integer storeCorso(Corso corso) throws DataException {
+        if (corso.getKey() != null) {
+            return updateCorso(corso);
+        } else {
+            return insertCorso(corso);
+        }
+    }
+
 }
