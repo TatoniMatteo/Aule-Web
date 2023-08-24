@@ -24,7 +24,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
     }
 
     private PreparedStatement getAllAule, getAulaByID, getAuleByGruppo, getAuleByName, getAuleNumber;
-    private PreparedStatement insertAula, updateAula;
+    private PreparedStatement insertAula, updateAula, deleteAulaById;
 
     @Override
     public void init() throws DataException {
@@ -38,6 +38,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAuleNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_aule FROM Aula");
             insertAula = connection.prepareStatement("INSERT INTO aula (nome,luogo,edificio,piano,capienza,prese_elettriche,prese_rete,note,id_responsabile) VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             updateAula = connection.prepareStatement("UPDATE aula SET nome=?,luogo=?,edificio=?,piano=?,capienza=?,prese_elettriche=?,prese_rete=?,note = ?,id_responsabile =?, versione=? WHERE ID=? and versione=?");
+            deleteAulaById = connection.prepareStatement("DELETE FROM aula WHERE ID=? ");
 
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
@@ -54,6 +55,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAuleNumber.close();
             insertAula.close();
             updateAula.close();
+            deleteAulaById.close();
 
             super.destroy();
         } catch (SQLException ex) {
