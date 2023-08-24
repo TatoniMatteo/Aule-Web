@@ -294,10 +294,14 @@ public class ManageData extends AuleWebController {
             int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
             String nome = request.getParameter("nome");
             String descrizione = request.getParameter("descrizione");
-            Categoria categoria = dataLayer
-                    .getCategorieDAO()
-                    .getCategoriaById(SecurityHelpers.checkNumeric(request.getParameter("categoria")));
+            String categoriaName = request.getParameter("categoriaName");
+            Integer categoriaKey = SecurityHelpers.checkNumeric(request.getParameter("categoriaKey"));
 
+            if (categoriaKey < 0) {
+                categoriaKey = dataLayer.getCategorieDAO().insertCategoria(categoriaName);
+            }
+
+            Categoria categoria = dataLayer.getCategorieDAO().getCategoriaById(categoriaKey);
             Gruppo gruppo;
 
             if (id >= 0) {
