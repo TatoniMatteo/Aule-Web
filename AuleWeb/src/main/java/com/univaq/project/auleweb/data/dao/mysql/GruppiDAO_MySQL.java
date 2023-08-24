@@ -94,7 +94,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
     }
     
     @Override
-    public List<Gruppo> getGruppiByName(String name, String filter)throws DataException{
+    public List<Gruppo> getGruppiByName(String filter)throws DataException{
         List<Gruppo> gruppi = new ArrayList<>();
         try {
             getGruppiByName.setString(1, "%" + filter + "%");

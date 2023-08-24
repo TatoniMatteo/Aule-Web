@@ -14,7 +14,7 @@ public interface GruppiDAO {
 
     List<Gruppo> getGruppiByAula(Integer key) throws DataException;
 
-    List<Gruppo> getGruppiByName(String name, String filter) throws DataException;
+    List<Gruppo> getGruppiByName( String filter) throws DataException;
 
     void updateAulaGruppo(List<Integer> keys, int aulaId) throws DataException;
 
