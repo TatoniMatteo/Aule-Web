@@ -36,7 +36,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzatureNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura");
             getAttrezzatureDisponibiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura WHERE id_aula IS NULL");
             getAllAttrezzature = this.connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
-            deleteAttrezzaturaById = this.connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ?");
+            deleteAttrezzaturaById = this.connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ? AND versione=?");
             getAttrezzatureByNameOrCode = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
             getAttrezzaturaById = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
             setAula = this.connection.prepareStatement("UPDATE attrezzatura SET id_aula=?, versione=? WHERE id=? AND versione=?");
@@ -61,6 +61,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzaturaById.close();
             setAula.close();
             insertAttrezzatura.close();
+            deleteAttrezzaturaById.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -289,6 +290,19 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             throw new DataException("Impossibile aggiungere l'attrezzatura", ex);
         }
 
+    }
+
+    @Override
+    public void deleteAttrezzaturaById(int attrezzaturaId, long versione) throws DataException {
+         try {
+
+            deleteAttrezzaturaById.setInt(1, attrezzaturaId);
+            deleteAttrezzaturaById.setLong(2, versione);
+            deleteAttrezzaturaById.execute();
+
+        } catch (SQLException ex) {
+            throw new DataException("Non è stato possibile eliminare l'attrezzatura con id: " + attrezzaturaId, ex);
+        }
     }
 
 }

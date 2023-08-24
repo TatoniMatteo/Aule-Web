@@ -27,7 +27,7 @@ public interface AttrezzatureDAO {
     void updateAulaAttrezzatura(List<Integer> keys, int aulaId) throws DataException;
 
     Integer insertAttrezzatura(String nome, String codice) throws DataException;
-    
-    
+
+    void deleteAttrezzaturaById(int attrezzaturaId, long versione) throws DataException;
 
 }
