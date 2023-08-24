@@ -20,6 +20,6 @@ public interface ResponsabiliDAO {
 
     Integer insertResponsabile(Responsabile responsabile) throws DataException;
 
-    Integer storeCorso(Responsabile responsabile) throws DataException;
+    Integer storeResponsabile(Responsabile responsabile) throws DataException;
 
 }

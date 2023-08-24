@@ -1,0 +1,44 @@
+<h4 class="text-left back">
+    <a href="amministrazione?page=gruppi">
+        <i class="fas fa-arrow-left"></i>
+        Torna indietro
+    </a>
+</h4>
+<h1>
+    <#if gruppo?has_content>
+    Modifica Gruppo
+    <#else>
+    Crea Gruppo
+    </#if>
+</h1>
+
+<form class="simple-form" method="post" action="managedata?type=1&object=4">
+    <input type="hidden" name="id" value="<#if gruppo?has_content>${gruppo.key}<#else>-1</#if>">
+    <input type="hidden" name="versione" value="<#if gruppo?has_content>${gruppo.version}<#else>0</#if>">
+    <label for="nome">Nome*:</label>
+    <input type="text" id="nome" name="nome" required value="<#if gruppo?has_content>${gruppo.nome}</#if>"><br>
+
+    <label for="descrizione">Descrizione*:</label>
+    <textarea type="text" id="descrizione" name="descrizione"  rows="10" required><#if gruppo?has_content>${gruppo.descrizione}</#if></textarea><br>
+
+    <label for="categoria">Categoria*:</label>
+    <input type="text" id="searchInput" name="categoriaName" placeholder="Cerca categoria...">
+    <ul id="optionsList" class="options-list">
+        <!-- Opzione speciale quando nessuna opzione fa match -->
+        <li id="no-match" class="no-match" data-key="-1">
+            <span class="user-input"></span>
+            <div class="bg-yellow icon">
+                <small>Nuvova categoria</small>
+                <i class="fas fa-plus-circle"></i>
+            </div>
+        </li>
+        <!-- opzioni -->
+        <li class="categoria" data-key="key1" data-text="Opzione 1">Opzione 1</li>
+        <li class="categoria" data-key="key2" data-text="Opzione 2">Opzione 2</li>
+        <!-- Aggiungi altre opzioni qui -->
+    </ul>
+    <input type="hidden" name="categoriaKey" id="selectedKey">
+
+
+    <button class="bg-blue" type="submit">Salva</button>
+</form>

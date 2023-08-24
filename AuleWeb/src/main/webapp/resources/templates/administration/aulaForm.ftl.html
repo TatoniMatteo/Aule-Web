@@ -6,7 +6,7 @@
 </h4>
 <h1>
     <#if aula?has_content>
-    Gestisci Aula
+    Modifica Aula
     <#else>
     Crea Aula
     </#if>
@@ -37,7 +37,7 @@
     <input type="number" id="prese_rete" name="prese_rete" required value="<#if aula?has_content>${aula.preseRete}</#if>"><br>
 
     <label for="note">Note:</label>
-    <textarea id="note" name="note" rows="4" value="<#if aula?has_content>${aula.note}</#if>"></textarea><br>
+    <textarea id="note" name="note" rows="10" value="<#if aula?has_content>${aula.note}</#if>"></textarea><br>
 
     <label for="responsabileInput">Responsabile*:</label>
     <div class="custom-element">

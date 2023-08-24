@@ -8,6 +8,7 @@ import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
+import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class AulaForm extends AuleWebController {
 
             String id = request.getParameter("id");
             if (id != null && !id.isBlank()) {
-                aula = dataLayer.getAuleDAO().getAulaById(Integer.parseInt(id));
+                aula = dataLayer.getAuleDAO().getAulaById(SecurityHelpers.checkNumeric(id));
             }
 
             String[] styles = {"administration/aulaForm", "simpleTable", "simpleForm"};

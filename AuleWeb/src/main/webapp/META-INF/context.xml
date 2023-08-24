@@ -9,5 +9,9 @@
               password="12345" 
               maxActive="10" 
               maxIdle="5" 
-              maxWait="10000" />
+              maxWait="10000">
+        <property name="useUnicode" value="true" />
+        <property name="characterEncoding" value="UTF-8" />
+    </Resource>
+    
 </Context>

@@ -8,6 +8,7 @@ import com.univaq.project.auleweb.data.implementation.ResponsabileImpl;
 import com.univaq.project.auleweb.data.implementation.enumType.Laurea;
 import com.univaq.project.auleweb.data.model.Amministratore;
 import com.univaq.project.auleweb.data.model.Aula;
+import com.univaq.project.auleweb.data.model.Categoria;
 import com.univaq.project.auleweb.data.model.Corso;
 import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.auleweb.data.model.Responsabile;
@@ -81,7 +82,7 @@ public class ManageData extends AuleWebController {
                         case 4 ->
                             responsabiliInsertOrUpdate(request, response);
                         case 5 ->
-                            gruppiInsert(request, response);
+                            gruppiInsertOrUpdate(request, response);
                         default ->
                             handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
                     }
@@ -287,12 +288,15 @@ public class ManageData extends AuleWebController {
         }
     }
 
-    private void gruppiInsert(HttpServletRequest request, HttpServletResponse response) {
+    private void gruppiInsertOrUpdate(HttpServletRequest request, HttpServletResponse response) {
         try {
             int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
             int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
             String nome = request.getParameter("nome");
             String descrizione = request.getParameter("descrizione");
+            Categoria categoria = dataLayer
+                    .getCategorieDAO()
+                    .getCategoriaById(SecurityHelpers.checkNumeric(request.getParameter("categoria")));
 
             Gruppo gruppo;
 
@@ -305,6 +309,7 @@ public class ManageData extends AuleWebController {
             gruppo.setVersion(versione);
             gruppo.setNome(nome);
             gruppo.setDescrizione(descrizione);
+            gruppo.setCategoria(categoria);
 
             dataLayer.getGruppiDAO().storeGruppo(gruppo);
 

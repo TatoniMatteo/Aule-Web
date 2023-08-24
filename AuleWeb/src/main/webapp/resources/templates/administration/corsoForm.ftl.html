@@ -1,0 +1,32 @@
+<h4 class="text-left back">
+    <a href="amministrazione?page=corsi">
+        <i class="fas fa-arrow-left"></i>
+        Torna indietro
+    </a>
+</h4>
+<h1>
+    <#if corso?has_content>
+    Modifica Corso
+    <#else>
+    Crea Corso
+    </#if>
+</h1>
+
+<form class="simple-form" method="post" action="managedata?type=1&object=3">
+    <input type="hidden" name="id" value="<#if corso?has_content>${corso.key}<#else>-1</#if>">
+    <input type="hidden" name="versione" value="<#if corso?has_content>${corso.version}<#else>0</#if>">
+    <label for="nome">Nome*:</label>
+    <input type="text" id="nome" name="nome" required value="<#if corso?has_content>${corso.nome}</#if>"><br>
+
+    <label for="descrizione">Descrizione*:</label>
+    <textarea type="text" id="descrizione" name="descrizione"  rows="10" required><#if corso?has_content>${corso.descrizione}</#if></textarea><br>
+
+    <label for="laurea">Laurea*:</label>
+    <select id="laurea" name="laurea" required>
+        <option value="" disabled <#if !corso?has_content>selected</#if>>-- Seleziona un'opzione --</option>
+        <#list lauree as laurea>
+        <option value="${laurea}" <#if corso?has_content && corso.corsoLaurea == laurea>selected</#if>>${laurea}</option>
+        </#list>
+    </select><br>
+    <button class="bg-blue" type="submit">Salva</button>
+</form>

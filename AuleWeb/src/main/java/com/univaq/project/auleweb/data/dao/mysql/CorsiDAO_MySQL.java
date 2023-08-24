@@ -33,7 +33,7 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             getAllCorsi = this.connection.prepareStatement("SELECT * FROM corso ORDER BY nome");
             getCorsiByName = this.connection.prepareStatement("SELECT * FROM Corso WHERE nome LIKE ? ORDER BY nome");
             getCorsiNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_corsi FROM Corso");
-            insertCorso = this.connection.prepareStatement("INSERT INTO Corso(nome, descrizione, corso_laurea) VALUES (?,?,?,)", Statement.RETURN_GENERATED_KEYS);
+            insertCorso = this.connection.prepareStatement("INSERT INTO Corso (nome, descrizione, corso_laurea) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
             deleteCorsoById = this.connection.prepareStatement("DELETE FROM corso WHERE ID = ?");
             updateCorso = this.connection.prepareStatement("UPDATE corso SET nome=?,descrizione=?,corso_laurea=?,versione=? WHERE ID=? and versione=?");
 
@@ -157,7 +157,7 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
         try {
             insertCorso.setString(1, corso.getNome());
             insertCorso.setString(2, corso.getDescrizione());
-            insertCorso.setString(3, corso.getCorsoLaurea().name());
+            insertCorso.setString(3, corso.getCorsoLaurea().toString());
             insertCorso.executeUpdate();
             try ( ResultSet generatedKeys = insertCorso.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -195,10 +195,11 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             // Aggiorniamo il corso
             updateCorso.setString(1, corso.getNome());
             updateCorso.setString(2, corso.getDescrizione());
+            updateCorso.setString(3, corso.getCorsoLaurea().toString());
 
-            updateCorso.setLong(3, corso.getVersion() + 1);
-            updateCorso.setInt(4, corso.getKey());
-            updateCorso.setLong(5, corso.getVersion());
+            updateCorso.setLong(4, corso.getVersion() + 1);
+            updateCorso.setInt(5, corso.getKey());
+            updateCorso.setLong(6, corso.getVersion());
 
             updateCorso.executeUpdate();
 

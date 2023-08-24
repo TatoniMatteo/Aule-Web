@@ -9,6 +9,7 @@
 <form action="managedata?type=1&object=2" method="post" class="simple-form" >
     <label for="nome">Tipo Attrezzatura*:</label>
     <select id="nome" name="nome" required>
+        <option value="" disabled selected>-- Seleziona un'tipo di attrezzatura --</option>
         <#list tipi as tipo>
         <option value="${tipo}">${tipo}</option>
         </#list>

@@ -199,7 +199,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
     }
     
     @Override
-    public Integer storeCorso(Responsabile responsabile) throws DataException {
+    public Integer storeResponsabile(Responsabile responsabile) throws DataException {
         if (responsabile.getKey() != null) {
             return updateResponsabile(responsabile);
         } else {
