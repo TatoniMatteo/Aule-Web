@@ -16,6 +16,8 @@ public interface GruppiDAO {
 
     List<Gruppo> getGruppiByName(String filter) throws DataException;
 
+    Gruppo getGruppoByName(String nome) throws DataException;
+
     void updateAulaGruppo(List<Integer> keys, int aulaId) throws DataException;
 
     Integer insertGruppo(Gruppo gruppo) throws DataException;
@@ -23,6 +25,6 @@ public interface GruppiDAO {
     Integer updateGruppo(Gruppo gruppo) throws DataException;
 
     void deleteGruppoById(int gruppoId, long versione) throws DataException;
-    
+
     Integer storeGruppo(Gruppo gruppo) throws DataException;
 }

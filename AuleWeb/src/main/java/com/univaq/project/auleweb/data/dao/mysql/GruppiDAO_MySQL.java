@@ -19,7 +19,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
         super(d);
     }
 
-    private PreparedStatement getAllGruppi, getGruppoByID, getGruppiByAula, getGruppiByName;
+    private PreparedStatement getAllGruppi, getGruppoByID, getGruppiByAula, getGruppiByName, getGruppoByName;
     private PreparedStatement removeAulaGruppo, insertAulaGruppo, deleteGruppoById;
     private PreparedStatement insertGruppo, updateGruppo;
 
@@ -29,6 +29,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
         try {
             super.init();
             getAllGruppi = connection.prepareStatement("SELECT * FROM Gruppo ORDER BY nome");
+            getGruppoByName = connection.prepareStatement("SELECT * FROM gruppo WHERE nome=?");
             getGruppoByID = connection.prepareStatement("SELECT * FROM Gruppo WHERE ID = ?");
             getGruppiByAula = connection.prepareStatement(
                     "SELECT g.id, g.nome, g.descrizione, g.id_categoria, g.versione FROM gruppo g JOIN aula_gruppo ag ON g.id = ag.id_gruppo WHERE ag.id_aula =  ?"
@@ -51,6 +52,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             getGruppoByID.close();
             getGruppiByAula.close();
             getGruppiByName.close();
+            getGruppoByName.close();
             removeAulaGruppo.close();
             insertAulaGruppo.close();
             insertGruppo.close();
@@ -111,6 +113,23 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
         }
 
         return gruppi;
+    }
+    
+    @Override
+    public Gruppo getGruppoByName(String nome) throws DataException{
+        Gruppo gruppo =null;
+        try {
+            getGruppiByName.setString(1, nome);
+            try ( ResultSet rs = getGruppiByName.executeQuery()) {
+                if (rs.next()) {
+                    gruppo = importGruppo(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare il gruppo : " + nome + "'", ex);
+        }
+
+        return gruppo;
     }
 
     @Override
