@@ -28,4 +28,6 @@ public interface EventiDAO {
 
     void removeOldAulaEventi(int aulaId) throws DataException;
 
+    Integer insertEvento(Evento evento) throws DataException;
+
 }
