@@ -5,7 +5,6 @@ import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.framework.data.DataItemImpl;
 import java.util.Objects;
 
-
 public class AttrezzaturaImpl extends DataItemImpl<Integer> implements Attrezzatura {
 
     private String nome;
@@ -13,11 +12,10 @@ public class AttrezzaturaImpl extends DataItemImpl<Integer> implements Attrezzat
     private Aula aula;
 
     public AttrezzaturaImpl() {
-        this.nome="";
-        this.numeroSerie="";
-        this.aula=null;
+        this.nome = "";
+        this.numeroSerie = null;
+        this.aula = null;
     }
-    
 
     public AttrezzaturaImpl(String nome, String numero_serie, Aula aula) {
         super();
@@ -70,6 +68,5 @@ public class AttrezzaturaImpl extends DataItemImpl<Integer> implements Attrezzat
         final AttrezzaturaImpl other = (AttrezzaturaImpl) obj;
         return this.numeroSerie.equals(other.numeroSerie);
     }
-    
 
 }

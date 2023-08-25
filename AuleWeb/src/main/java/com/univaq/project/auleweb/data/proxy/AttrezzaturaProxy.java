@@ -23,6 +23,7 @@ public class AttrezzaturaProxy extends AttrezzaturaImpl implements DataItemProxy
         this.dataLayer = d;
     }
 
+    @Override
     public void setKey(Integer key) {
         super.setKey(key);
         this.modified = true;
