@@ -33,7 +33,7 @@ public class CSVImporter {
             for (CSVRecord record : records) {
                 Aula aula = new AulaImpl();
                 List<Integer> gruppiKeys = new ArrayList<>();
-                List<Attrezzatura> attrezzature = new ArrayList<>();
+                List<Integer> attrezzatureKeys = new ArrayList<>();
 
                 aula.setNome(record.get("nome"));
                 aula.setLuogo(record.get("luogo"));
@@ -57,9 +57,9 @@ public class CSVImporter {
                     if (attrezzatura == null) {
                         throw new DataException("L'attrezzatura con codice " + attrezzaturaCode + " non è nel sistema!");
                     }
-                    attrezzature.add(attrezzatura);
+                    attrezzatureKeys.add(attrezzatura.getKey());
                 }
-                dataLayer.getAuleDAO().storeAula(aula, gruppiKeys, attrezzature);
+                dataLayer.getAuleDAO().storeAula(aula, gruppiKeys, attrezzatureKeys);
             }
 
         } catch (IOException ex) {

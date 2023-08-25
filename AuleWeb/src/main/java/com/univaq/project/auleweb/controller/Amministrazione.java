@@ -13,21 +13,22 @@ import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
 import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@MultipartConfig
 public class Amministrazione extends AuleWebController {
 
     private DataLayerImpl dataLayer;
@@ -43,44 +44,48 @@ public class Amministrazione extends AuleWebController {
                 response.sendRedirect("homepage");
             }
 
+            boolean error = false;
+
             String action = request.getParameter("action");
             if (action != null) {
                 switch (action) {
                     case "export" ->
-                        action_export(request, response);
+                        error = action_export(request, response);
                     case "import" ->
-                        action_import(request, response);
+                        error = action_import(request, response);
                     default ->
-                        throw new AssertionError();
+                        throw new DataException("Operazione sconosciuta: " + action);
                 }
             }
 
-            String page = request.getParameter("page");
-            if (page != null) {
-                switch (page) {
-                    case "dashboard" ->
-                        action_dashboard(request, response);
-                    case "aule" ->
-                        action_aule(request, response);
-                    case "aule_filtered" ->
-                        action_aule(request, response);
-                    case "attrezzature" ->
-                        action_attrezzature(request, response);
-                    case "gruppi" ->
-                        action_gruppi(request, response);
-                    case "eventi" ->
-                        action_eventi(request, response);
-                    case "corsi" ->
-                        action_corsi(request, response);
-                    case "responsabili" ->
-                        action_responsabili(request, response);
-                    case "dati" ->
-                        action_dati(request, response);
-                    default ->
-                        action_dashboard(request, response);
+            if (!error) {
+                String page = request.getParameter("page");
+                if (page != null) {
+                    switch (page) {
+                        case "dashboard" ->
+                            action_dashboard(request, response);
+                        case "aule" ->
+                            action_aule(request, response);
+                        case "aule_filtered" ->
+                            action_aule(request, response);
+                        case "attrezzature" ->
+                            action_attrezzature(request, response);
+                        case "gruppi" ->
+                            action_gruppi(request, response);
+                        case "eventi" ->
+                            action_eventi(request, response);
+                        case "corsi" ->
+                            action_corsi(request, response);
+                        case "responsabili" ->
+                            action_responsabili(request, response);
+                        case "dati" ->
+                            action_dati(request, response);
+                        default ->
+                            action_dashboard(request, response);
+                    }
+                } else {
+                    action_dashboard(request, response);
                 }
-            } else {
-                action_dashboard(request, response);
             }
         } catch (IOException | DataException ex) {
             handleError(ex, request, response);
@@ -256,7 +261,7 @@ public class Amministrazione extends AuleWebController {
         }
     }
 
-    private void action_export(HttpServletRequest request, HttpServletResponse response) {
+    private boolean action_export(HttpServletRequest request, HttpServletResponse response) {
         try {
             Integer gruppoId = SecurityHelpers.checkNumeric(request.getParameter("gruppo"));
             String outputName = request.getParameter("outputName");
@@ -265,8 +270,10 @@ public class Amministrazione extends AuleWebController {
             downloader.setResource(createFile(gruppoId, outputName));
             downloader.activate(request, response);
 
+            return false;
         } catch (DataException | IOException ex) {
             handleError(ex, request, response);
+            return true;
         }
 
     }
@@ -294,21 +301,24 @@ public class Amministrazione extends AuleWebController {
 
     }
 
-    private void action_import(HttpServletRequest request, HttpServletResponse response) {
-        File tempFile = new File(getServletContext().getRealPath("temp") + File.separatorChar + "import_aule.csv");
-        try ( InputStream input = request.getPart("inputfile").getInputStream();  OutputStream output = new FileOutputStream(tempFile)) {
+    private boolean action_import(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Path tempFilePath = Files.createTempFile("import_aule", ".csv");
+            try ( InputStream input = request.getPart("inputfile").getInputStream();  OutputStream output = Files.newOutputStream(tempFilePath)) {
 
-            byte[] buffer = new byte[1024];
-            int read;
-            while ((read = input.read(buffer)) > 0) {
-                output.write(buffer, 0, read);
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = input.read(buffer)) > 0) {
+                    output.write(buffer, 0, read);
+                }
+
+                CSVImporter.importAuleFromCSV(tempFilePath.toFile(), dataLayer);
+                Files.deleteIfExists(tempFilePath);
+                return false;
             }
-
-            CSVImporter.importAuleFromCSV(tempFile, dataLayer);
-            tempFile.deleteOnExit();
-
-        } catch (IOException | ServletException ex) {
+        } catch (DataException | IOException | ServletException ex) {
             handleError(ex, request, response);
+            return true;
         }
     }
 
