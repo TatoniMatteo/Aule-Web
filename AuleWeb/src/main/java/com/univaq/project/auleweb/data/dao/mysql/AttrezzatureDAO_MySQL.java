@@ -170,13 +170,13 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         try {
             getAttrezzaturaByCode.setString(1, codice);
 
-            try ( ResultSet rs = getAttrezzatureByNameOrCode.executeQuery()) {
+            try ( ResultSet rs = getAttrezzaturaByCode.executeQuery()) {
                 if (rs.next()) {
                     attrezzatura = importAttrezzatura(rs);
                 }
             }
         } catch (SQLException ex) {
-            throw new DataException("Impossibile caricare l'attrezzatura con codeice : " + codice, ex);
+            throw new DataException("Impossibile caricare l'attrezzatura con codice : " + codice, ex);
         }
 
         return attrezzatura;
