@@ -176,7 +176,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new DataException("Impossibile caricare l'attrezzatura con codeice : " + codice, ex);
+            throw new DataException("Impossibile caricare l'attrezzatura con codice : " + codice, ex);
         }
 
         return attrezzatura;
