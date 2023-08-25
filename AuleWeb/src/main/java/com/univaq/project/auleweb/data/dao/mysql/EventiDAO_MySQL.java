@@ -103,7 +103,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
 
             removeOldAulaEventi = connection.prepareStatement("DELETE FROM evento WHERE id_aula = ? AND data < CURDATE();");
 
-            insertEvento = connection.prepareStatement("INSERT INTO evento (id_ricorrenza,nome,descrizione,data,ora_inizio,ora_fine,id_corso,id_responsabile,id_aula,tipo_evento) VALUES()", Statement.RETURN_GENERATED_KEYS);
+            insertEvento = connection.prepareStatement("INSERT INTO evento (id_ricorrenza,nome,descrizione,data,ora_inizio,ora_fine,id_corso,id_responsabile,id_aula,tipo_evento) VALUES(?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -376,6 +376,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             insertEvento.setInt(7, evento.getCorso().getKey());
             insertEvento.setInt(8, evento.getResponsabile().getKey());
             insertEvento.setInt(9, evento.getAula().getKey());
+           insertEvento.setString(10, evento.getTipoEvento().name());
             insertEvento.executeUpdate();
 
             // Otteniamo l'id dell'evento appena inserito
