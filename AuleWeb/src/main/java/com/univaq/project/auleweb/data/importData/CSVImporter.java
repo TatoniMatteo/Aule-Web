@@ -11,10 +11,10 @@ import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 public class CSVImporter {
@@ -22,16 +22,14 @@ public class CSVImporter {
     private static final String[] HEADER_AULA = {"nome", "luogo", "edificio", "piano", "capienza", "prese_elettriche", "prese_rete", "note", "responsabile", "attrezzature", "gruppi"};
 
     public static void importAuleFromCSV(File tempFile, DataLayerImpl dataLayer) throws DataException {
-        try {
-            Reader in = new FileReader(tempFile);
-            CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
-                    .setHeader(HEADER_AULA)
-                    .setSkipHeaderRecord(true)
-                    .build();
+        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                .setHeader(HEADER_AULA)
+                .setSkipHeaderRecord(true)
+                .build();
 
-            Iterable<CSVRecord> records = csvFormat.parse(in);
+        try ( FileReader fileReader = new FileReader(tempFile);  CSVParser csvParser = new CSVParser(fileReader, csvFormat)) {
 
-            for (CSVRecord record : records) {
+            for (CSVRecord record : csvParser) {
                 Aula aula = new AulaImpl();
                 List<Integer> gruppiKeys = new ArrayList<>();
                 List<Integer> attrezzatureKeys = new ArrayList<>();
@@ -45,10 +43,12 @@ public class CSVImporter {
                 aula.setPreseRete(SecurityHelpers.checkNumeric(record.get("prese_rete")));
                 aula.setNote(record.get("note"));
 
-                Responsabile responsabile = dataLayer.getResponsabiliDAO().getByEmail(record.get("responsabile"));
+                Responsabile responsabile = dataLayer.getResponsabiliDAO().getResponsabileByEmail(record.get("responsabile"));
                 if (responsabile == null) {
                     throw new DataException("Il responsabile con email " + record.get("responsabile") + " non è nel sistema!");
                 }
+
+                aula.setResponsabile(responsabile);
 
                 for (String gruppoName : record.get("gruppi").split(",")) {
                     Gruppo gruppo = dataLayer.getGruppiDAO().getGruppoByName(gruppoName);

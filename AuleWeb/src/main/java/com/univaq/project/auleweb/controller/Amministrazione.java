@@ -305,17 +305,16 @@ public class Amministrazione extends AuleWebController {
         try {
             Path tempFilePath = Files.createTempFile("import_aule", ".csv");
             try ( InputStream input = request.getPart("inputfile").getInputStream();  OutputStream output = Files.newOutputStream(tempFilePath)) {
-
                 byte[] buffer = new byte[1024];
                 int read;
                 while ((read = input.read(buffer)) > 0) {
                     output.write(buffer, 0, read);
                 }
-
-                CSVImporter.importAuleFromCSV(tempFilePath.toFile(), dataLayer);
-                Files.deleteIfExists(tempFilePath);
-                return false;
+                output.close();
             }
+            CSVImporter.importAuleFromCSV(tempFilePath.toFile(), dataLayer);
+            Files.deleteIfExists(tempFilePath);
+            return false;
         } catch (DataException | IOException | ServletException ex) {
             handleError(ex, request, response);
             return true;
