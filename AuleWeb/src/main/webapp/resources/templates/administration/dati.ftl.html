@@ -25,14 +25,15 @@
 
 <h2>Importa Dati Aule</h2>
 <div class="export-form">
-    <form method="post">
-        <div>
+    <form method="post"  action="amministrazione?page=dati&action=import">
+        <div> 
             <label class="text-left" for="input-file">Nome file di output</label>
             <input type="file" name="inputfile" id="input-file" accept=".csv">
             <label for="input-file" class="custom-file-input" id="file-label"><i class="fa-solid fa-file-arrow-down"></i> Seleziona un file</label>
         </div>
 
-        <button type="submit" class="bg-blue export-button"> Importa <i class="fas fa-file-import"></i></button>
+        <button id="import_button" type="submit" class="bg-blue export-button"> Importa <i class="fas fa-file-import"></i></button>    
     </form>
+    <div class="error-message" id="error-message"></div>
 </div>
 

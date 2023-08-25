@@ -1,15 +1,29 @@
 package com.univaq.project.auleweb.controller;
 
+import com.univaq.project.auleweb.data.exportData.CSVExporter;
 import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
+import com.univaq.project.auleweb.data.importData.CSVImporter;
 import com.univaq.project.auleweb.data.model.Amministratore;
+import com.univaq.project.auleweb.data.model.Attrezzatura;
+import com.univaq.project.auleweb.data.model.Aula;
+import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.framework.data.DataException;
+import com.univaq.project.framework.result.StreamResult;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
+import com.univaq.project.framework.security.SecurityHelpers;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +41,18 @@ public class Amministrazione extends AuleWebController {
             amministratore = getLoggedAdminstrator(dataLayer, request);
             if (amministratore == null) {
                 response.sendRedirect("homepage");
+            }
+
+            String action = request.getParameter("action");
+            if (action != null) {
+                switch (action) {
+                    case "export" ->
+                        action_export(request, response);
+                    case "import" ->
+                        action_import(request, response);
+                    default ->
+                        throw new AssertionError();
+                }
             }
 
             String page = request.getParameter("page");
@@ -226,6 +252,62 @@ public class Amministrazione extends AuleWebController {
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/dati.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private void action_export(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Integer gruppoId = SecurityHelpers.checkNumeric(request.getParameter("gruppo"));
+            String outputName = request.getParameter("outputName");
+
+            StreamResult downloader = new StreamResult(getServletContext());
+            downloader.setResource(createFile(gruppoId, outputName));
+            downloader.activate(request, response);
+
+        } catch (DataException | IOException ex) {
+            handleError(ex, request, response);
+        }
+
+    }
+
+    private File createFile(Integer gruppoId, String outputName) throws DataException {
+        List<Aula> aule;
+        Map<Aula, List<Attrezzatura>> attrezzature = new HashMap<>();
+        Map<Aula, List<Gruppo>> gruppi = new HashMap<>();
+
+        if (gruppoId >= 0) {
+            aule = dataLayer.getAuleDAO().getAuleByGruppoID(gruppoId);
+        } else {
+            aule = dataLayer.getAuleDAO().getAllAule();
+        }
+
+        for (Aula aula : aule) {
+            List<Attrezzatura> attrezzatureList = dataLayer.getAttrezzatureDAO().getAttrezzaturaByAula(aula.getKey());
+            List<Gruppo> gruppiList = dataLayer.getGruppiDAO().getGruppiByAula(aula.getKey());
+            attrezzature.put(aula, attrezzatureList);
+            gruppi.put(aula, gruppiList);
+        }
+
+        outputName = outputName != null && !outputName.isBlank() ? (outputName.endsWith(".csv") ? outputName : outputName + ".csv") : "aule.csv";
+        return CSVExporter.exportAuleToCsv(aule, attrezzature, gruppi, getServletContext().getRealPath(outputName));
+
+    }
+
+    private void action_import(HttpServletRequest request, HttpServletResponse response) {
+        File tempFile = new File(getServletContext().getRealPath("temp") + File.separatorChar + "import_aule.csv");
+        try ( InputStream input = request.getPart("inputfile").getInputStream();  OutputStream output = new FileOutputStream(tempFile)) {
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = input.read(buffer)) > 0) {
+                output.write(buffer, 0, read);
+            }
+
+            CSVImporter.importAuleFromCSV(tempFile, dataLayer);
+            tempFile.deleteOnExit();
+
+        } catch (IOException | ServletException ex) {
             handleError(ex, request, response);
         }
     }

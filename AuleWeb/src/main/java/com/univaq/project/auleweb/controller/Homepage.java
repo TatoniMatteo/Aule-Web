@@ -2,8 +2,8 @@ package com.univaq.project.auleweb.controller;
 
 import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
 import com.univaq.project.auleweb.data.model.Evento;
-import com.univaq.project.auleweb.export.CSVExporter;
-import com.univaq.project.auleweb.export.ICalendarExporter;
+import com.univaq.project.auleweb.data.exportData.CSVExporter;
+import com.univaq.project.auleweb.data.exportData.ICalendarExporter;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.result.StreamResult;
 import com.univaq.project.framework.result.TemplateManagerException;
@@ -136,9 +136,11 @@ public class Homepage extends AuleWebController {
             String dataFine = request.getParameter("endDate");
             String outputName = request.getParameter("outputName");
 
-            StreamResult downloader = new StreamResult(getServletContext());
-            downloader.setResource(createFile(tipo, corsoId, dataInizio, dataFine, outputName));
-            downloader.activate(request, response);
+            if (tipo != null && dataInizio != null && dataFine != null) {
+                StreamResult downloader = new StreamResult(getServletContext());
+                downloader.setResource(createFile(tipo, corsoId, dataInizio, dataFine, outputName));
+                downloader.activate(request, response);
+            }
         } catch (IOException | DataException ex) {
             handleError(ex, request, response);
         }
