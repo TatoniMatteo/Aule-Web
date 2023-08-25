@@ -170,7 +170,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         try {
             getAttrezzaturaByCode.setString(1, codice);
 
-            try ( ResultSet rs = getAttrezzatureByNameOrCode.executeQuery()) {
+            try ( ResultSet rs = getAttrezzaturaByCode.executeQuery()) {
                 if (rs.next()) {
                     attrezzatura = importAttrezzatura(rs);
                 }
