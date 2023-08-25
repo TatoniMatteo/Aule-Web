@@ -31,18 +31,18 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         try {
             super.init();
 
-            getAttrezzaturaByAulaId = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id_aula=?");
-            getAttrezzaturaDisponibile = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id_aula IS NULL");
-            getAttrezzatureNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura");
-            getAttrezzatureDisponibiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura WHERE id_aula IS NULL");
-            getAllAttrezzature = this.connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
-            getAttrezzaturaByCode = connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome=?");
-            deleteAttrezzaturaById = this.connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ? AND versione=?");
-            getAttrezzatureByNameOrCode = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
-            getAttrezzaturaById = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
-            setAula = this.connection.prepareStatement("UPDATE attrezzatura SET id_aula=?, versione=? WHERE id=? AND versione=?");
-            insertAttrezzatura = this.connection.prepareStatement("INSERT INTO attrezzatura (nome,numero_serie) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
-            removeAulaFromAttrezzature = this.connection.prepareStatement("UPDATE attrezzatura SET id_aula = NULL WHERE id_aula = ?;");
+            getAttrezzaturaByAulaId = connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id_aula=?");
+            getAttrezzaturaDisponibile = connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id_aula IS NULL");
+            getAttrezzatureNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura");
+            getAttrezzatureDisponibiliNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura WHERE id_aula IS NULL");
+            getAllAttrezzature = connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
+            getAttrezzaturaByCode = connection.prepareStatement("SELECT * FROM attrezzatura WHERE numero_serie=?");
+            deleteAttrezzaturaById = connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ? AND versione=?");
+            getAttrezzatureByNameOrCode = connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
+            getAttrezzaturaById = connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
+            setAula = connection.prepareStatement("UPDATE attrezzatura SET id_aula=?, versione=? WHERE id=? AND versione=?");
+            insertAttrezzatura = connection.prepareStatement("INSERT INTO attrezzatura (nome,numero_serie) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
+            removeAulaFromAttrezzature = connection.prepareStatement("UPDATE attrezzatura SET id_aula = NULL WHERE id_aula = ?;");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -165,6 +165,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
         return attrezzature;
     }
 
+    @Override
     public Attrezzatura getAttrezzaturaByCode(String codice) throws DataException {
         Attrezzatura attrezzatura = null;
         try {

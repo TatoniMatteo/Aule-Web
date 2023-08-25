@@ -5,6 +5,7 @@ import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
 import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.auleweb.data.model.Gruppo;
+import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.File;
@@ -44,6 +45,11 @@ public class CSVImporter {
                 aula.setPreseRete(SecurityHelpers.checkNumeric(record.get("prese_rete")));
                 aula.setNote(record.get("note"));
 
+                Responsabile responsabile = dataLayer.getResponsabiliDAO().getByEmail(record.get("responsabile"));
+                if (responsabile == null) {
+                    throw new DataException("Il responsabile con email " + record.get("responsabile") + " non è nel sistema!");
+                }
+
                 for (String gruppoName : record.get("gruppi").split(",")) {
                     Gruppo gruppo = dataLayer.getGruppiDAO().getGruppoByName(gruppoName);
                     if (gruppo == null) {
@@ -53,9 +59,12 @@ public class CSVImporter {
                 }
 
                 for (String attrezzaturaCode : record.get("attrezzature").split(",")) {
-                    Attrezzatura attrezzatura = dataLayer.getAttrezzatureDAO().getAttrezzaturaByCode(attrezzaturaCode);
+                    Attrezzatura attrezzatura = dataLayer.getAttrezzatureDAO().getAttrezzaturaByCode(attrezzaturaCode.trim());
                     if (attrezzatura == null) {
                         throw new DataException("L'attrezzatura con codice " + attrezzaturaCode + " non è nel sistema!");
+
+                    } else if (attrezzatura.getAula() != null) {
+                        throw new DataException("L'attrezzatura con codice " + attrezzaturaCode + " è già stata assegnata!");
                     }
                     attrezzatureKeys.add(attrezzatura.getKey());
                 }
