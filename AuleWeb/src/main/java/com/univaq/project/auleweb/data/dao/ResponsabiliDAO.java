@@ -10,6 +10,8 @@ public interface ResponsabiliDAO {
 
     Responsabile getResponsabileById(int id) throws DataException;
 
+    Responsabile getResponsabileByEmail(String email) throws DataException;
+
     int getResponsabiliNumber() throws DataException;
 
     List<Responsabile> getAllResponsabili() throws DataException;

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
 
-    private PreparedStatement getResponsabileByID, getResponsabiliNumber, getAllResponsabili, getResponsabileByName;
+    private PreparedStatement getResponsabileByID, getResponsabiliNumber, getAllResponsabili, getResponsabileByName, getResponsabileByEmail;
     private PreparedStatement insertResponsabile, updateResponsabile, deleteResponsabileById;
 
     public ResponsabiliDAO_MySQL(DataLayer d) {
@@ -26,13 +26,14 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
     public void init() throws DataException {
         try {
             super.init();
-            getResponsabileByID = this.connection.prepareStatement("SELECT * FROM responsabile WHERE ID=?");
-            getResponsabiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_responsabili FROM responsabile");
-            getAllResponsabili = this.connection.prepareStatement("SELECT * FROM responsabile ORDER BY nome,cognome");
-            getResponsabileByName = this.connection.prepareStatement("SELECT * FROM responsabile WHERE nome LIKE ? OR cognome LIKE ? OR CONCAT(nome, ' ', cognome) LIKE ? ORDER BY nome, cognome");
-            insertResponsabile = this.connection.prepareStatement("INSERT INTO responsabile(nome,cognome,email) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            updateResponsabile = this.connection.prepareStatement("UPDATE responsabile SET nome=?,cognome=?,email=?,versione=? WHERE ID=? and versione=?");
-            deleteResponsabileById = this.connection.prepareStatement("DELETE FROM responsabile WHERE ID=? AND versione=? ");
+            getResponsabileByID = connection.prepareStatement("SELECT * FROM responsabile WHERE ID=?");
+            getResponsabileByEmail = connection.prepareStatement("SELECT * FROM responsabile WHERE email=?");
+            getResponsabiliNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_responsabili FROM responsabile");
+            getAllResponsabili = connection.prepareStatement("SELECT * FROM responsabile ORDER BY nome,cognome");
+            getResponsabileByName = connection.prepareStatement("SELECT * FROM responsabile WHERE nome LIKE ? OR cognome LIKE ? OR CONCAT(nome, ' ', cognome) LIKE ? ORDER BY nome, cognome");
+            insertResponsabile = connection.prepareStatement("INSERT INTO responsabile(nome,cognome,email) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            updateResponsabile = connection.prepareStatement("UPDATE responsabile SET nome=?,cognome=?,email=?,versione=? WHERE ID=? and versione=?");
+            deleteResponsabileById = connection.prepareStatement("DELETE FROM responsabile WHERE ID=? AND versione=? ");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -50,6 +51,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             insertResponsabile.close();
             updateResponsabile.close();
             deleteResponsabileById.close();
+            getResponsabileByEmail.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -69,6 +71,22 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             }
         } catch (SQLException ex) {
             throw new DataException("Impossibile caricare il responsabile da ID", ex);
+        }
+        return responsabile;
+    }
+    
+    @Override
+    public Responsabile getResponsabileByEmail(String email)throws DataException{
+        Responsabile responsabile = null;
+        try {
+            getResponsabileByEmail.setString(1, email);
+            try ( ResultSet rs = getResponsabileByEmail.executeQuery()) {
+                if (rs.next()) {
+                    responsabile = importResponsabile(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare il responsabile dall'email", ex);
         }
         return responsabile;
     }
