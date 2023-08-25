@@ -1,1 +1,38 @@
-<h1>Importa/Esporta</h1>
+<h1>Importa/Esporta Aule</h1>
+
+
+<h2>Esporta Dati Aule</h2>
+<div class="export-form">
+    <form method="post">
+        <div>
+            <label class="text-left" for="gruppo">Gruppo</label>
+            <select name="gruppo" id="gruppo">
+                <option value="-1">Tutti</option>
+                <#list gruppi as gruppo>
+                <option value="${gruppo.key}">${gruppo.nome}</option>
+                </#list>
+            </select>
+        </div>
+        <div>
+            <label class="text-left" for="output-name">Nome file di output</label>
+            <input type="text" name="outputName" id="output-name">
+        </div>
+        <div></div>
+        <button type="submit" class="bg-blue export-button"> Esporta <i class="fas fa-file-export"></i></button>
+    </form>
+</div>
+
+
+<h2>Importa Dati Aule</h2>
+<div class="export-form">
+    <form method="post">
+        <div>
+            <label class="text-left" for="input-file">Nome file di output</label>
+            <input type="file" name="inputfile" id="input-file" accept=".csv">
+            <label for="input-file" class="custom-file-input" id="file-label"><i class="fa-solid fa-file-arrow-down"></i> Seleziona un file</label>
+        </div>
+
+        <button type="submit" class="bg-blue export-button"> Importa <i class="fas fa-file-import"></i></button>
+    </form>
+</div>
+

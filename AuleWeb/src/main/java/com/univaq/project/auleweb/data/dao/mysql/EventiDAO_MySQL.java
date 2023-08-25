@@ -38,47 +38,47 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
 
         try {
             super.init();
-            getAllEeventiNext3Hours = this.dataLayer.getConnection().prepareStatement(
+            getAllEeventiNext3Hours = connection.prepareStatement(
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE (ADDTIME(data, ora_inizio) <= ADDTIME(NOW(), '03:00:00') AND ADDTIME(data, ora_inizio) >= NOW()) "
                     + "OR (ADDTIME(data, ora_fine) >= NOW() AND ADDTIME(data, ora_fine) <= ADDTIME(NOW(), '03:00:00')) "
                     + "ORDER BY ora_inizio"
             );
-            getEventiByAulaAndWeek = this.dataLayer.getConnection().prepareStatement(
+            getEventiByAulaAndWeek = connection.prepareStatement(
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND DATE_ADD(?, INTERVAL 6 DAY) AND id_aula = ? "
                     + "ORDER BY ora_inizio AND data"
             );
 
-            getEventiByCorsoAndWeek = this.dataLayer.getConnection().prepareStatement(
+            getEventiByCorsoAndWeek = connection.prepareStatement(
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND DATE_ADD(?, INTERVAL 6 DAY) AND id_corso = ? "
                     + "ORDER BY data ASC, ora_inizio"
             );
 
-            getEventoById = this.dataLayer.getConnection().prepareStatement(
+            getEventoById = connection.prepareStatement(
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE id = ? "
             );
-            getEventiByCorsoAndDateRange = this.dataLayer.getConnection().prepareStatement(
+            getEventiByCorsoAndDateRange = connection.prepareStatement(
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND ? AND id_corso = ? "
                     + "ORDER BY ora_inizio AND data"
             );
 
-            getEventiByDateRange = this.dataLayer.getConnection().prepareStatement(
+            getEventiByDateRange = connection.prepareStatement(
                     "SELECT * "
                     + "FROM evento "
                     + "WHERE data BETWEEN ? AND ? "
                     + "ORDER BY data ASC, ora_inizio"
             );
 
-            getEventiByGruppoIdAndDate = this.dataLayer.getConnection().prepareStatement(
+            getEventiByGruppoIdAndDate = connection.prepareStatement(
                     "SELECT evento.* "
                     + "FROM evento "
                     + "JOIN aula ON evento.id_aula = aula.id "
@@ -87,19 +87,19 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
                     + "ORDER BY data ASC, ora_inizio"
             );
 
-            getEventiNumber = this.dataLayer.getConnection().prepareStatement(
+            getEventiNumber = connection.prepareStatement(
                     "SELECT COUNT(*) AS numero_eventi "
                     + "FROM evento "
                     + "WHERE data > CURRENT_DATE() OR (data = CURRENT_DATE() AND ora_fine >= CURRENT_TIME)"
             );
 
-            getActiveEventiNumber = this.dataLayer.getConnection().prepareStatement(
+            getActiveEventiNumber = connection.prepareStatement(
                     "SELECT COUNT(*) AS numero_eventi "
                     + "FROM evento "
                     + "WHERE data = CURRENT_DATE() AND ora_inizio <= CURRENT_TIME AND ora_fine >= CURRENT_TIME"
             );
 
-            removeOldAulaEventi = this.dataLayer.getConnection().prepareStatement("DELETE FROM evento WHERE id_aula = ? AND data < CURDATE();");
+            removeOldAulaEventi = connection.prepareStatement("DELETE FROM evento WHERE id_aula = ? AND data < CURDATE();");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);

@@ -215,11 +215,14 @@ public class Amministrazione extends AuleWebController {
 
     private void action_dati(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {};
+            String[] styles = {"importExport"};
+            String[] scripts = {"fileInput"};
             Map data = new HashMap<>();
             data.put("styles", styles);
+            data.put("scripts", scripts);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("outline_tpl", "base/outline_administration.ftl.html");
+            data.put("gruppi", dataLayer.getGruppiDAO().getAllGruppi());
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/dati.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {

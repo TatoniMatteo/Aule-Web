@@ -42,7 +42,7 @@
 
 <h1>Esporta Dati</h1> 
 <div class="export-form">
-    <form method="post">
+    <form method="post" action="homepage?page=home&action=export">
         <div>
             <label class="text-left" for="format">Formato*</label>
             <select name="format" id="format">
@@ -54,7 +54,7 @@
         <div>
             <label class="text-left" for="course">Corso</label>
             <select name="corso" id="course">
-                <option value="">Tutti</option>
+                <option value="-1">Tutti</option>
                 <#list corsi as corso>
                 <option value="${corso.key}">${corso.nome}</option>
                 </#list>

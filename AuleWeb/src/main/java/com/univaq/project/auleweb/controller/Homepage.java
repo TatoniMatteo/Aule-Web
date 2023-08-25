@@ -8,6 +8,7 @@ import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.result.StreamResult;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
+import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,7 +25,12 @@ public class Homepage extends AuleWebController {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
 
         String page = request.getParameter("page");
+        String action = request.getParameter("action");
         dataLayer = (DataLayerImpl) request.getAttribute("datalayer");
+
+        if (action != null && "export".equals(action)) {
+            action_export(request, response);
+        }
         if (page != null) {
             switch (page) {
                 case "home" ->
@@ -107,20 +113,7 @@ public class Homepage extends AuleWebController {
 
     private void action_home(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String tipo = request.getParameter("format");
-            String corsoValue = request.getParameter("corso");
-            Integer corso = corsoValue != null && !corsoValue.isBlank() ? Integer.valueOf(request.getParameter("corso")) : null;
-            String dataInizio = request.getParameter("startDate");
-            String dataFine = request.getParameter("endDate");
-            String outputName = request.getParameter("outputName");
-
-            if (tipo != null && dataInizio != null && dataFine != null) {
-                StreamResult downloader = new StreamResult(getServletContext());
-                downloader.setResource(createFile(tipo, corso, dataInizio, dataFine, outputName));
-                downloader.activate(request, response);
-            }
-
-            String[] styles = {"home", "simpleTable"};
+            String[] styles = {"importExport", "simpleTable"};
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
@@ -130,15 +123,31 @@ public class Homepage extends AuleWebController {
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("home.ftl.html", data, response);
 
-        } catch (IOException | DataException | TemplateManagerException ex) {
+        } catch (DataException | TemplateManagerException ex) {
             handleError(ex, request, response);
         }
     }
 
-    private File createFile(String tipo, Integer corso, String dataInizio, String dataFine, String outputName) throws DataException {
+    private void action_export(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String tipo = request.getParameter("format");
+            Integer corsoId = SecurityHelpers.checkNumeric(request.getParameter("corso"));
+            String dataInizio = request.getParameter("startDate");
+            String dataFine = request.getParameter("endDate");
+            String outputName = request.getParameter("outputName");
+
+            StreamResult downloader = new StreamResult(getServletContext());
+            downloader.setResource(createFile(tipo, corsoId, dataInizio, dataFine, outputName));
+            downloader.activate(request, response);
+        } catch (IOException | DataException ex) {
+            handleError(ex, request, response);
+        }
+    }
+
+    private File createFile(String tipo, Integer corsoId, String dataInizio, String dataFine, String outputName) throws DataException {
         List<Evento> eventi;
-        if (corso != null) {
-            eventi = dataLayer.getEventiDAO().getEventiByCorsoAndDateRange(corso, dataInizio, dataFine);
+        if (corsoId != -1) {
+            eventi = dataLayer.getEventiDAO().getEventiByCorsoAndDateRange(corsoId, dataInizio, dataFine);
         } else {
             eventi = dataLayer.getEventiDAO().getEventiByDateRange(dataInizio, dataFine);
         }
