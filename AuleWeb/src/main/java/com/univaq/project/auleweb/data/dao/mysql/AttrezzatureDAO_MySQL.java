@@ -16,7 +16,7 @@ import java.util.List;
 
 public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
 
-    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByNameOrCode, getAttrezzaturaById;
+    private PreparedStatement getAttrezzaturaByAulaId, getAttrezzaturaDisponibile, getAttrezzatureNumber, getAttrezzatureDisponibiliNumber, getAllAttrezzature, getAttrezzatureByNameOrCode, getAttrezzaturaById, getAttrezzaturaByCode;
     private PreparedStatement deleteAttrezzaturaById;
     private PreparedStatement setAula, removeAulaFromAttrezzature;
 
@@ -36,6 +36,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzatureNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura");
             getAttrezzatureDisponibiliNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_attrezzature FROM Attrezzatura WHERE id_aula IS NULL");
             getAllAttrezzature = this.connection.prepareStatement("SELECT * FROM attrezzatura ORDER BY nome");
+            getAttrezzaturaByCode = connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome=?");
             deleteAttrezzaturaById = this.connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ? AND versione=?");
             getAttrezzatureByNameOrCode = this.connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
             getAttrezzaturaById = this.connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
@@ -57,6 +58,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             getAttrezzatureNumber.close();
             getAttrezzatureDisponibiliNumber.close();
             getAllAttrezzature.close();
+            getAttrezzaturaByCode.close();
             deleteAttrezzaturaById.close();
             getAllAttrezzature.close();
             getAttrezzaturaById.close();
@@ -161,6 +163,23 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             throw new DataException("Impossibile caricare le Attrezzature", ex);
         }
         return attrezzature;
+    }
+
+    public Attrezzatura getAttrezzaturaByCode(String codice) throws DataException {
+        Attrezzatura attrezzatura = null;
+        try {
+            getAttrezzaturaByCode.setString(1, codice);
+
+            try ( ResultSet rs = getAttrezzatureByNameOrCode.executeQuery()) {
+                if (rs.next()) {
+                    attrezzatura = importAttrezzatura(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Impossibile caricare l'attrezzatura con codeice : " + codice, ex);
+        }
+
+        return attrezzatura;
     }
 
     @Override

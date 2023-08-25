@@ -18,6 +18,8 @@ public interface AttrezzatureDAO {
 
     List<Attrezzatura> getAllAttrezzature() throws DataException;
 
+    Attrezzatura getAttrezzaturaByCode(String codice) throws DataException;
+
     List<Attrezzatura> getAttrezzatureByNameOrCode(String filter) throws DataException;
 
     Attrezzatura getAttrezzaturaById(int id) throws DataException;
