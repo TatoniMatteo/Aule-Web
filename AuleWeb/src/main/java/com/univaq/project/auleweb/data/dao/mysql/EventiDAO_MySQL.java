@@ -28,7 +28,8 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventiNumber,
             getActiveEventiNumber,
             removeOldAulaEventi,
-            insertEvento;
+            insertEvento,
+            updateEvento;
 
     public EventiDAO_MySQL(DataLayer d) {
         super(d);
@@ -104,6 +105,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             removeOldAulaEventi = connection.prepareStatement("DELETE FROM evento WHERE id_aula = ? AND data < CURDATE();");
 
             insertEvento = connection.prepareStatement("INSERT INTO evento (id_ricorrenza,nome,descrizione,data,ora_inizio,ora_fine,id_corso,id_responsabile,id_aula,tipo_evento) VALUES(?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            updateEvento = connection.prepareStatement("UPDATE evento SET id_ricorrenza=?,nome=?,descrizione=?,data=?,ora_inizio=?,ora_fine=?,id_corso=?,id_responsabile=?,id_aula=?,tipo_evento=?,versione=? WHERE ID=? and versione=?");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -125,6 +127,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getActiveEventiNumber.close();
             removeOldAulaEventi.close();
             insertEvento.close();
+            updateEvento.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -376,7 +379,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             insertEvento.setInt(7, evento.getCorso().getKey());
             insertEvento.setInt(8, evento.getResponsabile().getKey());
             insertEvento.setInt(9, evento.getAula().getKey());
-           insertEvento.setString(10, evento.getTipoEvento().name());
+            insertEvento.setString(10, evento.getTipoEvento().name());
             insertEvento.executeUpdate();
 
             // Otteniamo l'id dell'evento appena inserito
@@ -392,6 +395,59 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
         } catch (SQLException ex) {
 
             throw new DataException("Errore durante l'inserimento dell'evento", ex);
+        }
+    }
+
+    @Override
+    public Integer updateEvento(Evento evento) throws DataException {
+        try {
+
+            // Blocchiamo l'autocommit
+            connection.setAutoCommit(false);
+
+            // Aggiorniamo l'aula
+            updateEvento.setInt(1, evento.getId_ricorrenza());
+            updateEvento.setString(2, evento.getNome());
+            updateEvento.setString(3, evento.getDescrizione());
+            updateEvento.setString(4, evento.getData().toString());
+            updateEvento.setTime(5, evento.getOraInizio());
+            updateEvento.setTime(6, evento.getOraFine());
+            updateEvento.setInt(7, evento.getCorso().getKey());
+            updateEvento.setInt(8, evento.getResponsabile().getKey());
+            updateEvento.setInt(9, evento.getAula().getKey());
+            updateEvento.setString(10, evento.getTipoEvento().name());
+            updateEvento.setLong(10, evento.getVersion() + 1);
+            updateEvento.setInt(11, evento.getKey());
+            updateEvento.setLong(12, evento.getVersion());
+            updateEvento.executeUpdate();
+
+            // Eseguiamo il commit
+            connection.commit();
+
+            // Restituiamo l'id dell'aula
+            return evento.getKey();
+
+        } catch (SQLException ex) {
+           try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                throw new DataException("Errore durante il rollback della transazione (eventi)", ex1);
+            }
+            throw new DataException("Errore durante l'aggiornamento dell'evento con id " + evento.getKey(), ex);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new DataException("Errore durante il ripristino dell'autocommit (eventi)", ex);
+            }
+        }
+    }
+
+    public Integer storeEvento(Evento evento) throws DataException {
+        if (evento.getKey() != null) {
+            return updateEvento(evento);
+        } else {
+            return insertEvento(evento);
         }
     }
 }
