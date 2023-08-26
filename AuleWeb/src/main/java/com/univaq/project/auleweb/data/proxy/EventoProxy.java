@@ -74,8 +74,8 @@ public class EventoProxy extends EventoImpl implements DataItemProxy {
     }
 
     @Override
-    public void setId_ricorrenza(Integer id_ricorrenza) {
-        super.setId_ricorrenza(id_ricorrenza);
+    public void setIdRicorrenza(Integer id_ricorrenza) {
+        super.setIdRicorrenza(id_ricorrenza);
         this.modified = true;
     }
 

@@ -7,9 +7,9 @@ import java.util.Date;
 
 public interface Evento extends DataItem<Integer> {
 
-    Integer getId_ricorrenza();
+    Integer getIdRicorrenza();
 
-    void setId_ricorrenza(Integer id_ricorrenza);
+    void setIdRicorrenza(Integer id_ricorrenza);
 
     String getNome();
 

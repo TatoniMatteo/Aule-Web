@@ -15,6 +15,7 @@
 <form class="simple-form">
     <input type="hidden" id="key" value="<#if aula?has_content>${aula.key}</#if>">
     <input type="hidden" id="version" value="<#if aula?has_content>${aula.version}</#if>">
+
     <label for="nome">Nome Aula*:</label>
     <input type="text" id="nome" name="nome" required value="<#if aula?has_content>${aula.nome}</#if>"><br>
 
@@ -42,7 +43,7 @@
     <label for="responsabileInput">Responsabile*:</label>
     <div class="custom-element">
         <input type="text" id="responsabileInput" placeholder="Cerca un responsabile..." value="<#if aula?has_content>${aula.responsabile.nome} ${aula.responsabile.cognome}</#if>">
-        <a class="bg-blue" href="#"><i class="fa-solid fa-plus"></i></a>
+        <a class="bg-blue" href="responsabiliform"><i class="fa-solid fa-plus"></i></a>
     </div>
     <div class="options responsabili">
         <#list responsabili as responsabile>
@@ -50,16 +51,18 @@
         </#list>
     </div>
     <input type="hidden" id="responsabile" name="responsabile" value="<#if aula?has_content>${aula.responsabile.key}</#if>">
+
     <label for="attrezzaturainput">Attrezzatura:</label>
     <div class="custom-element">
         <input type="text" id="attrezzaturaInput" placeholder="Cerca un attrezzatura...">
-        <a class="bg-blue" href="#"><i class="fa-solid fa-plus"></i></a>
+        <a class="bg-blue" href="attrezzatureform"><i class="fa-solid fa-plus"></i></a>
     </div>
     <div class="options attrezzature">
         <#list attrezzatureDisponibili as attrezzatura>
         <div class="option attrezzatura" data-value="${attrezzatura.key}">${attrezzatura.nome} (${attrezzatura.numeroSerie})</div>
         </#list>
     </div>
+
     <div class="simple-table-container">
         <table id="attrezzaturaTable">
             <thead class="bg-gray">

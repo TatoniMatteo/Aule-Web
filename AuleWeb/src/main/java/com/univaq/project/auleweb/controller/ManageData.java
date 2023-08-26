@@ -4,15 +4,18 @@ import com.univaq.project.auleweb.data.exportData.CSVExporter;
 import com.univaq.project.auleweb.data.implementation.AulaImpl;
 import com.univaq.project.auleweb.data.implementation.CorsoImpl;
 import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
+import com.univaq.project.auleweb.data.implementation.EventoImpl;
 import com.univaq.project.auleweb.data.implementation.GruppoImpl;
 import com.univaq.project.auleweb.data.implementation.ResponsabileImpl;
 import com.univaq.project.auleweb.data.implementation.enumType.Laurea;
+import com.univaq.project.auleweb.data.implementation.enumType.Tipo;
 import com.univaq.project.auleweb.data.importData.CSVImporter;
 import com.univaq.project.auleweb.data.model.Amministratore;
 import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.auleweb.data.model.Categoria;
 import com.univaq.project.auleweb.data.model.Corso;
+import com.univaq.project.auleweb.data.model.Evento;
 import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataException;
@@ -26,6 +29,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -93,6 +100,8 @@ public class ManageData extends AuleWebController {
                             responsabiliInsertOrUpdate(request, response);
                         case 5 ->
                             gruppiInsertOrUpdate(request, response);
+                        case 6 ->
+                            eventiInsertOrUpdate(request, response)
                         default ->
                             handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
                     }
@@ -110,6 +119,8 @@ public class ManageData extends AuleWebController {
                             responsabiliRemove(request, response);
                         case 5 ->
                             gruppiRemove(request, response);
+                        case 6 ->
+                            eventiRemove(request, response);
                         default ->
                             handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
                     }
@@ -451,6 +462,75 @@ public class ManageData extends AuleWebController {
         } catch (DataException | IOException | ServletException ex) {
             errorPage("amministrazione?page=dati", "Si è verificato un errore durante l'importazione: " + ex.getMessage(), request, response);
         }
+    }
+
+    private void eventiInsertOrUpdate(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
+            int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
+            int idRicorrenza = SecurityHelpers.checkNumeric(request.getParameter("idRicorrenza"));
+
+            String nome = request.getParameter("nome");
+            String descrizione = request.getParameter("descrizione");
+            String giorno = request.getParameter("giorno");
+            String oraInizio = request.getParameter("oraInizio");
+            String oraFine = request.getParameter("oraFine");
+
+            int idAula = SecurityHelpers.checkNumeric(request.getParameter("aula"));
+            Integer corsoId = Integer.valueOf(request.getParameter("corso"));
+            Integer responsabileId = Integer.valueOf(request.getParameter("responsabile"));
+            String tipoString = request.getParameter("tipo");
+
+            Boolean tutti = Boolean.getBoolean(request.getParameter("tutti"));
+
+            Evento evento;
+            Tipo tipo = null;
+            DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
+            DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
+            for (Tipo t : Tipo.values()) {
+                if (t.toString().equals(tipoString)) {
+                    tipo = t;
+                    break;
+                }
+            }
+
+            if (tipo == null) {
+                throw new DataException("Tipo di evento non valido");
+            }
+
+            if (id >= 0) {
+                evento = dataLayer.getEventiDAO().getEventoById(id);
+            } else {
+                evento = new EventoImpl();
+            }
+
+            evento.setVersion(versione);
+            evento.setIdRicorrenza(idRicorrenza);
+            evento.setNome(nome);
+            evento.setDescrizione(descrizione);
+            evento.setData(dateFormat.parse(giorno));
+            evento.setOraInizio(new Time(timeFormat.parse(oraInizio).getTime()));
+            evento.setOraFine(new Time(timeFormat.parse(oraFine).getTime()));
+            evento.setAula(dataLayer.getAuleDAO().getAulaById(idAula));
+            evento.setTipoEvento(tipo);
+            if (tipo == Tipo.LEZIONE) {
+                evento.setCorso(dataLayer.getCorsiDAO().getCorsoById(corsoId));
+            } else {
+                evento.setCorso(null);
+            }
+            evento.setResponsabile(dataLayer.getResponsabiliDAO().getResponsabileById(responsabileId));
+
+            dataLayer.getEventiDAO().storeEvento(evento, tutti, );
+
+            successPage("amministrazione?page=corsi", "Operazione completata con successo", request, response);
+        } catch (ParseException | DataException ex) {
+            errorPage("amministrazione?page=corsi", "Si è verificato un errore: " + ex.getMessage(), request, response);
+        }
+    }
+
+    private void eventiRemove(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

@@ -143,19 +143,24 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             e.setKey(rs.getInt("ID"));
             e.setNome(rs.getString("nome"));
             e.setDescrizione(rs.getString("descrizione"));
-            e.setId_ricorrenza(rs.getInt("id_ricorrenza"));
+            e.setIdRicorrenza(rs.getInt("id_ricorrenza"));
             e.setData(rs.getDate("data"));
             e.setOraInizio(rs.getTime("ora_inizio"));
             e.setOraFine(rs.getTime("ora_fine"));
             e.setResponsabileId(rs.getInt("id_responsabile"));
             e.setCorsoId(rs.getInt("id_corso"));
             e.setAulaId(rs.getInt("id_aula"));
+            Tipo selectedTipo = null;
             for (Tipo t : Tipo.values()) {
                 if (t.toString().equals(rs.getString("tipo_evento"))) {
-                    e.setTipoEvento(t);
+                    selectedTipo = t;
                     break;
                 }
             }
+            if (selectedTipo == null) {
+                selectedTipo = Tipo.ALTRO;
+            }
+            e.setTipoEvento(selectedTipo);
             e.setVersion(rs.getInt("versione"));
         } catch (SQLException ex) {
             throw new DataException("Errore nel DataLayer", ex);
@@ -367,7 +372,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
         try {
 
             //Creiamo il nuovo evento
-            insertEvento.setInt(1, evento.getId_ricorrenza());
+            insertEvento.setInt(1, evento.getIdRicorrenza());
             insertEvento.setString(2, evento.getNome());
             insertEvento.setString(3, evento.getDescrizione());
             insertEvento.setString(4, evento.getData().toString());
@@ -376,7 +381,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             insertEvento.setInt(7, evento.getCorso().getKey());
             insertEvento.setInt(8, evento.getResponsabile().getKey());
             insertEvento.setInt(9, evento.getAula().getKey());
-           insertEvento.setString(10, evento.getTipoEvento().name());
+            insertEvento.setString(10, evento.getTipoEvento().name());
             insertEvento.executeUpdate();
 
             // Otteniamo l'id dell'evento appena inserito

@@ -1,0 +1,116 @@
+<h4 class="text-left back">    
+    <a href="amministrazione?page=eventi<#if evento?has_content>&day=${evento.data?string("yyyy-MM-dd")}</#if>">
+        <i class="fas fa-arrow-left"></i>
+        Torna indietro
+    </a>
+</h4>
+
+<h1>
+    <#if evento?has_content>
+    Modifica Evento
+    <#else>
+    Crea Evento
+    </#if>
+</h1>
+
+<form class="simple-form">
+    <input type="hidden" id="key" value="<#if evento?has_content>${evento.key}<#else>-1</#if>">
+    <input type="hidden" id="version" value="<#if evento?has_content>${evento.version}<#else>0</#if>">
+    <input type="hidden" id="ricorrenza" value="<#if evento?has_content>${evento.idRicorrenza}<#else>-1</#if>">
+
+    <label for="nome">Nome Evento*:</label>
+    <input type="text" id="nome" name="nome" required value="<#if evento?has_content>${evento.nome}</#if>"><br>
+
+    <label for="luogo">Descrizione*:</label>
+    <textarea type="text" id="descrizione" name="descrizione" rows="10" required><#if evento?has_content>${evento.descrizione}</#if></textarea><br>
+
+    <label for="date">Giorno*:</label>
+    <input type="date" id="giorno" name="giorno" required value="<#if evento?has_content>${evento.data?string("yyyy-MM-dd")}</#if>"><br>
+
+    <label for="inizio">Ora inizio*:</label>
+    <input type="time" id="inizio" name="inizio" required value="<#if evento?has_content>${evento.oraInizio}</#if>"><br>
+
+    <label for="fine">Ora fine*:</label>
+    <input type="time" id="fine" name="fine" required value="<#if evento?has_content>${evento.oraFine}</#if>"><br>
+
+
+    <label for="aula">Aula*:</label>
+    <select id="aula" name="aula">
+        <option value="" disabled <#if !evento?has_content>selected</#if>>-- Seleziona un'aula --</option>
+        <#list aule as aula>
+        <option value="${aula.key}" <#if evento?has_content && evento.aula.key == aula.key>selected</#if>>${aula.nome}</option>
+        </#list>
+    </select><br>
+
+
+
+    <label for="tipo">Tipo Evento*:</label>
+    <select id="tipo" name="tipo" required>
+        <option value="" disabled <#if !evento?has_content>selected</#if>>-- Seleziona un'opzione --</option>
+        <#list tipi as tipo>
+        <option value="${tipo}" <#if evento?has_content && evento.tipoEvento == tipo>selected</#if>>${tipo}</option>
+        </#list>
+    </select><br>
+
+    <div id="selectCorso">
+        <label for="corso">Corso*:</label>
+        <select id="corso" name="corso" required>
+            <option value="" disabled <#if !evento?has_content || !evento.corso?has_content>selected</#if>>-- Seleziona un'corso se opportuno --</option>
+            <#list corsi as corso>
+            <option value="${corso.key}" <#if evento?has_content && evento.corso?has_content && evento.corso.key == corso.key>selected</#if>>${corso.nome}</option>
+            </#list>
+        </select><br>
+    </div>
+
+    <label for="responsabileInput">Responsabile*:</label>
+    <div class="custom-element">
+        <input type="text" id="responsabileInput" placeholder="Cerca un responsabile..." value="<#if evento?has_content>${evento.responsabile.nome} ${evento.responsabile.cognome}</#if>">
+        <a class="bg-blue" href="responsabiliform"><i class="fa-solid fa-plus"></i></a>
+    </div>
+    <div class="options responsabili">
+        <#list responsabili as responsabile>
+        <div class="option responsabile" data-value="${responsabile.key}">${responsabile.nome} ${responsabile.cognome}</div>
+        </#list>
+    </div>
+    <input type="hidden" id="responsabile" name="responsabile" value="<#if evento?has_content>${evento.responsabile.key}</#if>">
+
+    <#if !evento?has_content>
+    <div id="ricorrenzaContainer">
+        <div id="ricorrenzaTipoContainer">
+            <label for="ricorrenza">Ripeti*:</label>
+            <select id="tipoRicorrenza" name="tipoRicorrenza" required>
+                <option value="" disabled <#if !evento?has_content>selected</#if>>-- Seleziona un'opzione --</option>
+                <option value="0">Mai</option>
+                <option value="1">Ogni giorno</option>
+                <option value="2">Ogni settimana</option>
+                <option value="3">Ogni mese</option>
+            </select><br>
+        </div>
+        <div class="space" id="spacer"></div>
+        <div id="ricorrenzaFineContainer">
+            <label for="fineRicorrenza">Fino al*:</label>
+            <input type="date" id="fineRicorrenza" name="fineRicorrenza" required><br>
+        </div>
+    </div>
+    </#if>
+
+    <#if evento?has_content && evento.idRicorrenza?has_content && evento.idRicorrenza gt 0>
+    <div class="row">
+        <div class="android-switch">
+            <input type="checkbox" id="androidSwitch" name="tutti" class="switch-input">
+            <label for="androidSwitch" class="switch-label">
+                <span class="switch-button"></span>
+                <span class="switch-text">Si</span>
+            </label>
+        </div>
+        <div class="space"></div>
+        <label for="androidSwitch">Applica modifiche a tutti gli eventi della serie</label>
+    </div>
+    </#if>
+
+    <p id="error-message" class="error-message"></p>
+    <div>
+        <button class="bg-blue" type="submit" formaction="managedata?type=1&object=6">Salva</button>
+        <button class="bg-blue" type="submit" formaction="managedata?type=1&object=6">Elimina</button>
+    </div>
+</form>

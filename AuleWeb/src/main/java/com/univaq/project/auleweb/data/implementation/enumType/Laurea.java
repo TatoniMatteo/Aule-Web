@@ -8,7 +8,7 @@ public enum Laurea {
     MEDICINA("Medicina"),
     SCIENZE_DELLA_FORMAZIONE("Scienze della formazione");
 
-    private String name;
+    private final String name;
 
     Laurea(String name) {
         this.name = name;

@@ -1,1 +1,51 @@
 <h1>Eventi</h1>
+<div class="btn_container">
+    <a href="eventiform" class="bg-blue text-right">
+        <i class="fa-solid fa-calendar-plus"></i> 
+        Aggiungi Evento
+    </a>
+</div>
+<h2>Eventi in programma per il giorno ${day}</h2>
+<form class="date-form" method="post">
+    <input type="date" id="dayPicker" name="day" value="${day}">
+    <button type="submit" class="bg-blue">Cambia Giorno</button>
+</form>
+<div class="simple-table-container">
+    <table>
+        <thead class="bg-gray">
+            <tr>
+                <th class="text-left">Nome Evento</th>
+                <th class="large-table text-left">Tipo Evento</th>
+                <th class="large-table">Aula</th>
+                <th>Giorno</th>
+                <th class="large-table">Inizio</th>
+                <th class="large-table">Fine</th>
+                <th class="small-table">Orario</th>
+                <th></th>
+            </tr>
+        </thead>
+        <#if eventi?has_content>
+        <tbody>
+            <#list eventi as evento>
+
+            <#assign start = evento.oraInizio?string("HH:mm")>
+            <#assign end = evento.oraFine?string("HH:mm")>
+
+            <tr>
+                <td class="text-left">${evento.nome}</td>
+                <td class="large-table text-left">${evento.tipoEvento?capitalize}</td>
+                <td class="large-table">${evento.aula.nome}</td>
+                <td>${evento.data}</td>
+                <td class="large-table">${start}</td>
+                <td class="large-table">${end}</td>
+                <td class="small-table">${start} - ${end}</td>
+                <td><a href="eventiform?id=${evento.key}" class="action-button bg-blue">Modifica</a></td>
+            </tr>
+            </#list>
+        </tbody>
+        </#if>
+    </table>
+    <#if !eventi?has_content>
+    <h4>Non ci sono eventi per questo giorno!</h4>
+    </#if>
+</div>

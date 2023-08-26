@@ -12,7 +12,7 @@ public enum AttrezzaturaTipo {
     LAVAGNA("Lavagna"),
     WIFI("Wi-Fi");
 
-    private String name;
+    private final String name;
 
     AttrezzaturaTipo(String name) {
         this.name = name;

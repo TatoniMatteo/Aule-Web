@@ -18,7 +18,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,18 +43,6 @@ public class Amministrazione extends AuleWebController {
             amministratore = getLoggedAdminstrator(dataLayer, request);
             if (amministratore == null) {
                 response.sendRedirect("homepage");
-            }
-
-            String action = request.getParameter("action");
-            if (action != null) {
-                switch (action) {
-                    case "export" ->
-                        action_export(request, response);
-                    case "import" ->
-                        action_import(request, response);
-                    default ->
-                        throw new DataException("Operazione sconosciuta: " + action);
-                }
             }
 
             String page = request.getParameter("page");
@@ -181,11 +171,21 @@ public class Amministrazione extends AuleWebController {
 
     private void action_eventi(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String[] styles = {};
+            String[] styles = {"simpleTable", "administration/eventi", "administration/administrationButtons"};
+
+            String day = request.getParameter("day");
+
+            if (day == null || day.isEmpty()) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                day = dateFormat.format(new Date());
+            }
+
             Map data = new HashMap<>();
             data.put("styles", styles);
             data.put("amministratore", getLoggedAdminstrator(dataLayer, request));
             data.put("outline_tpl", "base/outline_administration.ftl.html");
+            data.put("day", day);
+            data.put("eventi", dataLayer.getEventiDAO().getEventiByDateRange(day, day));
             TemplateResult templateResult = new TemplateResult(getServletContext());
             templateResult.activate("administration/eventi.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
@@ -253,66 +253,6 @@ public class Amministrazione extends AuleWebController {
             templateResult.activate("administration/dati.ftl.html", data, response);
         } catch (DataException | TemplateManagerException ex) {
             handleError(ex, request, response);
-        }
-    }
-
-    private boolean action_export(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Integer gruppoId = SecurityHelpers.checkNumeric(request.getParameter("gruppo"));
-            String outputName = request.getParameter("outputName");
-
-            StreamResult downloader = new StreamResult(getServletContext());
-            downloader.setResource(createFile(gruppoId, outputName));
-            downloader.activate(request, response);
-
-            return false;
-        } catch (DataException | IOException ex) {
-            handleError(ex, request, response);
-            return true;
-        }
-
-    }
-
-    private File createFile(Integer gruppoId, String outputName) throws DataException {
-        List<Aula> aule;
-        Map<Aula, List<Attrezzatura>> attrezzature = new HashMap<>();
-        Map<Aula, List<Gruppo>> gruppi = new HashMap<>();
-
-        if (gruppoId >= 0) {
-            aule = dataLayer.getAuleDAO().getAuleByGruppoID(gruppoId);
-        } else {
-            aule = dataLayer.getAuleDAO().getAllAule();
-        }
-
-        for (Aula aula : aule) {
-            List<Attrezzatura> attrezzatureList = dataLayer.getAttrezzatureDAO().getAttrezzaturaByAula(aula.getKey());
-            List<Gruppo> gruppiList = dataLayer.getGruppiDAO().getGruppiByAula(aula.getKey());
-            attrezzature.put(aula, attrezzatureList);
-            gruppi.put(aula, gruppiList);
-        }
-
-        outputName = outputName != null && !outputName.isBlank() ? (outputName.endsWith(".csv") ? outputName : outputName + ".csv") : "aule.csv";
-        return CSVExporter.exportAuleToCsv(aule, attrezzature, gruppi, getServletContext().getRealPath(outputName));
-
-    }
-
-    private boolean action_import(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Path tempFilePath = Files.createTempFile("import_aule", ".csv");
-            try ( InputStream input = request.getPart("inputfile").getInputStream();  OutputStream output = Files.newOutputStream(tempFilePath)) {
-                byte[] buffer = new byte[1024];
-                int read;
-                while ((read = input.read(buffer)) > 0) {
-                    output.write(buffer, 0, read);
-                }
-                output.close();
-            }
-            CSVImporter.importAuleFromCSV(tempFilePath.toFile(), dataLayer);
-            Files.deleteIfExists(tempFilePath);
-            return false;
-        } catch (DataException | IOException | ServletException ex) {
-            handleError(ex, request, response);
-            return true;
         }
     }
 

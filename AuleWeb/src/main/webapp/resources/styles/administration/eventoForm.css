@@ -1,0 +1,26 @@
+.row{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-content: center;
+}
+#ricorrenzaContainer{
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+#ricorrenzaTipoContainer{
+    flex:5;
+}
+
+#ricorrenzaFineContainer{
+    flex:5;
+}
+
+.space{
+    min-width: 20px;
+}
+
+#spacer{
+    flex:1;
+}

@@ -25,7 +25,7 @@ public class CSVExporter {
         try ( CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(filePath), csvFormat)) {
             for (Evento evento : eventi) {
                 csvPrinter.printRecord(
-                        evento.getId_ricorrenza(),
+                        evento.getIdRicorrenza(),
                         evento.getNome(),
                         evento.getDescrizione(),
                         evento.getData(),

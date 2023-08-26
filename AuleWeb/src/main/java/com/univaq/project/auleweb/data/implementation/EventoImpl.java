@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class EventoImpl extends DataItemImpl<Integer> implements Evento {
 
-    private Integer id_ricorrenza;
+    private Integer idRicorrenza;
     private String nome;
     private String descrizione;
     private Date data;
@@ -23,7 +23,7 @@ public class EventoImpl extends DataItemImpl<Integer> implements Evento {
     private Tipo tipoEvento;
 
     public EventoImpl() {
-        this.id_ricorrenza = null;
+        this.idRicorrenza = null;
         this.nome = "";
         this.descrizione = "";
         this.data = null;
@@ -38,7 +38,7 @@ public class EventoImpl extends DataItemImpl<Integer> implements Evento {
 
     public EventoImpl(Integer id_ricorrenza, String nome, String descrizione, Date data, Time ora_inizio, Time ora_fine, Corso corso, Responsabile responsabile, Aula aula, Tipo tipo) {
         super();
-        this.id_ricorrenza = id_ricorrenza;
+        this.idRicorrenza = id_ricorrenza;
         this.nome = nome;
         this.descrizione = descrizione;
         this.data = data;
@@ -50,12 +50,12 @@ public class EventoImpl extends DataItemImpl<Integer> implements Evento {
         this.tipoEvento = tipo;
     }
 
-    public Integer getId_ricorrenza() {
-        return id_ricorrenza;
+    public Integer getIdRicorrenza() {
+        return idRicorrenza;
     }
 
-    public void setId_ricorrenza(Integer id_ricorrenza) {
-        this.id_ricorrenza = id_ricorrenza;
+    public void setIdRicorrenza(Integer idRicorrenza) {
+        this.idRicorrenza = idRicorrenza;
     }
 
     public String getNome() {
