@@ -30,4 +30,6 @@ public interface EventiDAO {
 
     Integer insertEvento(Evento evento) throws DataException;
 
+    Integer updateEvento(Evento evento) throws DataException;
+
 }
