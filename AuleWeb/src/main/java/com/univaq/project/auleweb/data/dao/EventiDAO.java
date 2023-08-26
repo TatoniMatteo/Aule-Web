@@ -28,8 +28,10 @@ public interface EventiDAO {
 
     void removeOldAulaEventi(int aulaId) throws DataException;
 
-    Integer insertEvento(Evento evento) throws DataException;
+    Integer insertEvento(Evento evento, int tipoRicorrenza, String fineRicorrenza) throws DataException;
 
-    Integer updateEvento(Evento evento) throws DataException;
+    Integer updateEvento(Evento evento, boolean tutti) throws DataException;
+
+    Integer storeEvento(Evento evento, Boolean tutti, int tipoRicorrenza, String fineRicorrenza) throws DataException;
 
 }

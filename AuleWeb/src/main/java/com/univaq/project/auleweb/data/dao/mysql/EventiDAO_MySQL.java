@@ -7,10 +7,12 @@ import com.univaq.project.auleweb.data.proxy.EventoProxy;
 import com.univaq.project.framework.data.DAO;
 import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.data.DataLayer;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,6 +32,8 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             removeOldAulaEventi,
             insertEvento,
             updateEvento;
+
+    CallableStatement insertEventi;
 
     public EventiDAO_MySQL(DataLayer d) {
         super(d);
@@ -107,6 +111,8 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             insertEvento = connection.prepareStatement("INSERT INTO evento (id_ricorrenza,nome,descrizione,data,ora_inizio,ora_fine,id_corso,id_responsabile,id_aula,tipo_evento) VALUES(?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             updateEvento = connection.prepareStatement("UPDATE evento SET id_ricorrenza=?,nome=?,descrizione=?,data=?,ora_inizio=?,ora_fine=?,id_corso=?,id_responsabile=?,id_aula=?,tipo_evento=?,versione=? WHERE ID=? and versione=?");
 
+            insertEventi = connection.prepareCall("{CALL inserisci_eventi(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
         }
@@ -128,6 +134,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             removeOldAulaEventi.close();
             insertEvento.close();
             updateEvento.close();
+            insertEventi.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -370,48 +377,39 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
     }
 
     @Override
-    public Integer insertEvento(Evento evento) throws DataException {
-        int eventoId = -1;
+    public Integer insertEvento(Evento evento, int tipoRicorrenza, String fineRicorrenza) throws DataException {
+
         try {
 
-            //Creiamo il nuovo evento
-            insertEvento.setInt(1, evento.getIdRicorrenza());
-            insertEvento.setString(2, evento.getNome());
-            insertEvento.setString(3, evento.getDescrizione());
-            insertEvento.setString(4, evento.getData().toString());
-            insertEvento.setTime(5, evento.getOraInizio());
-            insertEvento.setTime(6, evento.getOraFine());
-            insertEvento.setInt(7, evento.getCorso().getKey());
-            insertEvento.setInt(8, evento.getResponsabile().getKey());
-            insertEvento.setInt(9, evento.getAula().getKey());
-            insertEvento.setString(10, evento.getTipoEvento().name());
-            insertEvento.executeUpdate();
+            insertEventi.setString(1, evento.getNome());
+            insertEventi.setString(2, evento.getDescrizione());
+            insertEventi.setString(3, evento.getData().toString());
+            insertEventi.setTime(4, evento.getOraInizio());
+            insertEventi.setTime(5, evento.getOraFine());
+            insertEventi.setInt(6, evento.getCorso().getKey());
+            insertEventi.setInt(7, evento.getResponsabile().getKey());
+            insertEventi.setInt(8, evento.getAula().getKey());
+            insertEventi.setString(9, evento.getTipoEvento().toString());
+            insertEventi.setInt(10, tipoRicorrenza);
+            insertEventi.setString(11, fineRicorrenza);
+            insertEventi.registerOutParameter(12, Types.INTEGER);
 
-            // Otteniamo l'id dell'evento appena inserito
-            try ( ResultSet generatedKeys = insertEvento.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    eventoId = generatedKeys.getInt(1);
-                }
-            }
-
-            // Restituiamo l'id del nuovo evento
-            return eventoId;
-
-        } catch (SQLException ex) {
-
-            throw new DataException("Errore durante l'inserimento dell'evento", ex);
+            insertEventi.execute();
+            return insertEventi.getInt(12);
+        } catch (SQLException e) {
+            throw new DataException("Errore durante l'inserimento dell'evento", e);
         }
     }
 
     @Override
-    public Integer updateEvento(Evento evento) throws DataException {
+    public Integer updateEvento(Evento evento, boolean tutti) throws DataException {
         try {
 
             // Blocchiamo l'autocommit
             connection.setAutoCommit(false);
 
             // Aggiorniamo l'aula
-            updateEvento.setInt(1, evento.getId_ricorrenza());
+            updateEvento.setInt(1, evento.getIdRicorrenza());
             updateEvento.setString(2, evento.getNome());
             updateEvento.setString(3, evento.getDescrizione());
             updateEvento.setString(4, evento.getData().toString());
@@ -433,7 +431,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             return evento.getKey();
 
         } catch (SQLException ex) {
-           try {
+            try {
                 connection.rollback();
             } catch (SQLException ex1) {
                 throw new DataException("Errore durante il rollback della transazione (eventi)", ex1);
@@ -448,11 +446,12 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
         }
     }
 
-    public Integer storeEvento(Evento evento) throws DataException {
+    @Override
+    public Integer storeEvento(Evento evento, Boolean tutti, int tipoRicorrenza, String fineRicorrenza) throws DataException {
         if (evento.getKey() != null) {
-            return updateEvento(evento);
+            return updateEvento(evento, tutti);
         } else {
-            return insertEvento(evento);
+            return insertEvento(evento, tipoRicorrenza, fineRicorrenza);
         }
     }
 }

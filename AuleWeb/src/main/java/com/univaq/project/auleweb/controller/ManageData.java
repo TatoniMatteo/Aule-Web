@@ -101,7 +101,7 @@ public class ManageData extends AuleWebController {
                         case 5 ->
                             gruppiInsertOrUpdate(request, response);
                         case 6 ->
-                            eventiInsertOrUpdate(request, response)
+                            eventiInsertOrUpdate(request, response);
                         default ->
                             handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
                     }
@@ -468,7 +468,9 @@ public class ManageData extends AuleWebController {
         try {
             int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
             int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
-            int idRicorrenza = SecurityHelpers.checkNumeric(request.getParameter("idRicorrenza"));
+            int idRicorrenza = SecurityHelpers.checkNumeric(request.getParameter("idRicorrDenza"));
+            int tipoRicorrenza = SecurityHelpers.checkNumeric(request.getParameter("tipoRicorrenza"));
+            String fineRicorrenza = request.getParameter("fineRicorrenza");
 
             String nome = request.getParameter("nome");
             String descrizione = request.getParameter("descrizione");
@@ -521,7 +523,7 @@ public class ManageData extends AuleWebController {
             }
             evento.setResponsabile(dataLayer.getResponsabiliDAO().getResponsabileById(responsabileId));
 
-            dataLayer.getEventiDAO().storeEvento(evento, tutti, );
+            dataLayer.getEventiDAO().storeEvento(evento, tutti, tipoRicorrenza, fineRicorrenza);
 
             successPage("amministrazione?page=corsi", "Operazione completata con successo", request, response);
         } catch (ParseException | DataException ex) {

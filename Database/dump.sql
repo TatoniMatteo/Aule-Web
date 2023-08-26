@@ -234,9 +234,8 @@ CREATE TABLE `evento` (
 --
 
 /*!40000 ALTER TABLE `evento` DISABLE KEYS */;
-INSERT INTO `evento` VALUES (2,NULL,'Seminario Finanza','Seminario sulla finanza aziendale','2023-08-22','14:00:00','16:00:00',NULL,2,2,0,'SEMINARIO'),(3,NULL,'Lab Elettronica','Laboratorio di elettronica','2023-08-22','10:00:00','13:00:00',3,3,3,0,'LEZIONE');
+INSERT INTO `evento` VALUES (2,NULL,'Seminario Finanza','Seminario sulla finanza aziendale','2023-08-26','14:00:00','16:00:00',NULL,2,2,0,'Seminario'),(3,NULL,'Lab Elettronica','Laboratorio di elettronica','2023-08-26','10:00:00','13:00:00',3,3,3,0,'Lezione');
 /*!40000 ALTER TABLE `evento` ENABLE KEYS */;
-ALTER DATABASE `auleweb` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -251,7 +250,7 @@ DELIMITER ;;
     DECLARE is_overlap BOOLEAN;
     DECLARE overlap_event_info TEXT;
 
-    SET is_overlap = check_event_overlap(NEW.ora_inizio, NEW.ora_fine, NEW.data, NEW.id_aula);
+    SET is_overlap = check_event_overlap(NEW.id, NEW.ora_inizio, NEW.ora_fine, NEW.data, NEW.id_aula);
 
     IF is_overlap THEN
         SIGNAL SQLSTATE '45000'
@@ -268,9 +267,9 @@ DELIMITER ;;
             SET MESSAGE_TEXT = 'L\'orario di fine deve essere arrotondato al quarto d\'ora.';
     END IF;
 
-    IF NOT (NEW.ora_inizio >= '08:00:00' AND NEW.ora_fine <= '20:00:00') THEN
+    IF NOT (NEW.ora_inizio <= NEW.ora_fine) THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Gli eventi devono essere all\'interno dell\'intervallo dalle 8:00 alle 20:00.';
+            SET MESSAGE_TEXT = 'L\'ora d\'inizio deve essere antecedente all\'ora di fine';
     END IF;
 END */;;
 DELIMITER ;
@@ -278,8 +277,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-ALTER DATABASE `auleweb` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
-ALTER DATABASE `auleweb` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -294,7 +291,7 @@ DELIMITER ;;
     DECLARE is_overlap BOOLEAN;
     DECLARE overlap_event_info TEXT;
 
-    SET is_overlap = check_event_overlap(NEW.ora_inizio, NEW.ora_fine, NEW.data, NEW.id_aula);
+    SET is_overlap = check_event_overlap(NEW.id, NEW.ora_inizio, NEW.ora_fine, NEW.data, NEW.id_aula);
 
     IF is_overlap THEN
         SIGNAL SQLSTATE '45000'
@@ -311,9 +308,9 @@ DELIMITER ;;
             SET MESSAGE_TEXT = 'L\'orario di fine deve essere arrotondato al quarto d\'ora.';
     END IF;
 
-    IF NOT (NEW.ora_inizio >= '08:00:00' AND NEW.ora_fine <= '20:00:00') THEN
+    IF NOT (NEW.ora_inizio <= NEW.ora_fine) THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Gli eventi devono essere all\'interno dell\'intervallo dalle 8:00 alle 20:00.';
+            SET MESSAGE_TEXT = 'L\'ora d\'inizio deve essere antecedente all\'ora di fine';
     END IF;
 END */;;
 DELIMITER ;
@@ -321,7 +318,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-ALTER DATABASE `auleweb` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
 
 --
 -- Table structure for table `gruppo`
@@ -384,4 +380,4 @@ INSERT INTO `responsabile` VALUES (1,'Mario','Rossi','mario.rossi@example.com',0
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-25 12:38:36
+-- Dump completed on 2023-08-26 19:44:10

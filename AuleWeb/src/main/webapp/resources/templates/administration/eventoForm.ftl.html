@@ -13,7 +13,7 @@
     </#if>
 </h1>
 
-<form class="simple-form">
+<form class="simple-form" method="post">
     <input type="hidden" id="key" value="<#if evento?has_content>${evento.key}<#else>-1</#if>">
     <input type="hidden" id="version" value="<#if evento?has_content>${evento.version}<#else>0</#if>">
     <input type="hidden" id="ricorrenza" value="<#if evento?has_content>${evento.idRicorrenza}<#else>-1</#if>">
