@@ -1,22 +1,31 @@
 package com.univaq.project.auleweb.controller;
 
+import com.univaq.project.auleweb.data.exportData.CSVExporter;
 import com.univaq.project.auleweb.data.implementation.AulaImpl;
 import com.univaq.project.auleweb.data.implementation.CorsoImpl;
 import com.univaq.project.auleweb.data.implementation.DataLayerImpl;
 import com.univaq.project.auleweb.data.implementation.GruppoImpl;
 import com.univaq.project.auleweb.data.implementation.ResponsabileImpl;
 import com.univaq.project.auleweb.data.implementation.enumType.Laurea;
+import com.univaq.project.auleweb.data.importData.CSVImporter;
 import com.univaq.project.auleweb.data.model.Amministratore;
+import com.univaq.project.auleweb.data.model.Attrezzatura;
 import com.univaq.project.auleweb.data.model.Aula;
 import com.univaq.project.auleweb.data.model.Categoria;
 import com.univaq.project.auleweb.data.model.Corso;
 import com.univaq.project.auleweb.data.model.Gruppo;
 import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataException;
+import com.univaq.project.framework.result.StreamResult;
 import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
 import com.univaq.project.framework.security.SecurityHelpers;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,6 +44,8 @@ public class ManageData extends AuleWebController {
     OPERAZIONI (type):
     - 1 = insert/update
     - 2 = remove
+    - 3 = import
+    - 4 = export
  
     ENTITÀ (object):
     - 1 = aule
@@ -103,6 +114,13 @@ public class ManageData extends AuleWebController {
                             handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
                     }
                 }
+
+                case 3 ->
+                    action_import(request, response);
+
+                case 4 ->
+                    action_export(request, response);
+
                 default ->
                     handleError("Richiesta non valida (parametri -> type: " + type + ", object: " + object + ")", request, response);
 
@@ -373,6 +391,65 @@ public class ManageData extends AuleWebController {
             successPage("amministrazione?page=responsabili", "L'attrezzatura è stata eliminata con successo", request, response);
         } catch (DataException ex) {
             errorPage("amministrazione?page=responsabili", "Si è verificato un errore: " + ex.getMessage(), request, response);
+        }
+    }
+
+    private void action_export(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Integer gruppoId = SecurityHelpers.checkNumeric(request.getParameter("gruppo"));
+            String outputName = request.getParameter("outputName");
+
+            StreamResult downloader = new StreamResult(getServletContext());
+            downloader.setResource(createFile(gruppoId, outputName));
+            downloader.activate(request, response);
+
+            successPage("amministrazione?page=aule", "L'esportazione è andata a buon fine", request, response);
+        } catch (DataException | IOException ex) {
+            errorPage("amministrazione?page=dati", "Si è verificato un errore durante l'esportazione: " + ex.getMessage(), request, response);
+        }
+
+    }
+
+    private File createFile(Integer gruppoId, String outputName) throws DataException {
+        List<Aula> aule;
+        Map<Aula, List<Attrezzatura>> attrezzature = new HashMap<>();
+        Map<Aula, List<Gruppo>> gruppi = new HashMap<>();
+
+        if (gruppoId >= 0) {
+            aule = dataLayer.getAuleDAO().getAuleByGruppoID(gruppoId);
+        } else {
+            aule = dataLayer.getAuleDAO().getAllAule();
+        }
+
+        for (Aula aula : aule) {
+            List<Attrezzatura> attrezzatureList = dataLayer.getAttrezzatureDAO().getAttrezzaturaByAula(aula.getKey());
+            List<Gruppo> gruppiList = dataLayer.getGruppiDAO().getGruppiByAula(aula.getKey());
+            attrezzature.put(aula, attrezzatureList);
+            gruppi.put(aula, gruppiList);
+        }
+
+        outputName = outputName != null && !outputName.isBlank() ? (outputName.endsWith(".csv") ? outputName : outputName + ".csv") : "aule.csv";
+        return CSVExporter.exportAuleToCsv(aule, attrezzature, gruppi, getServletContext().getRealPath(outputName));
+
+    }
+
+    private void action_import(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Path tempFilePath = Files.createTempFile("import_aule", ".csv");
+            try ( InputStream input = request.getPart("inputfile").getInputStream();  OutputStream output = Files.newOutputStream(tempFilePath)) {
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = input.read(buffer)) > 0) {
+                    output.write(buffer, 0, read);
+                }
+                output.close();
+            }
+            CSVImporter.importAuleFromCSV(tempFilePath.toFile(), dataLayer);
+            Files.deleteIfExists(tempFilePath);
+
+            successPage("amministrazione?page=aule", "L'importazione è andata a buon fine", request, response);
+        } catch (DataException | IOException | ServletException ex) {
+            errorPage("amministrazione?page=dati", "Si è verificato un errore durante l'importazione: " + ex.getMessage(), request, response);
         }
     }
 

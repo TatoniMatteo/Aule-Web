@@ -45,8 +45,8 @@ public class FailureResult {
     }
 
     public void activate(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getAttribute("exception") instanceof Exception) {
-            activate((Exception) request.getAttribute("exception"), request, response);
+        if (request.getAttribute("exception") instanceof Exception exception) {
+            activate(exception, request, response);
         } else {
             activate("Unknown error", request, response);
         }
@@ -55,7 +55,13 @@ public class FailureResult {
     public void activate(String message, HttpServletRequest request, HttpServletResponse response) {
         try {
             if (context.getInitParameter("view.error_template") != null) {
+                StringBuffer fullUrl = request.getRequestURL();
+                String queryString = request.getQueryString();
+                if (queryString != null) {
+                    fullUrl.append("?").append(queryString);
+                }
                 request.setAttribute("error", message);
+                request.setAttribute("backLink", fullUrl);
                 request.setAttribute("outline_tpl", "");
                 template.activate(context.getInitParameter("view.error_template"), request, response);
             } else {
@@ -65,7 +71,7 @@ public class FailureResult {
 
             }
 
-        } catch (Exception ex) {
+        } catch (TemplateManagerException | IOException ex) {
             message += ". In addition, the following exception was generated while trying to display the error page: " + ex.getMessage();
             try {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);

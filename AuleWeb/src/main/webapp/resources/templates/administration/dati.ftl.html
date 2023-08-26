@@ -3,7 +3,7 @@
 
 <h2>Esporta Dati Aule</h2>
 <div class="export-form">
-    <form method="post" action="amministrazione?page=dati&action=export">
+    <form method="post" action="managedata?type=4&object=1">
         <div>
             <label class="text-left" for="gruppo">Gruppo</label>
             <select name="gruppo" id="gruppo">
@@ -25,7 +25,7 @@
 
 <h2>Importa Dati Aule</h2>
 <div class="export-form">
-    <form method="post"  action="amministrazione?page=dati&action=import" enctype="multipart/form-data">
+    <form method="post"  action="managedata?type=3&object=1" enctype="multipart/form-data">
         <div> 
             <label class="text-left" for="input-file">Nome file di output</label>
             <input type="file" name="inputfile" id="input-file" accept=".csv">

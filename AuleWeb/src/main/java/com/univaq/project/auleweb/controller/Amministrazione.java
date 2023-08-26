@@ -13,7 +13,6 @@ import com.univaq.project.framework.result.TemplateManagerException;
 import com.univaq.project.framework.result.TemplateResult;
 import com.univaq.project.framework.security.SecurityHelpers;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -44,48 +43,44 @@ public class Amministrazione extends AuleWebController {
                 response.sendRedirect("homepage");
             }
 
-            boolean error = false;
-
             String action = request.getParameter("action");
             if (action != null) {
                 switch (action) {
                     case "export" ->
-                        error = action_export(request, response);
+                        action_export(request, response);
                     case "import" ->
-                        error = action_import(request, response);
+                        action_import(request, response);
                     default ->
                         throw new DataException("Operazione sconosciuta: " + action);
                 }
             }
 
-            if (!error) {
-                String page = request.getParameter("page");
-                if (page != null) {
-                    switch (page) {
-                        case "dashboard" ->
-                            action_dashboard(request, response);
-                        case "aule" ->
-                            action_aule(request, response);
-                        case "aule_filtered" ->
-                            action_aule(request, response);
-                        case "attrezzature" ->
-                            action_attrezzature(request, response);
-                        case "gruppi" ->
-                            action_gruppi(request, response);
-                        case "eventi" ->
-                            action_eventi(request, response);
-                        case "corsi" ->
-                            action_corsi(request, response);
-                        case "responsabili" ->
-                            action_responsabili(request, response);
-                        case "dati" ->
-                            action_dati(request, response);
-                        default ->
-                            action_dashboard(request, response);
-                    }
-                } else {
-                    action_dashboard(request, response);
+            String page = request.getParameter("page");
+            if (page != null) {
+                switch (page) {
+                    case "dashboard" ->
+                        action_dashboard(request, response);
+                    case "aule" ->
+                        action_aule(request, response);
+                    case "aule_filtered" ->
+                        action_aule(request, response);
+                    case "attrezzature" ->
+                        action_attrezzature(request, response);
+                    case "gruppi" ->
+                        action_gruppi(request, response);
+                    case "eventi" ->
+                        action_eventi(request, response);
+                    case "corsi" ->
+                        action_corsi(request, response);
+                    case "responsabili" ->
+                        action_responsabili(request, response);
+                    case "dati" ->
+                        action_dati(request, response);
+                    default ->
+                        action_dashboard(request, response);
                 }
+            } else {
+                action_dashboard(request, response);
             }
         } catch (IOException | DataException ex) {
             handleError(ex, request, response);
