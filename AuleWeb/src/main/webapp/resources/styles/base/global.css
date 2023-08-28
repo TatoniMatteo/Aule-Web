@@ -34,14 +34,28 @@ footer {
     text-align: center;
     display: flex;
     justify-content: space-around;
-    background-color: #f0f0f0;
-    height: 30px;
+    background-color: #302e28;
+    height: 70px;
     margin-top: auto;
+    color: #fff;
+    font-weight: bold;
 }
 
-.footer-text {
+.footer-content {
+    display: flex;
+    justify-content: center;
     max-width: 1400px;
-    margin: 10px 0;
+    min-width: 500px;
+    align-items: center;
+}
+
+footer img{
+    height: 65px;
+    width: auto;
+}
+
+footer p{
+    margin: 0 20px;
 }
 
 header {

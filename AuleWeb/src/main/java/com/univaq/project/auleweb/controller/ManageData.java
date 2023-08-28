@@ -526,7 +526,7 @@ public class ManageData extends AuleWebController {
 
             dataLayer.getEventiDAO().storeEvento(evento, tutti, tipoRicorrenza, fineRicorrenza);
 
-            successPage("amministrazione?page=eventi", "Operazione completata con successo", request, response);
+            successPage("amministrazione?page=eventi&day=" + giorno, "Operazione completata con successo", request, response);
         } catch (ParseException | DataException ex) {
             errorPage("amministrazione?page=eventi", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
@@ -537,10 +537,7 @@ public class ManageData extends AuleWebController {
             int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
             int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
             boolean tutti = Boolean.parseBoolean(request.getParameter("tutti"));
-            boolean test = Boolean.parseBoolean("true");
 
-            int zio = 1;
-            
             dataLayer.getEventiDAO().deleteEvento(id, versione, tutti);
 
             successPage("amministrazione?page=eventi", "Operazione completata con successo", request, response);
