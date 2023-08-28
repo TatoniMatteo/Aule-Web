@@ -40,7 +40,7 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
             deleteAttrezzaturaById = connection.prepareStatement("DELETE FROM attrezzatura WHERE ID = ? AND versione=?");
             getAttrezzatureByNameOrCode = connection.prepareStatement("SELECT * FROM attrezzatura WHERE nome LIKE ? OR numero_serie LIKE ? ORDER BY nome");
             getAttrezzaturaById = connection.prepareStatement("SELECT * FROM Attrezzatura WHERE id=?");
-            setAula = connection.prepareStatement("UPDATE attrezzatura SET id_aula=?, versione=? WHERE id=? AND versione=?");
+            setAula = connection.prepareStatement("UPDATE attrezzatura SET id_aula=? WHERE id=? AND versione=?");
             insertAttrezzatura = connection.prepareStatement("INSERT INTO attrezzatura (nome,numero_serie) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
             removeAulaFromAttrezzature = connection.prepareStatement("UPDATE attrezzatura SET id_aula = NULL WHERE id_aula = ?;");
 
@@ -245,18 +245,16 @@ public class AttrezzatureDAO_MySQL extends DAO implements AttrezzatureDAO {
                 }
                 if (isOld) {
                     setAula.setNull(1, Types.INTEGER);
-                    setAula.setLong(2, a1.getVersion() + 1);
-                    setAula.setInt(3, a1.getKey());
-                    setAula.setLong(4, a1.getVersion());
+                    setAula.setInt(2, a1.getKey());
+                    setAula.setLong(3, a1.getVersion());
                     setAula.executeUpdate();
                 }
             }
 
             for (Attrezzatura a : newAttrezzatura) {
-                setAula.setInt(1, aulaId);
-                setAula.setLong(2, a.getVersion() + 1);
-                setAula.setInt(3, a.getKey());
-                setAula.setLong(4, a.getVersion());
+                setAula.setInt(1, aulaId); 
+                setAula.setInt(2, a.getKey());
+                setAula.setLong(3, a.getVersion());
                 setAula.executeUpdate();
             }
 

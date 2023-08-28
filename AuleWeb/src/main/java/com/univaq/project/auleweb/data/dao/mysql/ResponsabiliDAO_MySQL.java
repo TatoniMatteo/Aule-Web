@@ -32,7 +32,7 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             getAllResponsabili = connection.prepareStatement("SELECT * FROM responsabile ORDER BY nome,cognome");
             getResponsabileByName = connection.prepareStatement("SELECT * FROM responsabile WHERE nome LIKE ? OR cognome LIKE ? OR CONCAT(nome, ' ', cognome) LIKE ? ORDER BY nome, cognome");
             insertResponsabile = connection.prepareStatement("INSERT INTO responsabile(nome,cognome,email) VALUES(?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            updateResponsabile = connection.prepareStatement("UPDATE responsabile SET nome=?,cognome=?,email=?,versione=? WHERE ID=? and versione=?");
+            updateResponsabile = connection.prepareStatement("UPDATE responsabile SET nome=?,cognome=?,email=? WHERE ID=? and versione=?");
             deleteResponsabileById = connection.prepareStatement("DELETE FROM responsabile WHERE ID=? AND versione=? ");
 
         } catch (SQLException ex) {
@@ -74,9 +74,9 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
         }
         return responsabile;
     }
-    
+
     @Override
-    public Responsabile getResponsabileByEmail(String email)throws DataException{
+    public Responsabile getResponsabileByEmail(String email) throws DataException {
         Responsabile responsabile = null;
         try {
             getResponsabileByEmail.setString(1, email);
@@ -170,9 +170,8 @@ public class ResponsabiliDAO_MySQL extends DAO implements ResponsabiliDAO {
             updateResponsabile.setString(2, responsabile.getCognome());
             updateResponsabile.setString(3, responsabile.getEmail());
 
-            updateResponsabile.setLong(4, responsabile.getVersion() + 1);
-            updateResponsabile.setInt(5, responsabile.getKey());
-            updateResponsabile.setLong(6, responsabile.getVersion());
+            updateResponsabile.setInt(4, responsabile.getKey());
+            updateResponsabile.setLong(5, responsabile.getVersion());
 
             updateResponsabile.executeUpdate();
 

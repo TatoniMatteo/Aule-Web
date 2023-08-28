@@ -39,7 +39,7 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             getAuleByName = connection.prepareStatement("SELECT * FROM Aula WHERE nome LIKE ?");
             getAuleNumber = connection.prepareStatement("SELECT COUNT(*) AS numero_aule FROM Aula");
             insertAula = connection.prepareStatement("INSERT INTO aula (nome,luogo,edificio,piano,capienza,prese_elettriche,prese_rete,note,id_responsabile) VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            updateAula = connection.prepareStatement("UPDATE aula SET nome=?,luogo=?,edificio=?,piano=?,capienza=?,prese_elettriche=?,prese_rete=?,note = ?,id_responsabile =?, versione=? WHERE ID=? and versione=?");
+            updateAula = connection.prepareStatement("UPDATE aula SET nome=?,luogo=?,edificio=?,piano=?,capienza=?,prese_elettriche=?,prese_rete=?,note = ?,id_responsabile =? WHERE ID=? and versione=?");
             deleteAulaById = connection.prepareStatement("DELETE FROM aula WHERE id = ? AND versione = ?;");
             deleteAulaGruppo = connection.prepareStatement("DELETE FROM aula_gruppo WHERE id_aula = ?;");
 
@@ -252,9 +252,8 @@ public class AuleDAO_MySQL extends DAO implements AuleDAO {
             updateAula.setInt(7, aula.getPreseRete());
             updateAula.setString(8, aula.getNote());
             updateAula.setInt(9, aula.getResponsabile().getKey());
-            updateAula.setLong(10, aula.getVersion() + 1);
-            updateAula.setInt(11, aula.getKey());
-            updateAula.setLong(12, aula.getVersion());
+            updateAula.setInt(10, aula.getKey());
+            updateAula.setLong(11, aula.getVersion());
             updateAula.executeUpdate();
 
             // Aggiorniamo le associazioni aula gruppo

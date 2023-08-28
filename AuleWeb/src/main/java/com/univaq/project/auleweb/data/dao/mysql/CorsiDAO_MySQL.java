@@ -35,7 +35,7 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             getCorsiNumber = this.connection.prepareStatement("SELECT COUNT(*) AS numero_corsi FROM Corso");
             insertCorso = this.connection.prepareStatement("INSERT INTO Corso (nome, descrizione, corso_laurea) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
             deleteCorsoById = this.connection.prepareStatement("DELETE FROM corso WHERE ID = ?");
-            updateCorso = this.connection.prepareStatement("UPDATE corso SET nome=?,descrizione=?,corso_laurea=?,versione=? WHERE ID=? and versione=?");
+            updateCorso = this.connection.prepareStatement("UPDATE corso SET nome=?,descrizione=?,corso_laurea=? WHERE ID=? and versione=?");
 
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
@@ -197,10 +197,8 @@ public class CorsiDAO_MySQL extends DAO implements CorsiDAO {
             updateCorso.setString(1, corso.getNome());
             updateCorso.setString(2, corso.getDescrizione());
             updateCorso.setString(3, corso.getCorsoLaurea().toString());
-
-            updateCorso.setLong(4, corso.getVersion() + 1);
-            updateCorso.setInt(5, corso.getKey());
-            updateCorso.setLong(6, corso.getVersion());
+            updateCorso.setInt(4, corso.getKey());
+            updateCorso.setLong(5, corso.getVersion());
 
             updateCorso.executeUpdate();
 

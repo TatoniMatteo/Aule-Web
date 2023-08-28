@@ -39,7 +39,7 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             deleteGruppoById = connection.prepareStatement("DELETE FROM gruppo WHERE ID=? AND versione=?");
             getGruppiByName = connection.prepareStatement("SELECT * FROM gruppo WHERE nome LIKE ? ORDER BY nome");
             insertGruppo = connection.prepareStatement("INSERT INTO gruppo(nome,descrizione,id_categoria) values(?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            updateGruppo = connection.prepareStatement("UPDATE gruppo SET nome=?,descrizione=?,id_categoria=?,versione=? WHERE ID=? and versione=?");
+            updateGruppo = connection.prepareStatement("UPDATE gruppo SET nome=?,descrizione=?,id_categoria=? WHERE ID=? and versione=?");
         } catch (SQLException ex) {
             throw new DataException("Errore durante l'inizializzazione del DatLayer", ex);
         }
@@ -114,10 +114,10 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
 
         return gruppi;
     }
-    
+
     @Override
-    public Gruppo getGruppoByName(String nome) throws DataException{
-        Gruppo gruppo =null;
+    public Gruppo getGruppoByName(String nome) throws DataException {
+        Gruppo gruppo = null;
         try {
             getGruppiByName.setString(1, nome);
             try ( ResultSet rs = getGruppiByName.executeQuery()) {
@@ -253,10 +253,8 @@ public class GruppiDAO_MySQL extends DAO implements GruppiDAO {
             updateGruppo.setString(1, gruppo.getNome());
             updateGruppo.setString(2, gruppo.getDescrizione());
             updateGruppo.setInt(3, gruppo.getCategoria().getKey());
-
-            updateGruppo.setLong(4, gruppo.getVersion() + 1);
-            updateGruppo.setInt(5, gruppo.getKey());
-            updateGruppo.setLong(6, gruppo.getVersion());
+            updateGruppo.setInt(4, gruppo.getKey());
+            updateGruppo.setLong(5, gruppo.getVersion());
 
             updateGruppo.executeUpdate();
 
