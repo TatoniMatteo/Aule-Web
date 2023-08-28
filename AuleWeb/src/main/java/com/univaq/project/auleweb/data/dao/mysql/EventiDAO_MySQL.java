@@ -30,7 +30,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getActiveEventiNumber,
             removeOldAulaEventi;
 
-    CallableStatement insertEventi, updateEvento;
+    CallableStatement insertEventi, updateEvento, deleteEvento;
 
     public EventiDAO_MySQL(DataLayer d) {
         super(d);
@@ -109,6 +109,8 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
 
             insertEventi = connection.prepareCall("CALL inserisci_eventi(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
+            deleteEvento = connection.prepareCall("CALL elimina_evento(?, ?, ?)");
+
         } catch (SQLException ex) {
             throw new DataException("Errore nell'inizializzazione del data layer", ex);
         }
@@ -130,6 +132,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             removeOldAulaEventi.close();
             updateEvento.close();
             insertEventi.close();
+            deleteEvento.close();
 
         } catch (SQLException ex) {
             throw new DataException("Errore nella chiusura degli statement", ex);
@@ -435,6 +438,19 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             updateEvento(evento, tutti);
         } else {
             insertEvento(evento, tipoRicorrenza, fineRicorrenza);
+        }
+    }
+
+    @Override
+    public void deleteEvento(int id, int versione, boolean tutti) throws DataException{
+        try {
+            deleteEvento.setInt(1, id);
+            deleteEvento.setInt(2, versione);
+            deleteEvento.setBoolean(3, tutti);
+            deleteEvento.execute();
+
+        } catch (SQLException ex) {
+            throw new DataException("Errore durante il rollback della transazione (eventi)", ex);
         }
     }
 }

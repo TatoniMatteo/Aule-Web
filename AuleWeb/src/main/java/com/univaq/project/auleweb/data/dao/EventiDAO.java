@@ -34,4 +34,6 @@ public interface EventiDAO {
 
     void storeEvento(Evento evento, Boolean tutti, Integer tipoRicorrenza, String fineRicorrenza) throws DataException;
 
+    void deleteEvento(int id, int versione, boolean tutti) throws DataException;
+
 }

@@ -400,9 +400,9 @@ public class ManageData extends AuleWebController {
         int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
         try {
             dataLayer.getGruppiDAO().deleteGruppoById(id, versione);
-            successPage("amministrazione?page=responsabili", "L'attrezzatura è stata eliminata con successo", request, response);
+            successPage("amministrazione?page=gruppi", "L'attrezzatura è stata eliminata con successo", request, response);
         } catch (DataException ex) {
-            errorPage("amministrazione?page=responsabili", "Si è verificato un errore: " + ex.getMessage(), request, response);
+            errorPage("amministrazione?page=gruppi", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
     }
 
@@ -485,7 +485,7 @@ public class ManageData extends AuleWebController {
             int responsabileId = SecurityHelpers.checkNumeric(request.getParameter("responsabile"));
             String tipoString = request.getParameter("tipo");
 
-            boolean tutti = Boolean.getBoolean(request.getParameter("tutti"));
+            boolean tutti = Boolean.parseBoolean(request.getParameter("tutti"));
 
             Evento evento;
             Tipo tipo = null;
@@ -533,7 +533,20 @@ public class ManageData extends AuleWebController {
     }
 
     private void eventiRemove(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
+            int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
+            boolean tutti = Boolean.parseBoolean(request.getParameter("tutti"));
+            boolean test = Boolean.parseBoolean("true");
+
+            int zio = 1;
+            
+            dataLayer.getEventiDAO().deleteEvento(id, versione, tutti);
+
+            successPage("amministrazione?page=eventi", "Operazione completata con successo", request, response);
+        } catch (DataException ex) {
+            errorPage("amministrazione?page=eventi", "Si è verificato un errore: " + ex.getMessage(), request, response);
+        }
     }
 
 }
