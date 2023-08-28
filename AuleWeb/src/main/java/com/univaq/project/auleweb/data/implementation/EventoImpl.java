@@ -7,7 +7,7 @@ import com.univaq.project.auleweb.data.model.Evento;
 import com.univaq.project.auleweb.data.model.Responsabile;
 import com.univaq.project.framework.data.DataItemImpl;
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 
 public class EventoImpl extends DataItemImpl<Integer> implements Evento {
 
@@ -50,82 +50,102 @@ public class EventoImpl extends DataItemImpl<Integer> implements Evento {
         this.tipoEvento = tipo;
     }
 
+    @Override
     public Integer getIdRicorrenza() {
         return idRicorrenza;
     }
 
+    @Override
     public void setIdRicorrenza(Integer idRicorrenza) {
         this.idRicorrenza = idRicorrenza;
     }
 
+    @Override
     public String getNome() {
         return nome;
     }
 
+    @Override
     public void setNome(String nome) {
         this.nome = nome;
     }
 
+    @Override
     public String getDescrizione() {
         return descrizione;
     }
 
+    @Override
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
+    @Override
     public Date getData() {
         return data;
     }
 
+    @Override
     public void setData(Date data) {
         this.data = data;
     }
 
+    @Override
     public Time getOraInizio() {
         return oraInizio;
     }
 
+    @Override
     public void setOraInizio(Time oraInizio) {
         this.oraInizio = oraInizio;
     }
 
+    @Override
     public Time getOraFine() {
         return oraFine;
     }
 
+    @Override
     public void setOraFine(Time oraFine) {
         this.oraFine = oraFine;
     }
 
+    @Override
     public Corso getCorso() {
         return corso;
     }
 
+    @Override
     public void setCorso(Corso corso) {
         this.corso = corso;
     }
 
+    @Override
     public Responsabile getResponsabile() {
         return responsabile;
     }
 
+    @Override
     public void setResponsabile(Responsabile responsabile) {
         this.responsabile = responsabile;
     }
 
+    @Override
     public Aula getAula() {
         return aula;
     }
 
+    @Override
     public void setAula(Aula aula) {
         this.aula = aula;
     }
 
+    @Override
     public Tipo getTipoEvento() {
         return tipoEvento;
     }
 
+    @Override
     public void setTipoEvento(Tipo tipoEvento) {
         this.tipoEvento = tipoEvento;
     }

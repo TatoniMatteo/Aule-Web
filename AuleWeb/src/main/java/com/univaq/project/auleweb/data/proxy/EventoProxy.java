@@ -12,10 +12,7 @@ import com.univaq.project.framework.data.DataException;
 import com.univaq.project.framework.data.DataItemProxy;
 import com.univaq.project.framework.data.DataLayer;
 import java.sql.Time;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

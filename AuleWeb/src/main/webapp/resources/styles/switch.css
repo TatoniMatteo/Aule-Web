@@ -1,6 +1,4 @@
 .android-switch {
-    display: inline-block;
-    font-family: Arial, sans-serif;
     margin: 0 10px 10px 0;
 }
 
@@ -13,7 +11,7 @@
     display: inline-block;
     width: 70px;
     height: 30px;
-    background-color: #e0e0e0;
+    background-color: #cc3300;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -41,12 +39,12 @@
 .switch-text {
     position: absolute;
     top: 50%;
-    left: 10%;
+    left: 60%;
     transform: translateY(-50%);
     color: #ffffff;
     transition: left 0.3s;
 }
 
 .switch-input:checked + .switch-label .switch-text {
-    left: calc(100% - 40px);
+    left: 20%;
 }

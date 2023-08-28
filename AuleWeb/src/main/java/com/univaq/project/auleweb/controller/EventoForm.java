@@ -38,7 +38,7 @@ public class EventoForm extends AuleWebController {
             }
 
             String[] styles = {"simpleForm", "administration/aulaForm", "administration/eventoForm", "switch"};
-            String[] scripts = {"eventoForm", "selectResponsabile"};
+            String[] scripts = {"eventoForm", "selectResponsabile", "switch"};
 
             Map data = new HashMap<>();
             data.put("styles", styles);

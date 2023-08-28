@@ -8,8 +8,10 @@ var activeItem = null;
 
 // Cerca tra tutte le voci di menu per trovare una corrispondenza con l'URL
 menuItems.forEach(function (item) {
+    const anchorElement = item.querySelector('a');
+    const pageName = anchorElement.getAttribute('href').split('?')[1]?.split('=')[1];
     const itemName = item.textContent.toLowerCase().trim();
-    if (url.includes(itemName)) {
+    if (url.includes(pageName)) {
         activeItem = item;
     }
 });

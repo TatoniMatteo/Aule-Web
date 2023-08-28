@@ -3,7 +3,7 @@ package com.univaq.project.auleweb.data.model;
 import com.univaq.project.auleweb.data.implementation.enumType.Tipo;
 import com.univaq.project.framework.data.DataItem;
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 
 public interface Evento extends DataItem<Integer> {
 

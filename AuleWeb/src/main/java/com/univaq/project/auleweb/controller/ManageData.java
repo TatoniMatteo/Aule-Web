@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Date;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -468,8 +469,8 @@ public class ManageData extends AuleWebController {
         try {
             int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
             int versione = SecurityHelpers.checkNumeric(request.getParameter("versione"));
-            int idRicorrenza = SecurityHelpers.checkNumeric(request.getParameter("idRicorrDenza"));
-            int tipoRicorrenza = SecurityHelpers.checkNumeric(request.getParameter("tipoRicorrenza"));
+            String tipoRicorrenzaString = request.getParameter("tipoRicorrenza");
+            Integer tipoRicorrenza = tipoRicorrenzaString == null ? null : SecurityHelpers.checkNumeric(tipoRicorrenzaString);
             String fineRicorrenza = request.getParameter("fineRicorrenza");
 
             String nome = request.getParameter("nome");
@@ -479,16 +480,17 @@ public class ManageData extends AuleWebController {
             String oraFine = request.getParameter("oraFine");
 
             int idAula = SecurityHelpers.checkNumeric(request.getParameter("aula"));
-            Integer corsoId = Integer.valueOf(request.getParameter("corso"));
-            Integer responsabileId = Integer.valueOf(request.getParameter("responsabile"));
+            String corso = request.getParameter("corso");
+            Integer corsoId = corso == null ? null : SecurityHelpers.checkNumeric(request.getParameter("corso"));
+            int responsabileId = SecurityHelpers.checkNumeric(request.getParameter("responsabile"));
             String tipoString = request.getParameter("tipo");
 
-            Boolean tutti = Boolean.getBoolean(request.getParameter("tutti"));
+            boolean tutti = Boolean.getBoolean(request.getParameter("tutti"));
 
             Evento evento;
             Tipo tipo = null;
             DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd");
-            DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+            DateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
             for (Tipo t : Tipo.values()) {
                 if (t.toString().equals(tipoString)) {
@@ -508,15 +510,14 @@ public class ManageData extends AuleWebController {
             }
 
             evento.setVersion(versione);
-            evento.setIdRicorrenza(idRicorrenza);
             evento.setNome(nome);
             evento.setDescrizione(descrizione);
-            evento.setData(dateFormat.parse(giorno));
+            evento.setData(new Date(dateFormat.parse(giorno).getTime()));
             evento.setOraInizio(new Time(timeFormat.parse(oraInizio).getTime()));
             evento.setOraFine(new Time(timeFormat.parse(oraFine).getTime()));
             evento.setAula(dataLayer.getAuleDAO().getAulaById(idAula));
             evento.setTipoEvento(tipo);
-            if (tipo == Tipo.LEZIONE) {
+            if (tipo == Tipo.LEZIONE || tipo == Tipo.ESAME || tipo == Tipo.PARZIALE) {
                 evento.setCorso(dataLayer.getCorsiDAO().getCorsoById(corsoId));
             } else {
                 evento.setCorso(null);
@@ -525,9 +526,9 @@ public class ManageData extends AuleWebController {
 
             dataLayer.getEventiDAO().storeEvento(evento, tutti, tipoRicorrenza, fineRicorrenza);
 
-            successPage("amministrazione?page=corsi", "Operazione completata con successo", request, response);
+            successPage("amministrazione?page=eventi", "Operazione completata con successo", request, response);
         } catch (ParseException | DataException ex) {
-            errorPage("amministrazione?page=corsi", "Si è verificato un errore: " + ex.getMessage(), request, response);
+            errorPage("amministrazione?page=eventi", "Si è verificato un errore: " + ex.getMessage(), request, response);
         }
     }
 
