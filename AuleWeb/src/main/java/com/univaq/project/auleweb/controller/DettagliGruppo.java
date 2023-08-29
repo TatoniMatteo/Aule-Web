@@ -19,7 +19,7 @@ public class DettagliGruppo extends AuleWebController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
+            int id = SecurityHelpers.checkNumeric(request.getParameter("id"));
             DataLayerImpl dataLayer = (DataLayerImpl) request.getAttribute("datalayer");
             String day = request.getParameter("day") != null
                     ? request.getParameter("day")

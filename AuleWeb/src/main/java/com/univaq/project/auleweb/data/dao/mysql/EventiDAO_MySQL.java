@@ -85,8 +85,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventiByGruppoIdAndDate = connection.prepareStatement(
                     "SELECT evento.* "
                     + "FROM evento "
-                    + "JOIN aula ON evento.id_aula = aula.id "
-                    + "JOIN aula_gruppo ON aula_gruppo.id_aula = aula.id "
+                    + "JOIN aula_gruppo ON aula_gruppo.id_aula = evento.id_aula "
                     + "WHERE aula_gruppo.id_gruppo = ? AND evento.data = ? "
                     + "ORDER BY data ASC, ora_inizio"
             );
