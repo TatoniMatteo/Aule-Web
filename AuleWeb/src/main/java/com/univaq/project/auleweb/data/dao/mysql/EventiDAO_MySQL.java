@@ -93,7 +93,7 @@ public class EventiDAO_MySQL extends DAO implements EventiDAO {
             getEventiNumber = connection.prepareStatement(
                     "SELECT COUNT(*) AS numero_eventi "
                     + "FROM evento "
-                    + "WHERE data > CURRENT_DATE() OR (data = CURRENT_DATE() AND ora_fine >= CURRENT_TIME)"
+                    + "WHERE data > CURRENT_DATE() OR (data = CURRENT_DATE() AND ora_fine >= CURRENT_TIME())"
             );
 
             getActiveEventiNumber = connection.prepareStatement(
